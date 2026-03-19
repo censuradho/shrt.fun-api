@@ -10,8 +10,14 @@ export async function urlRoutes(app: FastifyInstance) {
     {
       schema: {
         body: createUrlDto
+      },
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: '1 minute'
+        }
       }
-    },  
+    },
     urlController.create.bind(urlController)
   );
 }
