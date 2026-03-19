@@ -6,17 +6,18 @@ import { PrismaClient } from "prisma/generated/client";
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
-  async getOriginalUrl(shortUrl: string): Promise<string | null> {
+  async getOriginalUrl(shortUrl: string): Promise<{ originalUrl: string; id: string } | null> {
     const data = await this.prisma.url.findUnique({
       where: {
         shortUrl
       },
       select: {
-        originalUrl: true
+        originalUrl: true,
+        id: true
       }
     })
 
-    return data?.originalUrl || null;
+    return data || null;
   }
 
   async create (payload: CreateUrlEntityDto): Promise<string> { 
@@ -46,6 +47,13 @@ export class UrlRepository implements IUrlRepository {
     })
 
     return data?.id || null
+  }
+
+  async incrementHitsCount (id: string): Promise<void> {
+    await this.prisma.url.update({
+      where: { id },
+      data: { hitsCount: { increment: 1 } }
+    })
   }
 
   async delete (id: string): Promise<void> {

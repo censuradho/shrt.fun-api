@@ -5,7 +5,9 @@ export interface IUrlRepository {
 
   getIdByShortUrl (url: string): Promise<string | null>
 
-  getOriginalUrl (shortUrl: string): Promise<string | null>
+  getOriginalUrl (shortUrl: string): Promise<{ id: string; originalUrl: string } | null>
+
+  incrementHitsCount (id: string): Promise<void>
 
   delete (id: string): Promise<void>
 }
