@@ -17,7 +17,11 @@ export class UrlController {
   }
 
   async redirect (request: FastifyRequest<{ Params: { slug: string } }>, reply: FastifyReply) {
-    const originalUrl = await this.redirectUrlUseCase.execute(request.params.slug)
+    const originalUrl = await this.redirectUrlUseCase.execute(
+      request.params.slug,
+      request.ip,
+      request.headers['user-agent'] || ''
+    );
     return reply.redirect(originalUrl, HTTP_REDIRECT_CODES.FOUND)
   }
 }
