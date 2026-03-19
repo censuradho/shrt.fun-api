@@ -1,48 +1,52 @@
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { IHitRepository } from '@/domain/repositories/IHitRepository';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
+import { IUrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
 import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
 import { nanoid } from 'nanoid';
 
 export class RedirectUrlUseCase {
   constructor(
-    private readonly urlRepository: IUrlRepository,
     private readonly urlCacheService: IUrlCacheService,
-    private readonly hitRepository: IHitRepository
+    private readonly urlUnitOfWork: IUrlUnitOfWork
   ) {}
 
-  async execute(
-    slug: string,
-    ip: string,
-    userAgent: string
-  ): Promise<string> {
+  async execute(slug: string, ip: string, userAgent: string): Promise<string> {
     const shortUrl = `${process.env.DOMAIN_URL}/${slug}`;
+    const hitPayload = { id: nanoid(), ipAddress: ip, userAgent };
 
     const cached = await this.urlCacheService.getUrl(shortUrl);
 
     if (cached) {
-      await this.urlCacheService.incrementHits(shortUrl);
-      return cached;
+      await this.urlUnitOfWork.run(async ({ url, hit }) => {
+        await Promise.all([
+          url.incrementHitsCount(cached.urlId),
+          hit.incrementHitCount({ ...hitPayload, urlId: cached.urlId }),
+          this.urlCacheService.incrementHits(shortUrl)
+        ])
+      })
+      
+      return cached.originalUrl;
     }
 
-    const originalUrl = await this.urlRepository.getOriginalUrl(shortUrl);
-    if (!originalUrl) {
-      throw new AppError(URL_ERRORS.URL_NOT_FOUND, {
-        status: HTTP_ERROR_CODES.NOT_FOUND
-      });
-    }
+    const result = await this.urlUnitOfWork.run(async ({ url, hit }) => {
+      const data = await url.getOriginalUrl(shortUrl);
 
-    await this.hitRepository.incrementHitCount({
-      urlId: shortUrl,
-      id: nanoid(),
-      ipAddress: ip,
-      userAgent: userAgent,
+      if (!data) {
+        throw new AppError(URL_ERRORS.URL_NOT_FOUND, { status: HTTP_ERROR_CODES.NOT_FOUND });
+      }
+
+      await Promise.all([
+        url.incrementHitsCount(data.id),
+        hit.incrementHitCount({ ...hitPayload, urlId: data.id }),
+        this.urlCacheService.setUrl(shortUrl, data.originalUrl, data.id),
+        this.urlCacheService.incrementHits(shortUrl),
+      ])
+
+      return data;
     });
-    await this.urlCacheService.setUrl(shortUrl, originalUrl);
-    await this.urlCacheService.incrementHits(shortUrl);
 
-    return originalUrl;
+
+    return result.originalUrl;
   }
 }
