@@ -18,6 +18,7 @@ import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
 import { errorHandler } from './presentation/middleware/error-handler';
 
 const app = Fastify({
+  trustProxy: true,
   logger: process.env.NODE_ENV !== 'production' ? ({
     transport: {
       target: 'pino-pretty',
