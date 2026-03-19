@@ -1,19 +1,19 @@
-import { UrlController } from '../controller/url.controller';
+import { UrlCacheService } from '@/application/services/UrlCacheService';
 import { CreateUrlUseCase } from '@/application/useCases/CreateUrl.useCase';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
-import { UrlRepository } from '@/infra/repositories/url/UrlRepository.prisma';
-import { prisma } from '@/infra/database/prisma';
+import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { RedisCacheGateway } from '@/infra/cache/RedisCacheGateway';
-import { FastifyInstance } from 'fastify';
-import { UrlCacheService } from '@/application/services/UrlCacheService';
 import { envProvider } from '@/infra/config/ProcessEnvProvider';
-import { HitRepository } from '@/infra/repositories/hit/HitRepository';
+import { prisma } from '@/infra/database/prisma';
+import { UrlRepository } from '@/infra/repositories/url/UrlRepository.prisma';
+import { UrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
+import { FastifyInstance } from 'fastify';
+import { UrlController } from '../controller/url.controller';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
-const htRepository = new HitRepository(prisma);
 
+const urlUnitOfWork = new UrlUnitOfWork(prisma);
 
 export function makeUrlController(app: FastifyInstance): UrlController {
   const cache: CacheGateway = new RedisCacheGateway(app.redis);
@@ -21,9 +21,8 @@ export function makeUrlController(app: FastifyInstance): UrlController {
 
   const createUrlUseCase = new CreateUrlUseCase(urlRepository, urlCacheService, envProvider);
   const redirectUrlUseCase = new RedirectUrlUseCase(
-    urlRepository, 
     urlCacheService, 
-    htRepository
+    urlUnitOfWork
   );
 
   return new UrlController(createUrlUseCase, redirectUrlUseCase);
