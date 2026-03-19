@@ -27,3 +27,5 @@ app.setSerializerCompiler(serializerCompiler)
 
 app.register(fastifyCors, corsConfig)
 app.register(redisPlugin)
+
+export { app }
