@@ -17,7 +17,7 @@ export class CreateUrlUseCase {
   ) {}
 
   async execute(dto: CreateUrlDto): Promise<string> {
-    const { url, slug } = dto;
+    const { url, slug, expireAt } = dto;
     const hash = slug ?? slugify(url) + generateHash();
     const shortUrl = `${this.envProvider.get('DOMAIN_URL')}/${hash}`;
 
@@ -32,7 +32,7 @@ export class CreateUrlUseCase {
     const urlId = await this.urlRepository.create({
       originalUrl: url,
       shortUrl,
-      expireAt: addHours(new Date(), 24)
+      expireAt: expireAt ?? addHours(new Date(), 24),
     });
 
     try {
