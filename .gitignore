@@ -5,3 +5,5 @@ node_modules
 dist
 src/tmp
 .claude
+
+prisma/generated
