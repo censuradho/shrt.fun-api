@@ -5,6 +5,11 @@ export const HTTP_SUCCESS_CODES = {
   NO_CONTENT: 204
 } as const
 
+export const HTTP_REDIRECT_CODES = {
+  MOVED_PERMANENTLY: 301,
+  FOUND: 302,
+} as const
+
 export const HTTP_ERROR_CODES = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
