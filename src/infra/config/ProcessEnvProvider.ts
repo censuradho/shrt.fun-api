@@ -1,0 +1,7 @@
+import { IEnvProvider, LocalEnvironmentVars } from './../../domain/services/EnvProvider';
+
+export class ProcessEnvProvider implements IEnvProvider {
+  get(key: keyof LocalEnvironmentVars): string | undefined {
+    return process.env[key];
+  }
+}
