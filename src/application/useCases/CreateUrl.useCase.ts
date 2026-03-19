@@ -36,8 +36,11 @@ export class CreateUrlUseCase {
     });
 
     try {
-      await this.urlCacheService.setUrl(shortUrl, url, urlId);
-      await this.urlCacheService.incrementTotalUrls();
+      await Promise.all([
+        this.urlCacheService.setUrl(shortUrl, url, urlId),
+        this.urlCacheService.incrementTotalUrls()
+      ])
+
       return shortUrl;
     } catch {
       await this.urlRepository.delete(urlId);
