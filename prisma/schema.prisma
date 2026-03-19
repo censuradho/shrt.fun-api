@@ -46,12 +46,3 @@ model Url {
 
   @@map("urls")
 }
-
-model GeneralStats {
-  id String @id
-
-  totalUrls Int @default(0)
-  totalHits Int @default(0)
-
-  @@map("general_stats")
-}
