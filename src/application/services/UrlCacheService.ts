@@ -22,14 +22,14 @@ export class UrlCacheService implements IUrlCacheService {
     return await this.cache.get<number>(cacheKey);
   }
 
-  async setUrl(shortUrl: string, originalUrl: string): Promise<void> {
+  async setUrl(shortUrl: string, originalUrl: string, urlId: string): Promise<void> {
     const cacheKey = CacheKeyBuilder.url(shortUrl);
-    await this.cache.set(cacheKey, originalUrl, URL_TTL_SECONDS);
+    await this.cache.set(cacheKey, { originalUrl, urlId }, URL_TTL_SECONDS);
   }
 
-  async getUrl(shortUrl: string): Promise<string | null> {
+  async getUrl(shortUrl: string): Promise<{ originalUrl: string; urlId: string } | null> {
     const cacheKey = CacheKeyBuilder.url(shortUrl);
-    return await this.cache.get<string>(cacheKey);
+    return await this.cache.get<{ originalUrl: string; urlId: string }>(cacheKey);
   }
 
   async incrementHits(shortUrl: string): Promise<void> {
