@@ -3,7 +3,7 @@ import { sanitizeString } from "@/shered/sanitizeString";
 import z from "zod";
 
 export const createUrlDto = z.object({
-  url: z.url(FIELD_ERROR_MESSAGES.REQUIRED),
+  url: z.url(FIELD_ERROR_MESSAGES.INVALID_FIELD),
   slug: z
     .string()
     .optional()
