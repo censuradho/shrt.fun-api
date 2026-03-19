@@ -21,6 +21,14 @@ export class CreateUrlUseCase {
     const hash = slug ?? slugify(url) + generateHash();
     const shortUrl = `${this.envProvider.get('DOMAIN_URL')}/${hash}`;
 
+    const existUrl = await this.urlRepository.getIdByShortUrl(shortUrl);
+
+    if (existUrl) {
+      throw new AppError(URL_ERRORS.SHORT_URL_ALREADY_EXISTS, {
+        status: HTTP_ERROR_CODES.CONFLICT
+      });
+    }
+
     const urlId = await this.urlRepository.create({
       originalUrl: url,
       shortUrl,
