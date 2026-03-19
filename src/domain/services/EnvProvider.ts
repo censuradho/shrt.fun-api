@@ -18,6 +18,7 @@ export interface LocalEnvironmentVars {
   BREVO_SMTP_KEY?: string;
   BREVO_SMTP_SENDER?: string;
   NOVA_BACKOFFICE_URL?: string;
+  DATABASE_URL?: string;
 }
 
 export interface IEnvProvider {
