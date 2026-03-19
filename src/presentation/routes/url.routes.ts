@@ -20,4 +20,9 @@ export async function urlRoutes(app: FastifyInstance) {
     },
     urlController.create.bind(urlController)
   );
+
+  app.get(
+    '/:slug',
+    urlController.redirect.bind(urlController)
+  );
 }
