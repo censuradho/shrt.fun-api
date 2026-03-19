@@ -11,6 +11,7 @@ export default defineConfig(
   {
     rules: {
       indent: ['warn', 2],
+      "@typescript-eslint/no-extraneous-class": "off"
     },
   },
 );
