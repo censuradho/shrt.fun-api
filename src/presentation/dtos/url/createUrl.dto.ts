@@ -7,7 +7,8 @@ export const createUrlDto = z.object({
   slug: z
     .string()
     .optional()
-    .transform((value) => sanitizeString(value))
+    .transform((value) => sanitizeString(value)),
+  expireAt: z.coerce.date().optional()
 })
 
 export type CreateUrlDto = z.infer<typeof createUrlDto>
