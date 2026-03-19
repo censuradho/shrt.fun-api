@@ -9,15 +9,22 @@ import { RedisCacheGateway } from '@/infra/cache/RedisCacheGateway';
 import { FastifyInstance } from 'fastify';
 import { UrlCacheService } from '@/application/services/UrlCacheService';
 import { envProvider } from '@/infra/config/ProcessEnvProvider';
+import { HitRepository } from '@/infra/repositories/hit/HitRepository';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
+const htRepository = new HitRepository(prisma);
+
 
 export function makeUrlController(app: FastifyInstance): UrlController {
   const cache: CacheGateway = new RedisCacheGateway(app.redis);
   const urlCacheService = new UrlCacheService(cache);
 
   const createUrlUseCase = new CreateUrlUseCase(urlRepository, urlCacheService, envProvider);
-  const redirectUrlUseCase = new RedirectUrlUseCase(urlRepository, urlCacheService);
+  const redirectUrlUseCase = new RedirectUrlUseCase(
+    urlRepository, 
+    urlCacheService, 
+    htRepository
+  );
 
   return new UrlController(createUrlUseCase, redirectUrlUseCase);
 }
