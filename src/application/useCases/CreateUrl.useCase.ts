@@ -36,7 +36,7 @@ export class CreateUrlUseCase {
     });
 
     try {
-      await this.urlCacheService.setUrl(shortUrl, url);
+      await this.urlCacheService.setUrl(shortUrl, url, urlId);
       await this.urlCacheService.incrementTotalUrls();
       return shortUrl;
     } catch {
