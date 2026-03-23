@@ -18,7 +18,11 @@ export class CreateUrlUseCase {
 
   async execute(dto: CreateUrlDto): Promise<string> {
     const { url, slug, expireAt } = dto;
-    const hash = slug ?? slugify(url) + generateHash();
+
+    const path = new URL(url).pathname;
+
+    const hash = slug ?? slugify(path) + generateHash();
+
     const shortUrl = `${this.envProvider.get('DOMAIN_URL')}/${hash}`;
 
     const existUrl = await this.urlRepository.getIdByShortUrl(shortUrl);
