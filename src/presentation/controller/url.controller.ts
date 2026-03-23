@@ -12,8 +12,9 @@ export class UrlController {
 
   async create (request: FastifyRequest, reply: FastifyReply) {
     const payload = request.body as CreateUrlDto
-    await this.createUrlUseCase.execute(payload)
-    return reply.status(201).send()
+    const shortUrl = await this.createUrlUseCase.execute(payload)
+
+    return reply.status(201).send({ shortUrl });
   }
 
   async redirect (request: FastifyRequest<{ Params: { slug: string } }>, reply: FastifyReply) {
