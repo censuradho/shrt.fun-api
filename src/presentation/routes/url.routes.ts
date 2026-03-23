@@ -19,7 +19,7 @@ export async function urlRoutesPublic(app: FastifyInstance) {
           max: 2,
           timeWindow: '1 hour',
           errorResponseBuilder: () => {
-            throw new AppError(URL_ERRORS.ONLY_2_URL_CREATIONS_PER_HOUR, {
+            throw new AppError(URL_ERRORS.ONLY_1_URL_CREATIONS_PER_DAY, {
               status: HTTP_STATUS_CODES.TOO_MANY_REQUESTS
             })
           }
