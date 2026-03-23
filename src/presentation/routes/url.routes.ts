@@ -1,9 +1,13 @@
 import { FastifyInstance } from 'fastify';
 import { makeUrlController } from '../modules/url.module';
 import { createUrlDto } from '../dtos/url/createUrl.dto';
+import { URL_ERRORS } from '@/domain/errors/url.error';
+import { AppError } from '@/domain/errors/AppError';
+import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
 
 export async function urlRoutes(app: FastifyInstance) {
   const urlController = makeUrlController(app);
+
 
   app.post(
     '/url', 
@@ -13,9 +17,14 @@ export async function urlRoutes(app: FastifyInstance) {
       },
       config: {
         rateLimit: {
-          max: 5,
-          timeWindow: '1 minute'
-        }
+          max: 2,
+          timeWindow: '1 hour',
+          errorResponseBuilder: () => {
+            throw new AppError(URL_ERRORS.ONLY_2_URL_CREATIONS_PER_HOUR, {
+              status: HTTP_STATUS_CODES.TOO_MANY_REQUESTS
+            })
+          }
+        },
       }
     },
     urlController.create.bind(urlController)
