@@ -5,9 +5,8 @@ import { URL_ERRORS } from '@/domain/errors/url.error';
 import { AppError } from '@/domain/errors/AppError';
 import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
 
-export async function urlRoutes(app: FastifyInstance) {
+export async function urlRoutesPublic(app: FastifyInstance) {
   const urlController = makeUrlController(app);
-
 
   app.post(
     '/url', 

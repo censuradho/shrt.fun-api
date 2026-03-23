@@ -1,21 +1,21 @@
-import 'dotenv/config';
 import fastifyCors from "@fastify/cors";
-import Fastify from "fastify";
 import fastifyRateLimit from "@fastify/rate-limit";
+import 'dotenv/config';
+import Fastify from "fastify";
 
-import { 
-  ZodTypeProvider, 
-  validatorCompiler, 
-  serializerCompiler, 
+import {
+  ZodTypeProvider,
+  serializerCompiler,
+  validatorCompiler,
 } from "fastify-type-provider-zod";
 
 import { corsConfig } from './infra/config/cors';
 import { redisPlugin } from './infra/http/plugins/redis';
 
-import { urlRoutes } from './presentation/routes/url.routes';
 import { rateLimitConfig } from './infra/config/rateLimit';
-import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
 import { errorHandler } from './presentation/middleware/error-handler';
+import { urlRoutesPublic } from './presentation/routes/url.routes';
+import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
 
 const app = Fastify({
   trustProxy: true,
@@ -47,6 +47,6 @@ app.register(fastifyRateLimit, rateLimitConfig).after(() => {
   })
 })
 
-app.register(urlRoutes, { prefix: '/v1' });
+app.register(urlRoutesPublic);
 
-export { app }
+export { app };
