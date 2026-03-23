@@ -7,7 +7,6 @@ import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
 import { generateHash } from "@/shered/generateHash";
 import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
 import { slugify } from "@/shered/slugify";
-import { addHours } from "date-fns";
 
 export class CreateUrlUseCase {
   constructor (
@@ -17,7 +16,7 @@ export class CreateUrlUseCase {
   ) {}
 
   async execute(dto: CreateUrlDto): Promise<string> {
-    const { url, slug, expireAt } = dto;
+    const { url, slug } = dto;
 
 
     const hash = slug ? slugify(slug) : generateHash();
@@ -35,13 +34,12 @@ export class CreateUrlUseCase {
     const urlId = await this.urlRepository.create({
       originalUrl: url,
       shortUrl,
-      expireAt: expireAt ?? addHours(new Date(), 24),
     });
 
     try {
       await Promise.all([
-        this.urlCacheService.setUrl(shortUrl, url, urlId),
-        this.urlCacheService.incrementTotalUrls()
+        this.urlCacheService.setUrl(shortUrl, url, urlId, 60 * 60 * 24),
+        this.urlCacheService.incrementTotalUrls(),
       ])
 
       return shortUrl;
