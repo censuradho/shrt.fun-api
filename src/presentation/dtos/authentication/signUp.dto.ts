@@ -1,5 +1,6 @@
 import { AUTHENTICATION_ERROR_MESSAGES } from "@/domain/errors/authentication.errors";
 import { FIELD_ERROR_MESSAGES } from "@/domain/errors/errors";
+import { sanitizeString } from "@/shered/sanitizeString";
 import z from "zod";
 
 export const signUpDto = z.object({
@@ -7,9 +8,16 @@ export const signUpDto = z.object({
   password: z
     .string()
     .min(8, AUTHENTICATION_ERROR_MESSAGES.PASSWORD_MIN_8_CHARACTERS)
-    .max(256, FIELD_ERROR_MESSAGES.MAX_LENGTH(256)),
-  firstName: z.string().min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255)),
-  lastName: z.string().min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255)),
+    .max(256, FIELD_ERROR_MESSAGES.MAX_LENGTH(256))
+    .transform(value => value.trim()),
+  firstName: z
+    .string()
+    .min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
+    .transform(value => sanitizeString(value)),
+  lastName: z
+    .string()
+    .min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
+    .transform(value => sanitizeString(value)),
 })
 
 export type SignUpDto = z.infer<typeof signUpDto>
