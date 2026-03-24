@@ -5,9 +5,10 @@ import { SupabaseAuthGateway } from "@/infra/auth/SupabaseAuthGateway";
 import { supabaseClient } from "@/infra/auth/client";
 import { UserRepository } from "@/infra/repositories/user/UserRepository.prisma";
 import { prisma } from "@/infra/database/prisma";
+import { envProvider } from "@/infra/config/ProcessEnvProvider";
 
 export function makeAuthController(app: FastifyInstance): AuthenticationController {
-  const supabaseAuthGateway = new SupabaseAuthGateway(supabaseClient)
+  const supabaseAuthGateway = new SupabaseAuthGateway(supabaseClient, envProvider)
   const userRepository = new UserRepository(prisma)
 
   const signUpWithEmailAndPasswordUseCase = new SignUpWithEmailAndPasswordUseCase(
