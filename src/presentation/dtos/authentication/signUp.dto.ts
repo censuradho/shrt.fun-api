@@ -12,7 +12,7 @@ export const signUpDto = z.object({
     .transform(value => value.trim()),
   firstName: z
     .string()
-    .min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
+    .min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(100, FIELD_ERROR_MESSAGES.MAX_LENGTH(100))
     .refine(value => !!sanitizeString(value)),
   lastName: z
     .string()
