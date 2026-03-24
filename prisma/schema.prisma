@@ -40,9 +40,27 @@ model Url {
   description String?
   tags String[]
 
+  userId String?
+  user User? @relation(fields: [userId], references: [id])
+
   expireAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("urls")
+}
+
+model User {
+  id String @id
+
+  email String @unique
+  password String
+  isActive Boolean @default(true)
+
+  urls Url[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
