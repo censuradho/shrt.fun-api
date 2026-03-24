@@ -38,7 +38,7 @@ export class CreateUrlUseCase {
 
     try {
       await Promise.all([
-        this.urlCacheService.setUrl(shortUrl, url, urlId, 60 * 60 * 24),
+        this.urlCacheService.setUrl(shortUrl, url, urlId, 60 * 60 * 24 * 30),
         this.urlCacheService.incrementTotalUrls(),
       ])
 
