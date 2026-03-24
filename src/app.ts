@@ -49,6 +49,6 @@ app.register(fastifyRateLimit, rateLimitConfig).after(() => {
 })
 
 app.register(urlRoutesPublic);
-app.register(routes, { prefix: '/api/v1' });
+app.register(routes, { prefix: '/v1' });
 
 export { app };
