@@ -20,6 +20,7 @@ export interface LocalEnvironmentVars {
   NOVA_BACKOFFICE_URL?: string;
   DATABASE_URL?: string;
   DOMAIN_URL?: string;
+  CLIENT_URL?: string;
 }
 
 export interface IEnvProvider {
