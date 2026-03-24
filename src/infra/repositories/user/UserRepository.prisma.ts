@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository {
         email: payload.email,
         firstName: payload.firstName,
         lastName: payload.lastName,
-        username: `@${payload.firstName}_${Math.floor(Math.random() * 1000)}`
+        username: `@${payload.firstName.toLocaleLowerCase()}_${Math.floor(Math.random() * 1000)}`
       },
       select: { id: true },
     });
