@@ -1,27 +1,30 @@
 import { AuthGateway, AuthUser, SignUpWithEmailAndPasswordParams, UpdateUserParams } from "@/domain/interfaces/AuthGateway";
+import { IEnvProvider } from "@/domain/services/EnvProvider";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export class SupabaseAuthGateway implements AuthGateway {
-  constructor(private readonly client: SupabaseClient) {}
+  constructor(
+    private readonly client: SupabaseClient,
+    private readonly envProvider: IEnvProvider
+  ) {}
 
   async signUpWithEmailAndPassword(params: SignUpWithEmailAndPasswordParams): Promise<AuthUser> {
     const {
       email,
       password,
       phone,
-      emailConfirmed,
-      phoneConfirmed,
     } = params;
 
-    const { data, error } = await this.client.auth.admin.createUser({
+    const { data, error } = await this.client.auth.signUp({
       email,
       password,
-      phone,
-      email_confirm: emailConfirmed,
-      phone_confirm: phoneConfirmed,
-    });
+      options: {
+        emailRedirectTo: this.envProvider.get('CLIENT_URL')
+      },
+      ...(phone && { phone }),
+    })
 
-    if (error) throw error;
+    if (error || !data.user) throw error;
 
     return data.user;
   }
