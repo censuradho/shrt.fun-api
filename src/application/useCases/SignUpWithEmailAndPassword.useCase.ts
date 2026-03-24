@@ -6,6 +6,7 @@ import { USER_ERRORS_MESSAGES } from '@/domain/errors/user.errors';
 import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
 import { ErrorLog } from '@/shered/ErrorLog';
 import { FastifyInstance } from 'fastify';
+import { delay } from '@/utils/delay';
 
 export class SignUpWithEmailAndPasswordUseCase {
   constructor (
@@ -19,9 +20,12 @@ export class SignUpWithEmailAndPasswordUseCase {
 
     const userExists = await this.userRepository.checkIfExistsByEmail(email)
 
-    if (userExists) throw new AppError(USER_ERRORS_MESSAGES.USER_ALREADY_EXISTS, {
-      status: HTTP_STATUS_CODES.CONFLICT
-    })
+    if (userExists) {
+      await delay(1000) // Adiciona um atraso para dificultar ataques de enumeração de usuários
+      throw new AppError(USER_ERRORS_MESSAGES.USER_ALREADY_EXISTS, {
+        status: HTTP_STATUS_CODES.CONFLICT
+      })
+    }
 
     const userId = await this.userRepository.create({ email, firstName, lastName })
 
