@@ -19,6 +19,7 @@
     "@fastify/rate-limit": "^10.3.0",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
+    "@supabase/supabase-js": "^2.100.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "fastify": "^5.8.2",
