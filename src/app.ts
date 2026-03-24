@@ -16,6 +16,7 @@ import { rateLimitConfig } from './infra/config/rateLimit';
 import { errorHandler } from './presentation/middleware/error-handler';
 import { urlRoutesPublic } from './presentation/routes/url.routes';
 import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
+import { routes } from "./presentation/routes/routes";
 
 const app = Fastify({
   trustProxy: true,
@@ -48,5 +49,6 @@ app.register(fastifyRateLimit, rateLimitConfig).after(() => {
 })
 
 app.register(urlRoutesPublic);
+app.register(routes, { prefix: '/api/v1' });
 
 export { app };
