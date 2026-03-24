@@ -13,11 +13,11 @@ export const signUpDto = z.object({
   firstName: z
     .string()
     .min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
-    .transform(value => sanitizeString(value)),
+    .refine(value => !!sanitizeString(value)),
   lastName: z
     .string()
     .min(1, FIELD_ERROR_MESSAGES.REQUIRED).max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
-    .transform(value => sanitizeString(value)),
+    .refine(value => !!sanitizeString(value)),
 })
 
 export type SignUpDto = z.infer<typeof signUpDto>
