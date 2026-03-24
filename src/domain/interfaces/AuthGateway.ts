@@ -1,9 +1,7 @@
 export interface SignUpWithEmailAndPasswordParams {
   email: string;
-  password?: string;
+  password: string;
   phone?: string;
-  emailConfirmed?: boolean;
-  phoneConfirmed?: boolean;
 }
 
 export interface UpdateUserParams {
