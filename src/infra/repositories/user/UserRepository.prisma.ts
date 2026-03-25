@@ -1,3 +1,4 @@
+import { UserModel } from "@/domain/models/User.model";
 import { CreateUserEntityDto } from "@/domain/repositories/dtos/CreateUserEntity.dto";
 import { IUserRepository } from "@/domain/repositories/IUserRepository";
 import { nanoid } from "nanoid";
@@ -5,6 +6,33 @@ import { PrismaClient } from "prisma/generated/client";
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}
+  async findUserBySupabaseId(supabaseId: string): Promise<UserModel | null> {
+    const user = await this.prisma.user.findUnique({ where: { supabaseId } });
+
+    return user ? ({
+      createdAt: user.createdAt,
+      email: user.email,
+      firstName: user.firstName,
+      id: user.id,
+      lastName: user.lastName,
+      isActive: user.isActive,
+      username: user.username,
+    }) : null;
+  }
+
+  async me (id: string): Promise<UserModel | null> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    return user ? ({
+      createdAt: user.createdAt,
+      email: user.email,
+      firstName: user.firstName,
+      id: user.id,
+      lastName: user.lastName,
+      isActive: user.isActive,
+      username: user.username,
+    }) : null
+  }
 
   async create(payload: CreateUserEntityDto): Promise<string> {
     const data = await this.prisma.user.create({
@@ -13,7 +41,8 @@ export class UserRepository implements IUserRepository {
         email: payload.email,
         firstName: payload.firstName,
         lastName: payload.lastName,
-        username: `@${payload.firstName.toLocaleLowerCase()}_${Math.floor(Math.random() * 1000)}`
+        username: `@${payload.firstName.toLocaleLowerCase()}_${Math.floor(Math.random() * 1000)}`,
+        supabaseId: payload.supabaseId,
       },
       select: { id: true },
     });
