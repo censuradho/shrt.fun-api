@@ -11,7 +11,6 @@ export interface LocalEnvironmentVars {
   REDIS_URL?: string;
   SUPABASE_SERVICE_ROLE_KEY?: string;
   SUPABASE_URL?: string;
-  SUPABASE_LEGACY_JWT_SECRET?: string;
   BREVO_SMTP_HOST?: string;
   BREVO_SMTP_PORT?: string;
   BREVO_SMTP_USER?: string;
