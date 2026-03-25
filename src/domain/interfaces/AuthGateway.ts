@@ -21,4 +21,5 @@ export interface AuthGateway {
   signUpWithEmailAndPassword(params: SignUpWithEmailAndPasswordParams): Promise<AuthUser>;
   updateUser(userId: string, params: UpdateUserParams): Promise<AuthUser>;
   deleteUser(userId: string): Promise<void>
+  getUser(token?: string): Promise<AuthUser | null>
 }
