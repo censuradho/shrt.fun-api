@@ -7,6 +7,7 @@ import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
 import { ErrorLog } from '@/shered/ErrorLog';
 import { FastifyInstance } from 'fastify';
 import { delay } from '@/utils/delay';
+import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
 
 export class SignUpWithEmailAndPasswordUseCase {
   constructor (
@@ -27,17 +28,21 @@ export class SignUpWithEmailAndPasswordUseCase {
       })
     }
 
-    const userId = await this.userRepository.create({ email, firstName, lastName })
+    let userId: string | null = null
 
     try {
-      await this.authGateway.signUpWithEmailAndPassword({ email, password })
+      const supabaseUser = await this.authGateway.signUpWithEmailAndPassword({ email, password })
+      const user = await this.userRepository.create({ email, firstName, lastName, supabaseId: supabaseUser.id })
+
+      userId = user
     } catch(error: any)  {
-      await this.userRepository.delete(userId)
+      if (userId) await this.userRepository.delete(userId)
+
       this.app.log.error(
         new ErrorLog({ err: error, context: 'SignUpWithEmailAndPasswordUseCase.execute', input: { email } }),
       )
 
-      throw new AppError(USER_ERRORS_MESSAGES.SIGN_UP_FAILED, {
+      throw new AppError(AUTHENTICATION_ERROR_MESSAGES.SIGN_UP_FAILED, {
         status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
       })
     }
