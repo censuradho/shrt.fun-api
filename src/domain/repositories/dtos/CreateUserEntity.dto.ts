@@ -3,4 +3,5 @@ export interface CreateUserEntityDto {
   firstName: string
   lastName: string
   supabaseId: string
+  planId: string
 }
