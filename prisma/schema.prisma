@@ -62,10 +62,26 @@ model User {
   isActive Boolean @default(true)
 
   urls Url[]
-  plan String @default("FREE")
+
+  planId String
+  plan Plan @relation(fields: [planId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Plan {
+  id String @id
+
+  name String
+  monthlyLinkLimit Int 
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("plans")
 }
