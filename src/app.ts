@@ -8,9 +8,6 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod";
-import fastifyJwt from '@fastify/jwt'
-import fastifyCookie from '@fastify/cookie'
-
 import { corsConfig } from './infra/config/cors';
 import { redisPlugin } from './infra/http/plugins/redis';
 
@@ -39,15 +36,6 @@ app.setErrorHandler(errorHandler);
 
 app.register(fastifyCors, corsConfig)
 app.register(redisPlugin)
-
-app.register(fastifyCookie, {
-  secret: envProvider.get('COOKIE_SECRET') as string,
-})
-
-app.register(fastifyJwt, {
-  secret: envProvider.get('SUPABASE_LEGACY_JWT_SECRET') as string
-})
-
 
 app.register(fastifyRateLimit, rateLimitConfig).after(() => {
   app.setNotFoundHandler({
