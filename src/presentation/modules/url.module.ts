@@ -21,14 +21,14 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   const cache: CacheGateway = new RedisCacheGateway(app.redis);
   const urlCacheService = new UrlCacheService(cache);
 
-  const CreateAnonymousUrlUseCase = new CreateAnonymousUrlUseCase(urlRepository, urlCacheService, envProvider);
+  const createAnonymousUrlUseCase = new CreateAnonymousUrlUseCase(urlRepository, urlCacheService, envProvider);
   const redirectUrlUseCase = new RedirectUrlUseCase(
     urlCacheService, 
     urlUnitOfWork
   );
 
   return new UrlController(
-    CreateAnonymousUrlUseCase, 
+    createAnonymousUrlUseCase, 
     redirectUrlUseCase, 
     findManyLinksPaginatedQuery
   );
