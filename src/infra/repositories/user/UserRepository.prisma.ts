@@ -43,6 +43,7 @@ export class UserRepository implements IUserRepository {
         lastName: payload.lastName,
         username: `@${payload.firstName.toLocaleLowerCase()}_${Math.floor(Math.random() * 1000)}`,
         supabaseId: payload.supabaseId,
+        planId: payload.planId,
       },
       select: { id: true },
     });
