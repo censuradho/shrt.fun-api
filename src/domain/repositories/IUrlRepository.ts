@@ -8,12 +8,12 @@ export interface UrlPaginationFilters {
 
 export interface IUrlRepository {
   createAnonymous (payload: CreateUrlEntityDto): Promise<string>
-  create (userId: string, payload: CreateUrlEntityDto): Promise<string>
+  create (supabaseId: string, payload: CreateUrlEntityDto): Promise<string>
   getIdByShortUrl (url: string): Promise<string | null>
   getOriginalUrl (shortUrl: string): Promise<{ id: string; originalUrl: string } | null>
   incrementHitsCount (id: string): Promise<void>
   delete (id: string): Promise<void>
-  findManyPaginated (userId: string, pagination: PaginationParams, filters: UrlPaginationFilters): Promise<
+  findManyPaginated (supabaseId: string, pagination: PaginationParams, filters: UrlPaginationFilters): Promise<
     PaginationResult<UrlModel>
   >
 }

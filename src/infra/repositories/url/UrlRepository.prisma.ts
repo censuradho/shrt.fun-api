@@ -8,11 +8,11 @@ import { UrlModel, UrlWhereInput } from "prisma/generated/models";
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
-  async create (userId: string, payload: CreateUrlEntityDto): Promise<string> {
+  async create (supabaseId: string, payload: CreateUrlEntityDto): Promise<string> {
     const data= await this.prisma.url.create({
       data: {
         id: nanoid(),
-        userId,
+        supabaseId,
         originalUrl: payload.originalUrl,
         shortUrl: payload.shortUrl,
         description: payload.description,
@@ -26,7 +26,7 @@ export class UrlRepository implements IUrlRepository {
   }
 
   async findManyPaginated(
-    userId: string, 
+    supabaseId: string, 
     pagination: PaginationParams, 
     filters: UrlPaginationFilters
   ): Promise<PaginationResult<UrlModel>> {
@@ -34,7 +34,7 @@ export class UrlRepository implements IUrlRepository {
     const { isActive } = filters
 
     const where: UrlWhereInput = {
-      userId,
+      supabaseId,
       ...(isActive !== undefined && { isActive })
     }
 
