@@ -4,6 +4,7 @@ import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
 
 export interface UrlPaginationFilters {
   isActive?: boolean
+  search?: string
 }
 
 export interface IUrlRepository {

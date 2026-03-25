@@ -8,10 +8,11 @@ export class FindManyLinksPaginatedQuery {
   ) {}
 
   async execute (userId: string, queries: FindManyLinksFiltersDto) {
-    const { cursor, limit, isActive } = queries;
+    const { cursor, limit, isActive, search } = queries;
 
     const filters: UrlPaginationFilters = {
-      isActive
+      isActive,
+      search
     }
 
     const pagination: PaginationParams = {

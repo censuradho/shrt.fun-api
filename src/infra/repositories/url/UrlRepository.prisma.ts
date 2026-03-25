@@ -31,11 +31,17 @@ export class UrlRepository implements IUrlRepository {
     filters: UrlPaginationFilters
   ): Promise<PaginationResult<UrlModel>> {
     const { cursor, limit } = pagination;
-    const { isActive } = filters
+    const { isActive, search } = filters
 
     const where: UrlWhereInput = {
       supabaseId,
-      ...(isActive !== undefined && { isActive })
+      ...(isActive !== undefined && { isActive }),
+      ...(search &&  ({
+        OR: [
+          { originalUrl: { contains: search, mode: 'insensitive' } },
+          { shortUrl: { contains: search, mode: 'insensitive' } },
+        ]
+      })),
     }
 
     const data = await this.prisma.url.findMany({
