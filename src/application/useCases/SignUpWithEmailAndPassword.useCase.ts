@@ -1,4 +1,5 @@
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
+import { IPlanRepository } from '@/domain/repositories/IPlanRepository';
 import { AuthGateway } from '../../domain/interfaces/AuthGateway';
 import { SignUpDto } from "@/presentation/dtos/authentication/signUp.dto";
 import { AppError } from '@/domain/errors/AppError';
@@ -8,11 +9,13 @@ import { ErrorLog } from '@/shered/ErrorLog';
 import { FastifyInstance } from 'fastify';
 import { delay } from '@/utils/delay';
 import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
+import { PlanName } from '@/domain/enums/Plan.enum';
 
 export class SignUpWithEmailAndPasswordUseCase {
   constructor (
     private readonly authGateway: AuthGateway,
     private readonly userRepository: IUserRepository,
+    private readonly planRepository: IPlanRepository,
     private readonly app: FastifyInstance
   ) {}
 
@@ -28,11 +31,17 @@ export class SignUpWithEmailAndPasswordUseCase {
       })
     }
 
+    const freePlan = await this.planRepository.findByName(PlanName.FREE)
+
+    if (!freePlan) throw new AppError(AUTHENTICATION_ERROR_MESSAGES.SIGN_UP_FAILED, {
+      status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+    })
+
     let userId: string | null = null
 
     try {
       const supabaseUser = await this.authGateway.signUpWithEmailAndPassword({ email, password })
-      const user = await this.userRepository.create({ email, firstName, lastName, supabaseId: supabaseUser.id })
+      const user = await this.userRepository.create({ email, firstName, lastName, supabaseId: supabaseUser.id, planId: freePlan.id })
 
       userId = user
     } catch(error: any)  {
