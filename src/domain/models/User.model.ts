@@ -7,7 +7,6 @@ export interface UserModel {
   isActive: boolean
   createdAt: Date
   plan: {
-    id: string
     name: string
     monthlyLinkLimit: number
   }
