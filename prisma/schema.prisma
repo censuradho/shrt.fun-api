@@ -40,8 +40,8 @@ model Url {
   description String?
   tags String[]
 
-  userId String?
-  user User? @relation(fields: [userId], references: [id])
+  supabaseId String?
+  user User? @relation(fields: [supabaseId], references: [supabaseId])
 
   expireAt DateTime?
   createdAt DateTime @default(now())
