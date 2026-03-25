@@ -1,24 +1,27 @@
-import { CreateAnonymousUrlUseCase } from "@/application/useCases/CreateAnonymous.useCase";
+import { CreateAnonymousShortUrl } from "@/application/useCases/CreateAnonymousShortUrl.useCase";
 import { RedirectUrlUseCase } from "@/application/useCases/RedirectUrl.useCase";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreateUrlDto } from "../dtos/url/createUrl.dto";
 import { HTTP_REDIRECT_CODES } from "@/shered/httpStatusCodes";
 import { FindManyLinksFiltersDto } from "../dtos/url/findManyLinksQueries.dto";
 import { FindManyLinksPaginatedQuery } from "@/application/queries/findManyLinksPaginated.query";
+import { CreateShortUrlUseCase } from "@/application/useCases/CreateShortUrl.useCase";
 
 export class UrlController {
   constructor (
-    private readonly CreateAnonymousUrlUseCase: CreateAnonymousUrlUseCase,
+    private readonly createAnonymousShortUrlUseCase: CreateAnonymousShortUrl,
     private readonly redirectUrlUseCase: RedirectUrlUseCase,
-    private readonly findManyLinksPaginatedQuery: FindManyLinksPaginatedQuery
+    private readonly findManyLinksPaginatedQuery: FindManyLinksPaginatedQuery,
+    private readonly createShortUrlUseCase: CreateShortUrlUseCase
   ) {}
 
-  async create (request: FastifyRequest, reply: FastifyReply) {
+  async createAnonymous (request: FastifyRequest, reply: FastifyReply) {
     const payload = request.body as CreateUrlDto
-    const shortUrl = await this.CreateAnonymousUrlUseCase.execute(payload)
+    const shortUrl = await this.createAnonymousShortUrlUseCase.execute(payload)
 
     return reply.status(201).send({ shortUrl });
   }
+  
 
   async redirect (request: FastifyRequest<{ Params: { slug: string } }>, reply: FastifyReply) {
     const originalUrl = await this.redirectUrlUseCase.execute(
