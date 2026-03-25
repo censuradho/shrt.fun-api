@@ -8,6 +8,7 @@ export interface UrlPaginationFilters {
 
 export interface IUrlRepository {
   createAnonymous (payload: CreateUrlEntityDto): Promise<string>
+  create (userId: string, payload: CreateUrlEntityDto): Promise<string>
   getIdByShortUrl (url: string): Promise<string | null>
   getOriginalUrl (shortUrl: string): Promise<{ id: string; originalUrl: string } | null>
   incrementHitsCount (id: string): Promise<void>

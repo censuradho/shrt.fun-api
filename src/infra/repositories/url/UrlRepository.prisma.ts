@@ -8,6 +8,23 @@ import { UrlModel, UrlWhereInput } from "prisma/generated/models";
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
+  async create (userId: string, payload: CreateUrlEntityDto): Promise<string> {
+    const data= await this.prisma.url.create({
+      data: {
+        id: nanoid(),
+        userId,
+        originalUrl: payload.originalUrl,
+        shortUrl: payload.shortUrl,
+        description: payload.description,
+        expireAt: payload.expireAt,
+        tags: payload.tags,
+      },
+      select: { id: true }
+    })
+
+    return data.id
+  }
+
   async findManyPaginated(
     userId: string, 
     pagination: PaginationParams, 
