@@ -16,7 +16,6 @@ import { errorHandler } from './presentation/middleware/error-handler';
 import { urlRoutesPublic } from './presentation/routes/url.routes';
 import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
 import { routes } from "./presentation/routes/routes";
-import { envProvider } from "./infra/config/ProcessEnvProvider";
 
 const app = Fastify({
   trustProxy: true,
