@@ -1,5 +1,5 @@
 import { UrlCacheService } from '@/application/services/UrlCacheService';
-import { CreateAnonymousUrlUseCase } from '@/application/useCases/CreateAnonymous.useCase';
+import { CreateAnonymousShortUrl, CreateAnonymousUrlUseCase } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
@@ -11,6 +11,7 @@ import { UrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
 import { FastifyInstance } from 'fastify';
 import { UrlController } from '../controller/url.controller';
 import { FindManyLinksPaginatedQuery } from '@/application/queries/findManyLinksPaginated.query';
+import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerateService';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
 
@@ -20,15 +21,21 @@ const findManyLinksPaginatedQuery = new FindManyLinksPaginatedQuery(urlRepositor
 export function makeUrlController(app: FastifyInstance): UrlController {
   const cache: CacheGateway = new RedisCacheGateway(app.redis);
   const urlCacheService = new UrlCacheService(cache);
+  const shortUrlGenerateService = new ShortUrlGenerateService(urlRepository, envProvider);
+  
+  const createAnonymousShortUrlUseCase = new CreateAnonymousShortUrl(
+    urlRepository, 
+    urlCacheService, 
+    shortUrlGenerateService
+  );
 
-  const createAnonymousUrlUseCase = new CreateAnonymousUrlUseCase(urlRepository, urlCacheService, envProvider);
   const redirectUrlUseCase = new RedirectUrlUseCase(
     urlCacheService, 
     urlUnitOfWork
   );
 
   return new UrlController(
-    createAnonymousUrlUseCase, 
+    createAnonymousShortUrlUseCase, 
     redirectUrlUseCase, 
     findManyLinksPaginatedQuery
   );
