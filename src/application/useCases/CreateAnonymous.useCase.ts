@@ -8,7 +8,7 @@ import { generateHash } from "@/shered/generateHash";
 import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
 import { slugify } from "@/shered/slugify";
 
-export class CreateUrlUseCase {
+export class CreateAnonymousUrlUseCase {
   constructor (
     private readonly urlRepository: IUrlRepository,
     private readonly urlCacheService: IUrlCacheService,
@@ -30,7 +30,7 @@ export class CreateUrlUseCase {
       });
     }
 
-    const urlId = await this.urlRepository.create({
+    const urlId = await this.urlRepository.createAnonymous({
       originalUrl: url,
       shortUrl,
     });

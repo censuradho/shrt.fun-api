@@ -1,5 +1,5 @@
 import { UrlCacheService } from '@/application/services/UrlCacheService';
-import { CreateUrlUseCase } from '@/application/useCases/CreateUrl.useCase';
+import { CreateAnonymousUrlUseCase } from '@/application/useCases/CreateAnonymous.useCase';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
@@ -21,14 +21,14 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   const cache: CacheGateway = new RedisCacheGateway(app.redis);
   const urlCacheService = new UrlCacheService(cache);
 
-  const createUrlUseCase = new CreateUrlUseCase(urlRepository, urlCacheService, envProvider);
+  const CreateAnonymousUrlUseCase = new CreateAnonymousUrlUseCase(urlRepository, urlCacheService, envProvider);
   const redirectUrlUseCase = new RedirectUrlUseCase(
     urlCacheService, 
     urlUnitOfWork
   );
 
   return new UrlController(
-    createUrlUseCase, 
+    CreateAnonymousUrlUseCase, 
     redirectUrlUseCase, 
     findManyLinksPaginatedQuery
   );

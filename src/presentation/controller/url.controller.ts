@@ -1,4 +1,4 @@
-import { CreateUrlUseCase } from "@/application/useCases/CreateUrl.useCase";
+import { CreateAnonymousUrlUseCase } from "@/application/useCases/CreateAnonymous.useCase";
 import { RedirectUrlUseCase } from "@/application/useCases/RedirectUrl.useCase";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreateUrlDto } from "../dtos/url/createUrl.dto";
@@ -8,14 +8,14 @@ import { FindManyLinksPaginatedQuery } from "@/application/queries/findManyLinks
 
 export class UrlController {
   constructor (
-    private readonly createUrlUseCase: CreateUrlUseCase,
+    private readonly CreateAnonymousUrlUseCase: CreateAnonymousUrlUseCase,
     private readonly redirectUrlUseCase: RedirectUrlUseCase,
     private readonly findManyLinksPaginatedQuery: FindManyLinksPaginatedQuery
   ) {}
 
   async create (request: FastifyRequest, reply: FastifyReply) {
     const payload = request.body as CreateUrlDto
-    const shortUrl = await this.createUrlUseCase.execute(payload)
+    const shortUrl = await this.CreateAnonymousUrlUseCase.execute(payload)
 
     return reply.status(201).send({ shortUrl });
   }

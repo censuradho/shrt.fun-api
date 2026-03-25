@@ -54,7 +54,7 @@ export class UrlRepository implements IUrlRepository {
     return data || null;
   }
 
-  async create (payload: CreateUrlEntityDto): Promise<string> { 
+  async createAnonymous (payload: CreateUrlEntityDto): Promise<string> { 
     const data= await this.prisma.url.create({
       data: {
         id: nanoid(),
