@@ -15,13 +15,21 @@ export class UrlController {
     private readonly createShortUrlUseCase: CreateShortUrlUseCase
   ) {}
 
+  async create (request: FastifyRequest, reply: FastifyReply) {
+    const userId = request.user.id;
+    const payload = request.body as CreateUrlDto
+    const shortUrl = await this.createShortUrlUseCase.execute(userId, payload)
+
+
+    return reply.status(201).send({ shortUrl });
+  }
+
   async createAnonymous (request: FastifyRequest, reply: FastifyReply) {
     const payload = request.body as CreateUrlDto
     const shortUrl = await this.createAnonymousShortUrlUseCase.execute(payload)
 
     return reply.status(201).send({ shortUrl });
   }
-  
 
   async redirect (request: FastifyRequest<{ Params: { slug: string } }>, reply: FastifyReply) {
     const originalUrl = await this.redirectUrlUseCase.execute(
