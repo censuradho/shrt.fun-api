@@ -7,7 +7,10 @@ import { PrismaClient } from "prisma/generated/client";
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}
   async findUserBySupabaseId(supabaseId: string): Promise<UserModel | null> {
-    const user = await this.prisma.user.findUnique({ where: { supabaseId } });
+    const user = await this.prisma.user.findUnique({
+      where: { supabaseId },
+      include: { plan: { select: { id: true, name: true, monthlyLinkLimit: true } } },
+    });
 
     return user ? ({
       createdAt: user.createdAt,
@@ -17,11 +20,15 @@ export class UserRepository implements IUserRepository {
       lastName: user.lastName,
       isActive: user.isActive,
       username: user.username,
+      plan: user.plan,
     }) : null;
   }
 
   async me (id: string): Promise<UserModel | null> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { plan: { select: { id: true, name: true, monthlyLinkLimit: true } } },
+    });
 
     return user ? ({
       createdAt: user.createdAt,
@@ -31,6 +38,7 @@ export class UserRepository implements IUserRepository {
       lastName: user.lastName,
       isActive: user.isActive,
       username: user.username,
+      plan: user.plan,
     }) : null
   }
 
