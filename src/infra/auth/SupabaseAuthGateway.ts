@@ -8,6 +8,12 @@ export class SupabaseAuthGateway implements AuthGateway {
     private readonly envProvider: IEnvProvider
   ) {}
 
+  async getUser(token?: string): Promise<AuthUser | null> {
+    const { data, error } = await this.client.auth.getUser(token);
+    if (error) throw error;
+    return data.user ?? null;
+  }
+
   async signUpWithEmailAndPassword(params: SignUpWithEmailAndPasswordParams): Promise<AuthUser> {
     const {
       email,
