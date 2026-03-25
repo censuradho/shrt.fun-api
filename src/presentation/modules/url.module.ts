@@ -12,6 +12,7 @@ import { FastifyInstance } from 'fastify';
 import { UrlController } from '../controller/url.controller';
 import { FindManyLinksPaginatedQuery } from '@/application/queries/findManyLinksPaginated.query';
 import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerateService';
+import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.useCase';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
 
@@ -29,6 +30,12 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     shortUrlGenerateService
   );
 
+  const createShortUrlUseCase = new CreateShortUrlUseCase(
+    urlRepository, 
+    urlCacheService, 
+    shortUrlGenerateService
+  );
+
   const redirectUrlUseCase = new RedirectUrlUseCase(
     urlCacheService, 
     urlUnitOfWork
@@ -37,6 +44,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   return new UrlController(
     createAnonymousShortUrlUseCase, 
     redirectUrlUseCase, 
-    findManyLinksPaginatedQuery
+    findManyLinksPaginatedQuery,
+    createShortUrlUseCase
   );
 }
