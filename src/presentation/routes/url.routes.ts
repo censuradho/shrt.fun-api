@@ -26,7 +26,7 @@ export async function urlRoutesPublic(app: FastifyInstance) {
         },
       }
     },
-    urlController.create.bind(urlController)
+    urlController.createAnonymous.bind(urlController)
   );
 
   app.get(
