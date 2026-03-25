@@ -57,7 +57,8 @@ model User {
   username String
   firstName String
   lastName String
-
+  supabaseId String @unique
+  
   isActive Boolean @default(true)
 
   urls Url[]
