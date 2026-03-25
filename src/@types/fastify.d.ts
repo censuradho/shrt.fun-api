@@ -1,11 +1,14 @@
 import 'fastify'
 import Redis from "ioredis";
-import { CookieUser } from '@/domain/interfaces/CookieUser';
-
 declare module 'fastify' {
+
   interface FastifyRequest {
-    localUser?: CookieUser
+    user: {
+      id: string;
+      email?: string
+    };
   }
+  
   interface FastifyInstance {
     redis: Redis;
   }
