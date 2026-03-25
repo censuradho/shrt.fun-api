@@ -1,34 +1,22 @@
 import { AppError } from "@/domain/errors/AppError";
 import { URL_ERRORS } from "@/domain/errors/url.error";
+import { IShortUrlGenerateService } from "@/domain/interfaces/IShortUrlGenerateService";
 import { IUrlCacheService } from "@/domain/interfaces/IUrlCacheService";
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IEnvProvider } from "@/domain/services/EnvProvider";
 import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
-import { generateHash } from "@/shered/generateHash";
 import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
-import { slugify } from "@/shered/slugify";
 
-export class CreateAnonymousUrlUseCase {
+export class CreateAnonymousShortUrl {
   constructor (
     private readonly urlRepository: IUrlRepository,
     private readonly urlCacheService: IUrlCacheService,
-    private readonly envProvider: IEnvProvider
+    private readonly shortUrlGenerateService: IShortUrlGenerateService
   ) {}
 
   async execute(dto: CreateUrlDto): Promise<string> {
     const { url, slug } = dto;
 
-    const hash = slug ? slugify(slug) : generateHash();
-
-    const shortUrl = `${this.envProvider.get('DOMAIN_URL')}/${hash}`;
-
-    const existUrl = await this.urlRepository.getIdByShortUrl(shortUrl);
-
-    if (existUrl) {
-      throw new AppError(URL_ERRORS.SHORT_URL_ALREADY_EXISTS, {
-        status: HTTP_ERROR_CODES.CONFLICT
-      });
-    }
+    const shortUrl = await this.shortUrlGenerateService.generate(slug);
 
     const urlId = await this.urlRepository.createAnonymous({
       originalUrl: url,
