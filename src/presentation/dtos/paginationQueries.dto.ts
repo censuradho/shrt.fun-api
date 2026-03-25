@@ -1,7 +1,10 @@
 import z from "zod";
 
 export const paginationQueriesDto = z.object({
-  cursor: z.string().optional(),
+  cursor: z
+    .string()
+    .max(255)
+    .optional(),
   limit: z.number().int().positive().max(100).optional().default(10),
 })
 
