@@ -45,6 +45,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     createAnonymousShortUrlUseCase, 
     redirectUrlUseCase, 
     findManyLinksPaginatedQuery,
-    createShortUrlUseCase
+    createShortUrlUseCase,
+    envProvider
   );
 }
