@@ -14,6 +14,10 @@ export class HitRepository implements IHitRepository {
         userAgent: payload.userAgent,
         country: payload.country,
         city: payload.city,
+        referrer: payload.referrer,
+        device: payload.device,
+        os: payload.os,
+        browser: payload.browser,
       }
     })
   }
