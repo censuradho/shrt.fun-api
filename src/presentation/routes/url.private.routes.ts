@@ -21,6 +21,15 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
     urlController.findManyPaginated.bind(urlController)
   );
 
+  app.get(
+    '/:id',
+    {
+      preHandler: authMiddleware,
+      schema: { params: urlParamsDto },
+    },
+    urlController.findById.bind(urlController)
+  );
+
   app.patch(
     '/:id/active',
     {
