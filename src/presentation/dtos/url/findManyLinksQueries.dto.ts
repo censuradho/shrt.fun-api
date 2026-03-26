@@ -3,7 +3,7 @@ import { paginationQueriesDto } from "../paginationQueries.dto";
 import { sanitizeString } from "@/shered/sanitizeString";
 
 export const findManyLinksFiltersDto = paginationQueriesDto.extend({
-  isActive: z.boolean().optional(),
+  isActive: z.enum(['true', 'false']).transform(v => v === 'true').optional(),
   search: z
     .string()
     .max(255)
