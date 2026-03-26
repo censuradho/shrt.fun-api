@@ -14,7 +14,7 @@ export class CreateShortUrlUseCase {
   ) {}
 
   async execute(userId: string, dto: CreateUrlDto): Promise<string> {
-    const { url, slug } = dto;
+    const { url, slug, title } = dto;
 
     const shortUrl = await this.shortUrlGenerateService.generate(slug);
 
@@ -23,11 +23,12 @@ export class CreateShortUrlUseCase {
       {
         originalUrl: url,
         shortUrl,
+        title,
       });
 
     try {
       await Promise.all([
-        this.urlCacheService.setUrl(shortUrl, url, urlId, 60 * 60 * 24 * 30),
+        this.urlCacheService.setUrl(shortUrl, url, urlId, true, 60 * 60 * 24 * 30),
         this.urlCacheService.incrementTotalUrls(),
       ])
 
