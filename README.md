@@ -21,6 +21,8 @@ Sobe apenas os bancos (Postgres + Redis) via Docker e roda o servidor localmente
 ```bash
 docker-compose -f docker-compose.dev.yml up -d
 pnpm install
+pnpm deploy   # roda as migrations
+pnpm seed     # popula dados iniciais (planos, etc.) — obrigatório antes do primeiro uso
 pnpm dev
 ```
 
