@@ -14,6 +14,11 @@ export const createUrlDto = z.object({
     .max(100, FIELD_ERROR_MESSAGES.MAX_LENGTH(100))
     .optional()
     .transform((value) => sanitizeString(value)),
+  title: z
+    .string()
+    .max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
+    .optional()
+    .transform((value) => sanitizeString(value)),
 })
 
 export type CreateUrlDto = z.infer<typeof createUrlDto>
