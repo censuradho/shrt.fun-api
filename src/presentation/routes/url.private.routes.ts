@@ -3,6 +3,9 @@ import { makeUrlController } from '../modules/url.module';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { findManyLinksFiltersDto } from '../dtos/url/findManyLinksQueries.dto';
 import { createUrlDto } from '../dtos/url/createUrl.dto';
+import z from 'zod';
+
+const urlParamsDto = z.object({ id: z.string() });
 
 export async function urlRoutesPrivate(app: FastifyInstance) {
   const urlController = makeUrlController(app);
@@ -16,6 +19,15 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
       },
     },
     urlController.findManyPaginated.bind(urlController)
+  );
+
+  app.patch(
+    '/:id/active',
+    {
+      preHandler: authMiddleware,
+      schema: { params: urlParamsDto },
+    },
+    urlController.toggleActive.bind(urlController)
   );
 
   app.post(
