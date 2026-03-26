@@ -121,4 +121,21 @@ export class UrlRepository implements IUrlRepository {
       }
     })
   }
+
+  async toggleActive (id: string, supabaseId: string): Promise<boolean | null> {
+    const url = await this.prisma.url.findFirst({
+      where: { id, user: { supabaseId } },
+      select: { isActive: true },
+    });
+
+    if (!url) return null;
+
+    const updated = await this.prisma.url.update({
+      where: { id },
+      data: { isActive: !url.isActive },
+      select: { isActive: true },
+    });
+
+    return updated.isActive;
+  }
 }
