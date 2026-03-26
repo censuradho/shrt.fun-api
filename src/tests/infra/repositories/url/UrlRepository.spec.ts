@@ -22,7 +22,7 @@ describe('UrlRepository', () => {
 
       mockCtx.prisma.url.create.mockResolvedValue({ id: 'generated-id' } as any);
 
-      const id = await repo.create(payload);
+      const id = await repo.create('asdasd', payload);
 
       expect(id).toBe('generated-id');
       expect(mockCtx.prisma.url.create).toHaveBeenCalledWith({
