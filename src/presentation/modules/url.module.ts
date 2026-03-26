@@ -15,6 +15,7 @@ import { FindManyLinksPaginatedQuery } from '@/application/queries/findManyLinks
 import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerateService';
 import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.useCase';
 import { GeoipLiteGeolocationService } from '@/infra/geolocation/GeoipLiteGeolocationService';
+import { UaParserDeviceService } from '@/infra/device/UaParserDeviceService';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
 
@@ -41,7 +42,8 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   const redirectUrlUseCase = new RedirectUrlUseCase(
     urlCacheService,
     urlUnitOfWork,
-    new GeoipLiteGeolocationService()
+    new GeoipLiteGeolocationService(),
+    new UaParserDeviceService()
   );
 
   const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository);
