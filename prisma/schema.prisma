@@ -23,11 +23,15 @@ model Hit {
   userAgent String
   country   String?
   city      String?
+  referrer  String?
+  device    String?
+  os        String?
+  browser   String?
 
   createdAt DateTime @default(now())
 
+  @@index([urlId])
   @@index([country])
-
   @@map("hits")
 }
 
