@@ -10,24 +10,25 @@
       "ESNext.Iterator",
       "ESNext.Promise"
     ],
-    "module": "es2022",
-    "target": "es2024",
+    "module": "ESNext",
+    "target": "ES2023",
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "prisma/generated/*": ["prisma/generated/*"]
+    },
     "outDir": "./dist",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
   },
   "include": [
-    "src", 
-    "src/**/*.ts", 
-    "src/@types", 
-    "prisma", 
-    "node_modules/@prisma/client"
+    "src",
+    "src/**/*.ts",
+    "src/@types"
   ],
   "exclude": ["node_modules"]
 }
