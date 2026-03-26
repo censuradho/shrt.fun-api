@@ -3,4 +3,6 @@ export interface CreateHitEntityDto {
   userAgent: string
   ipAddress: string
   id: string
+  country?: string | null
+  city?: string | null
 }
