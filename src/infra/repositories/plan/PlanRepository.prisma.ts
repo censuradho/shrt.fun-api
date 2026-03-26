@@ -1,5 +1,5 @@
 import { IPlanRepository, PlanModel } from '@/domain/repositories/IPlanRepository';
-import { PrismaClient } from 'prisma/generated/client';
+import { PrismaClient } from '@/generated/prisma/client';
 
 export class PlanRepository implements IPlanRepository {
   constructor(private readonly prisma: PrismaClient) {}

@@ -1,6 +1,6 @@
 import { IUnitOfWork } from "@/domain/interfaces/IUnitOfWork";
 import { IUrlRepository } from "@/domain/repositories/IUrlRepository";
-import { PrismaClient } from "prisma/generated/client";
+import { PrismaClient } from "@/generated/prisma/client";
 import { UrlRepository } from "./UrlRepository.prisma";
 import { IHitRepository } from "@/domain/repositories/IHitRepository";
 import { HitRepository } from "../hit/HitRepository";

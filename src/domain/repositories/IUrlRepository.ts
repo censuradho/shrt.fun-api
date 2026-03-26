@@ -1,4 +1,4 @@
-import { UrlModel } from "prisma/generated/models";
+import { UrlModel } from "@/generated/prisma/models";
 import { PaginationParams, PaginationResult } from "../interfaces/Pagination";
 import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
 

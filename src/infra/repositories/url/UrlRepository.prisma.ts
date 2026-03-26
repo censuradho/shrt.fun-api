@@ -2,8 +2,8 @@ import { PaginationParams, PaginationResult } from "@/domain/interfaces/Paginati
 import { CreateUrlEntityDto } from "@/domain/repositories/dtos/CreateUrlEntity.dto";
 import { IUrlRepository, UrlPaginationFilters } from "@/domain/repositories/IUrlRepository";
 import { nanoid } from "nanoid";
-import { PrismaClient } from "prisma/generated/client";
-import { UrlModel, UrlWhereInput } from "prisma/generated/models";
+import { PrismaClient } from "@/generated/prisma/client";
+import { UrlModel, UrlWhereInput } from "@/generated/prisma/models";
 
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}

@@ -2,7 +2,7 @@ import { UserModel } from "@/domain/models/User.model";
 import { CreateUserEntityDto } from "@/domain/repositories/dtos/CreateUserEntity.dto";
 import { IUserRepository } from "@/domain/repositories/IUserRepository";
 import { nanoid } from "nanoid";
-import { PrismaClient } from "prisma/generated/client";
+import { PrismaClient } from "@/generated/prisma/client";
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}

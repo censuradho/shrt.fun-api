@@ -1,6 +1,6 @@
 import { IHitRepository, LocationAnalyticsItem } from "@/domain/repositories/IHitRepository";
 import { CreateHitEntityDto } from "@/domain/repositories/dtos/CreateHitEntity.dto";
-import { PrismaClient } from "prisma/generated/client";
+import { PrismaClient } from "@/generated/prisma/client";
 
 export class HitRepository implements IHitRepository {
   constructor (private readonly prisma: PrismaClient) {}

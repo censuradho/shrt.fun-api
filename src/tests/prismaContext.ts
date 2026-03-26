@@ -1,4 +1,4 @@
-import { PrismaClient } from 'prisma/generated/client'
+import { PrismaClient } from '@/generated/prisma/client'
 import { mockDeep, DeepMockProxy } from 'vitest-mock-extended'
 
 export interface Context {
