@@ -39,7 +39,8 @@ export class UrlController {
     const data = await this.redirectUrlUseCase.execute(
       request.params.slug,
       request.ip,
-      request.headers['user-agent'] || ''
+      request.headers['user-agent'] || '',
+      request.headers['referer'] || null
     );
     if (!data.isActive) 
       return reply
