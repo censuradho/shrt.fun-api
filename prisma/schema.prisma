@@ -26,6 +26,8 @@ model Hit {
 
   createdAt DateTime @default(now())
 
+  @@index([country])
+
   @@map("hits")
 }
 
