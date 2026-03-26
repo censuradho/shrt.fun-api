@@ -7,3 +7,4 @@ src/tmp
 .claude
 
 prisma/generated
+src/generated
