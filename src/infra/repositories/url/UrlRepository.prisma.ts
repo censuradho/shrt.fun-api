@@ -63,14 +63,15 @@ export class UrlRepository implements IUrlRepository {
     };
   }
 
-  async getOriginalUrl(shortUrl: string): Promise<{ originalUrl: string; id: string } | null> {
+  async getOriginalUrl(shortUrl: string): Promise<{ originalUrl: string; id: string, isActive: boolean } | null> {
     const data = await this.prisma.url.findUnique({
       where: {
         shortUrl
       },
       select: {
         originalUrl: true,
-        id: true
+        id: true,
+        isActive: true
       }
     })
 

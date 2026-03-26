@@ -11,7 +11,7 @@ export interface IUrlRepository {
   createAnonymous (payload: CreateUrlEntityDto): Promise<string>
   create (supabaseId: string, payload: CreateUrlEntityDto): Promise<string>
   getIdByShortUrl (url: string): Promise<string | null>
-  getOriginalUrl (shortUrl: string): Promise<{ id: string; originalUrl: string } | null>
+  getOriginalUrl (shortUrl: string): Promise<{ id: string; originalUrl: string, isActive: boolean } | null>
   incrementHitsCount (id: string): Promise<void>
   delete (id: string): Promise<void>
   findManyPaginated (supabaseId: string, pagination: PaginationParams, filters: UrlPaginationFilters): Promise<
