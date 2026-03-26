@@ -9,7 +9,8 @@
     "seed": "prisma db seed",
     "dev": "set NODE_ENV=development && tsx -r tsconfig-paths/register --watch  ./src/server.ts",
     "test:unit": "vitest",
-    "test:unit:ui": "vitest --ui"
+    "test:unit:ui": "vitest --ui",
+    "start": "node dist/src/server.js"
   },
   "type": "module",
   "keywords": [],
@@ -45,6 +46,7 @@
     "@types/ua-parser-js": "^0.7.39",
     "eslint": "^10.0.3",
     "prisma": "^7.5.0",
+    "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
