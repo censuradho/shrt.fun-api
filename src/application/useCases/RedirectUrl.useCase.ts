@@ -1,5 +1,6 @@
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
+import { IGeolocationService } from '@/domain/interfaces/IGeolocationService';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { IUrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
 import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
@@ -8,12 +9,15 @@ import { nanoid } from 'nanoid';
 export class RedirectUrlUseCase {
   constructor(
     private readonly urlCacheService: IUrlCacheService,
-    private readonly urlUnitOfWork: IUrlUnitOfWork
+    private readonly urlUnitOfWork: IUrlUnitOfWork,
+    private readonly geolocationService: IGeolocationService
   ) {}
 
   async execute(slug: string, ip: string, userAgent: string) {
     const shortUrl = `${process.env.DOMAIN_URL}/${slug}`;
-    const hitPayload = { id: nanoid(), ipAddress: ip, userAgent };
+    const { country, city } = this.geolocationService.lookup(ip);
+
+    const hitPayload = { id: nanoid(), ipAddress: ip, userAgent, country, city };
 
     const cached = await this.urlCacheService.getUrl(shortUrl);
 
