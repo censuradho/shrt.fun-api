@@ -21,6 +21,8 @@ model Hit {
 
   ipAddress String
   userAgent String
+  country   String?
+  city      String?
 
   createdAt DateTime @default(now())
 
