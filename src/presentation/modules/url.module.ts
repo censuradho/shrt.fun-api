@@ -12,6 +12,7 @@ import { UrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
 import { FastifyInstance } from 'fastify';
 import { UrlController } from '../controller/url.controller';
 import { FindManyLinksPaginatedQuery } from '@/application/queries/findManyLinksPaginated.query';
+import { FindUrlByIdQuery } from '@/application/queries/findUrlById.query';
 import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerateService';
 import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.useCase';
 import { GeoipLiteGeolocationService } from '@/infra/geolocation/GeoipLiteGeolocationService';
@@ -48,10 +49,13 @@ export function makeUrlController(app: FastifyInstance): UrlController {
 
   const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository);
 
+  const findUrlByIdQuery = new FindUrlByIdQuery(urlRepository);
+
   return new UrlController(
     createAnonymousShortUrlUseCase,
     redirectUrlUseCase,
     findManyLinksPaginatedQuery,
+    findUrlByIdQuery,
     createShortUrlUseCase,
     toggleUrlActiveUseCase,
     envProvider
