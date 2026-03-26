@@ -11,7 +11,7 @@ export class RedirectUrlUseCase {
     private readonly urlUnitOfWork: IUrlUnitOfWork
   ) {}
 
-  async execute(slug: string, ip: string, userAgent: string): Promise<string> {
+  async execute(slug: string, ip: string, userAgent: string) {
     const shortUrl = `${process.env.DOMAIN_URL}/${slug}`;
     const hitPayload = { id: nanoid(), ipAddress: ip, userAgent };
 
@@ -26,7 +26,7 @@ export class RedirectUrlUseCase {
         ])
       })
       
-      return cached.originalUrl;
+      return cached;
     }
 
     const result = await this.urlUnitOfWork.run(async ({ url, hit }) => {
@@ -39,7 +39,12 @@ export class RedirectUrlUseCase {
       await Promise.all([
         url.incrementHitsCount(data.id),
         hit.incrementHitCount({ ...hitPayload, urlId: data.id }),
-        this.urlCacheService.setUrl(shortUrl, data.originalUrl, data.id),
+        this.urlCacheService.setUrl(
+          shortUrl, 
+          data.originalUrl, 
+          data.id,
+          data.isActive
+        ),
         this.urlCacheService.incrementHits(shortUrl),
       ])
 
@@ -47,6 +52,6 @@ export class RedirectUrlUseCase {
     });
 
 
-    return result.originalUrl;
+    return result;
   }
 }
