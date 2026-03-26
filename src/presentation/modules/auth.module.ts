@@ -22,6 +22,7 @@ export function makeAuthController(app: FastifyInstance): AuthenticationControll
 
   return new AuthenticationController(
     signUpWithEmailAndPasswordUseCase,
-    userRepository
+    userRepository,
+    app
   )
 }
