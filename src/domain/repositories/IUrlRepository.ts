@@ -12,6 +12,7 @@ export interface IUrlRepository {
   create (supabaseId: string, payload: CreateUrlEntityDto): Promise<string>
   getIdByShortUrl (url: string): Promise<string | null>
   getOriginalUrl (shortUrl: string): Promise<{ id: string; originalUrl: string, isActive: boolean } | null>
+  findById (id: string, supabaseId: string): Promise<UrlModel | null>
   incrementHitsCount (id: string): Promise<void>
   delete (id: string): Promise<void>
   toggleActive (id: string, supabaseId: string): Promise<boolean | null>

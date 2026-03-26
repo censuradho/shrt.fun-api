@@ -96,6 +96,14 @@ export class UrlRepository implements IUrlRepository {
     return data.id
   }
 
+  async findById (id: string, supabaseId: string): Promise<UrlModel | null> {
+    const data = await this.prisma.url.findFirst({
+      where: { id, supabaseId },
+    });
+
+    return data || null;
+  }
+
   async getIdByShortUrl (url: string): Promise<string | null> {
     const data = await this.prisma.url.findUnique({
       where: {
