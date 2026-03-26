@@ -12,6 +12,8 @@ export class HitRepository implements IHitRepository {
         id: payload.id,
         ipAddress: payload.ipAddress,
         userAgent: payload.userAgent,
+        country: payload.country,
+        city: payload.city,
       }
     })
   }
