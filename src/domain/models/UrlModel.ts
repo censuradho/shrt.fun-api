@@ -2,11 +2,12 @@ export interface UrlModel {
   id: string
   originalUrl: string
   shortUrl: string
+  title?: string | null
   hitsCount: number
   isActive: boolean
-  description?: string
+  description?: string | null
   tags: string[]
-  expiresAt?: Date
+  expireAt?: Date | null
   createdAt: Date
   updatedAt: Date
 }
