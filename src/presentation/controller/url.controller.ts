@@ -5,6 +5,7 @@ import { CreateUrlDto } from "../dtos/url/createUrl.dto";
 import { HTTP_REDIRECT_CODES, HTTP_STATUS_CODES } from "@/shered/httpStatusCodes";
 import { FindManyLinksFiltersDto } from "../dtos/url/findManyLinksQueries.dto";
 import { FindManyLinksPaginatedQuery } from "@/application/queries/findManyLinksPaginated.query";
+import { FindUrlByIdQuery } from "@/application/queries/findUrlById.query";
 import { CreateShortUrlUseCase } from "@/application/useCases/CreateShortUrl.useCase";
 import { ToggleUrlActiveUseCase } from "@/application/useCases/ToggleUrlActive.useCase";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
@@ -14,6 +15,7 @@ export class UrlController {
     private readonly createAnonymousShortUrlUseCase: CreateAnonymousShortUrl,
     private readonly redirectUrlUseCase: RedirectUrlUseCase,
     private readonly findManyLinksPaginatedQuery: FindManyLinksPaginatedQuery,
+    private readonly findUrlByIdQuery: FindUrlByIdQuery,
     private readonly createShortUrlUseCase: CreateShortUrlUseCase,
     private readonly toggleUrlActiveUseCase: ToggleUrlActiveUseCase,
     private readonly envProvider: IEnvProvider
@@ -53,6 +55,12 @@ export class UrlController {
   async toggleActive (request: FastifyRequest, reply: FastifyReply) {
     const { id } = request.params as { id: string };
     const result = await this.toggleUrlActiveUseCase.execute(id, request.user.id);
+    return reply.send(result);
+  }
+
+  async findById (request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string };
+    const result = await this.findUrlByIdQuery.execute(id, request.user.id);
     return reply.send(result);
   }
 
