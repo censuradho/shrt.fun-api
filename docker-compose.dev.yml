@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: mv_postgres_dev
+    restart: always
+    environment:
+      POSTGRES_USER: mvUser
+      POSTGRES_PASSWORD: mbPass
+      POSTGRES_DB: mvDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: mv_redis_dev
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
