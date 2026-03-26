@@ -1,6 +1,7 @@
 import { UrlCacheService } from '@/application/services/UrlCacheService';
-import { CreateAnonymousShortUrl, CreateAnonymousUrlUseCase } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
+import { CreateAnonymousShortUrl } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
+import { ToggleUrlActiveUseCase } from '@/application/useCases/ToggleUrlActive.useCase';
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { RedisCacheGateway } from '@/infra/cache/RedisCacheGateway';
@@ -37,15 +38,18 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   );
 
   const redirectUrlUseCase = new RedirectUrlUseCase(
-    urlCacheService, 
+    urlCacheService,
     urlUnitOfWork
   );
 
+  const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository);
+
   return new UrlController(
-    createAnonymousShortUrlUseCase, 
-    redirectUrlUseCase, 
+    createAnonymousShortUrlUseCase,
+    redirectUrlUseCase,
     findManyLinksPaginatedQuery,
     createShortUrlUseCase,
+    toggleUrlActiveUseCase,
     envProvider
   );
 }
