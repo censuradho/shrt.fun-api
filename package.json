@@ -8,6 +8,7 @@
     "build": "tsup",
     "deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
+    "generate": "prisma generate",
     "dev": "set NODE_ENV=development && tsx -r tsconfig-paths/register --watch  ./src/server.ts",
     "test:unit": "vitest",
     "test:unit:ui": "vitest --ui",
