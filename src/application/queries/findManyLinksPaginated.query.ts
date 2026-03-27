@@ -1,4 +1,4 @@
-import { PaginationParams } from "@/domain/interfaces/Pagination";
+import { CursorPaginationParams } from "@/domain/interfaces/Pagination";
 import { IUrlRepository, UrlPaginationFilters } from "@/domain/repositories/IUrlRepository";
 import { FindManyLinksFiltersDto } from "@/presentation/dtos/url/findManyLinksQueries.dto";
 
@@ -15,7 +15,7 @@ export class FindManyLinksPaginatedQuery {
       search
     }
 
-    const pagination: PaginationParams = {
+    const pagination: CursorPaginationParams = {
       cursor,
       limit,
     }

@@ -1,4 +1,4 @@
-import { PaginationParams, PaginationResult } from "@/domain/interfaces/Pagination";
+import { CursorPaginationParams, CursorPaginationResult } from "@/domain/interfaces/Pagination";
 import { CreateUrlEntityDto } from "@/domain/repositories/dtos/CreateUrlEntity.dto";
 import { IUrlRepository, UrlPaginationFilters } from "@/domain/repositories/IUrlRepository";
 import { nanoid } from "nanoid";
@@ -28,9 +28,9 @@ export class UrlRepository implements IUrlRepository {
 
   async findManyPaginated(
     supabaseId: string, 
-    pagination: PaginationParams, 
+    pagination: CursorPaginationParams, 
     filters: UrlPaginationFilters
-  ): Promise<PaginationResult<UrlModel>> {
+  ): Promise<CursorPaginationResult<UrlModel>> {
     const { cursor, limit } = pagination;
     const { isActive, search } = filters
 

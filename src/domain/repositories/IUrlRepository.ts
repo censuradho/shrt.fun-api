@@ -1,5 +1,5 @@
 import { UrlModel } from "@/generated/prisma/models";
-import { PaginationParams, PaginationResult } from "../interfaces/Pagination";
+import { CursorPaginationParams, CursorPaginationResult } from "../interfaces/Pagination";
 import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
 
 export interface UrlPaginationFilters {
@@ -16,7 +16,7 @@ export interface IUrlRepository {
   incrementHitsCount (id: string): Promise<void>
   delete (id: string): Promise<void>
   toggleActive (id: string, supabaseId: string): Promise<boolean | null>
-  findManyPaginated (supabaseId: string, pagination: PaginationParams, filters: UrlPaginationFilters): Promise<
-    PaginationResult<UrlModel>
+  findManyPaginated (supabaseId: string, pagination: CursorPaginationParams, filters: UrlPaginationFilters): Promise<
+    CursorPaginationResult<UrlModel>
   >
 }
