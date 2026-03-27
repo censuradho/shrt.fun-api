@@ -1,4 +1,5 @@
-import { IHitRepository, LocationAnalyticsItem } from "@/domain/repositories/IHitRepository";
+import { OffsetPaginationParams, OffsetPaginationResult } from "@/domain/interfaces/Pagination";
+import { IHitRepository, LocationAnalyticsItem, LocationClicksItem } from "@/domain/repositories/IHitRepository";
 import { CreateHitEntityDto } from "@/domain/repositories/dtos/CreateHitEntity.dto";
 import { PrismaClient } from "@/generated/prisma/client";
 
@@ -35,5 +36,54 @@ export class HitRepository implements IHitRepository {
       city: row.city,
       clicks: row._count.id,
     }));
+  }
+
+  async groupByCountryByUser(supabaseId: string, pagination: OffsetPaginationParams): Promise<OffsetPaginationResult<LocationClicksItem>> {
+    const where = { url: { supabaseId } };
+
+    const [rows, total] = await Promise.all([
+      this.prisma.hit.groupBy({
+        by: ['country'],
+        where,
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+        skip: pagination.offset,
+        take: pagination.limit,
+      }),
+      this.prisma.hit.groupBy({ by: ['country'], where, _count: { id: true } }).then(r => r.length),
+    ]);
+
+    return {
+      data: rows.map(row => ({ name: row.country, clicks: row._count.id })),
+      total,
+      limit: pagination.limit,
+      offset: pagination.offset,
+    };
+  }
+
+  async groupByCityByUser(
+    supabaseId: string, 
+    pagination: OffsetPaginationParams
+  ): Promise<OffsetPaginationResult<LocationClicksItem>> {
+    const where = { url: { supabaseId } };
+
+    const [rows, total] = await Promise.all([
+      this.prisma.hit.groupBy({
+        by: ['city'],
+        where,
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+        skip: pagination.offset,
+        take: pagination.limit,
+      }),
+      this.prisma.hit.groupBy({ by: ['city'], where, _count: { id: true } }).then(r => r.length),
+    ]);
+
+    return {
+      data: rows.map(row => ({ name: row.city, clicks: row._count.id })),
+      total,
+      limit: pagination.limit,
+      offset: pagination.offset,
+    };
   }
 }
