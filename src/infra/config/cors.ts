@@ -8,9 +8,7 @@ const originDevelopment = [
 const origins = process.env.ORIGIN?.split(',') || []
 
 export const corsConfig: FastifyCorsOptions = {
-  origin: [
-    ...(process.env.NODE_ENV != 'production' ? originDevelopment : origins)
-  ],
+  origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 }
