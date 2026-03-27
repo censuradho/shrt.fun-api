@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const paginationQueriesDto = z.object({
+export const cursorPaginationQueriesDto = z.object({
   cursor: z
     .string()
     .max(255)
@@ -8,4 +8,5 @@ export const paginationQueriesDto = z.object({
   limit: z.number().int().positive().max(100).optional().default(10),
 })
 
-export type PaginationQueriesDto = z.infer<typeof paginationQueriesDto>;
+export type CursorPaginationQueriesDto = z.infer<typeof cursorPaginationQueriesDto>;
+

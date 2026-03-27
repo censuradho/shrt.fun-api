@@ -1,8 +1,8 @@
 import z from "zod";
-import { paginationQueriesDto } from "../paginationQueries.dto";
+import { cursorPaginationQueriesDto } from "../paginationQueries.dto";
 import { sanitizeString } from "@/shered/sanitizeString";
 
-export const findManyLinksFiltersDto = paginationQueriesDto.extend({
+export const findManyLinksFiltersDto = cursorPaginationQueriesDto.extend({
   isActive: z.enum(['true', 'false']).transform(v => v === 'true').optional(),
   search: z
     .string()
