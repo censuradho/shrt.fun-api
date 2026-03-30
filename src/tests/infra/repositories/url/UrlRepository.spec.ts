@@ -49,7 +49,7 @@ describe('UrlRepository', () => {
       expect(result).toEqual(expected);
       expect(mockCtx.prisma.url.findUnique).toHaveBeenCalledWith({
         where: { shortUrl },
-        select: { originalUrl: true, id: true },
+        select: { originalUrl: true, id: true, isActive: true },
       });
     });
 
@@ -63,7 +63,7 @@ describe('UrlRepository', () => {
       expect(result).toBeNull();
       expect(mockCtx.prisma.url.findUnique).toHaveBeenCalledWith({
         where: { shortUrl: 'https://mv.api/notfound' },
-        select: { originalUrl: true, id: true },
+        select: { originalUrl: true, id: true, isActive: true },
       });
     });
   });
