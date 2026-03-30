@@ -23,7 +23,9 @@ const makeUrlCacheService = (): IUrlCacheService => ({
   incrementHits: vi.fn(),
   incrementTotalUrls: vi.fn(),
   getTotalUrls: vi.fn(),
+  deleteUrl: vi.fn(),
 });
+
 
 const makeGeolocationService = (): IGeolocationService => ({
   lookup: vi.fn().mockReturnValue({ country: null, city: null }),
@@ -51,15 +53,18 @@ const makeUnitOfWork = (): IUrlUnitOfWork => ({
   ),
 });
 
+const makeEnvProvider = () => ({
+  get: vi.fn().mockReturnValue(DOMAIN),
+});
+
 const makeUseCase = (
   cacheService: IUrlCacheService,
   uow: IUrlUnitOfWork,
   geo = makeGeolocationService(),
   device = makeDeviceService()
-) => new RedirectUrlUseCase(cacheService, uow, geo, device);
+) => new RedirectUrlUseCase(cacheService, uow, geo, device, makeEnvProvider());
 
 beforeEach(() => {
-  process.env.DOMAIN_URL = DOMAIN;
   vi.clearAllMocks();
 });
 
