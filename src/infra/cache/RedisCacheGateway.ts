@@ -25,14 +25,4 @@ export class RedisCacheGateway implements CacheGateway {
   async delete(key: string): Promise<void> {
     await this.redis.del(key);
   }
-
-  async getAll<T>(pattern = '*'): Promise<{ key: string; value: T }[]> {
-    const keys = await this.redis.keys(pattern);
-    if (keys.length === 0) return [];
-
-    const values = await this.redis.mget(...keys);
-    return keys
-      .map((key, i) => ({ key, value: values[i] ? JSON.parse(values[i] ?? 'null') as T : null }))
-      .filter((entry): entry is { key: string; value: T } => entry.value !== null);
-  }
 }
