@@ -1,4 +1,3 @@
-import { envProvider } from './src/infra/config/ProcessEnvProvider';
 import { defineConfig } from "prisma/config";
 
 export default defineConfig({
@@ -10,6 +9,6 @@ export default defineConfig({
       : "tsx -r tsconfig-paths/register prisma/seed.ts"
   },
   datasource: {
-    url:  envProvider.get("DATABASE_URL"),
+    url: process.env.DATABASE_URL,
   },
 });
