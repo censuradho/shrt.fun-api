@@ -2,6 +2,7 @@ import { UrlCacheService } from '@/application/services/UrlCacheService';
 import { CreateAnonymousShortUrl } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
 import { ToggleUrlActiveUseCase } from '@/application/useCases/ToggleUrlActive.useCase';
+import { DeleteUrlUseCase } from '@/application/useCases/DeleteUrl.useCase';
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { RedisCacheGateway } from '@/infra/cache/RedisCacheGateway';
@@ -49,6 +50,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   );
 
   const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository, urlCacheService);
+  const deleteUrlUseCase = new DeleteUrlUseCase(urlRepository, urlCacheService);
 
   const findUrlByIdQuery = new FindUrlByIdQuery(urlRepository);
 
@@ -59,6 +61,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     findUrlByIdQuery,
     createShortUrlUseCase,
     toggleUrlActiveUseCase,
+    deleteUrlUseCase,
     envProvider
   );
 }
