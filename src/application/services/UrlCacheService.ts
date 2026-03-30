@@ -32,6 +32,11 @@ export class UrlCacheService implements IUrlCacheService {
     return await this.cache.get<{ originalUrl: string; urlId: string; isActive: boolean }>(cacheKey);
   }
 
+  async deleteUrl(shortUrl: string): Promise<void> {
+    const cacheKey = CacheKeyBuilder.url(shortUrl);
+    await this.cache.delete(cacheKey);
+  }
+
   async incrementHits(shortUrl: string, ttl: number = URL_TTL_SECONDS): Promise<void> {
     const cacheKey = CacheKeyBuilder.urlHits(shortUrl);
     const hits = await this.cache.get<number>(cacheKey);
