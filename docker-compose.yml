@@ -4,7 +4,7 @@ services:
     container_name: mv_api
     restart: always
     ports:
-      - "3333:3333"
+      - "3000:3333"
     env_file:
       - .env
     depends_on:
@@ -22,7 +22,7 @@ services:
       POSTGRES_PASSWORD: mbPass
       POSTGRES_DB: mvDb
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -33,7 +33,7 @@ services:
     container_name: mv_redis
     restart: always
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
