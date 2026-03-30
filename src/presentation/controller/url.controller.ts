@@ -8,6 +8,7 @@ import { FindManyLinksPaginatedQuery } from "@/application/queries/findManyLinks
 import { FindUrlByIdQuery } from "@/application/queries/findUrlById.query";
 import { CreateShortUrlUseCase } from "@/application/useCases/CreateShortUrl.useCase";
 import { ToggleUrlActiveUseCase } from "@/application/useCases/ToggleUrlActive.useCase";
+import { DeleteUrlUseCase } from "@/application/useCases/DeleteUrl.useCase";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
 
 export class UrlController {
@@ -18,6 +19,7 @@ export class UrlController {
     private readonly findUrlByIdQuery: FindUrlByIdQuery,
     private readonly createShortUrlUseCase: CreateShortUrlUseCase,
     private readonly toggleUrlActiveUseCase: ToggleUrlActiveUseCase,
+    private readonly deleteUrlUseCase: DeleteUrlUseCase,
     private readonly envProvider: IEnvProvider
   ) {}
 
@@ -56,6 +58,12 @@ export class UrlController {
     const { id } = request.params as { id: string };
     const result = await this.toggleUrlActiveUseCase.execute(id, request.user.id);
     return reply.send(result);
+  }
+
+  async delete (request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string };
+    await this.deleteUrlUseCase.execute(id, request.user.id);
+    return reply.status(HTTP_STATUS_CODES.NO_CONTENT).send();
   }
 
   async findById (request: FastifyRequest, reply: FastifyReply) {
