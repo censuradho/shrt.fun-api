@@ -1,0 +1,61 @@
+services:
+  api:
+    build: .
+    container_name: mv_api
+    restart: always
+    ports:
+      - "3000:3333"
+    env_file:
+      - .env.prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - mv_network
+
+  postgres:
+    image: postgres:16
+    container_name: mv_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: mvUser
+      POSTGRES_PASSWORD: mbPass
+      POSTGRES_DB: mvDb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mv_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mvUser -d mvDb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: mv_redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - mv_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  mv_network:
+    driver: bridge
