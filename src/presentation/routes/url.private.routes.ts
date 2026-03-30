@@ -49,4 +49,13 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
     },
     urlController.create.bind(urlController)
   );
+
+  app.delete(
+    '/:id',
+    {
+      preHandler: authMiddleware,
+      schema: { params: urlParamsDto },
+    },
+    urlController.delete.bind(urlController)
+  );
 }
