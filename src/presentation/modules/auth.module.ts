@@ -17,6 +17,7 @@ export function makeAuthController(app: FastifyInstance): AuthenticationControll
     supabaseAuthGateway,
     userRepository,
     planRepository,
+    envProvider,
     app
   )
 
