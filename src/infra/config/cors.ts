@@ -1,14 +1,10 @@
 import { FastifyCorsOptions } from "@fastify/cors";
+import { envProvider } from "./ProcessEnvProvider";
 
-const originDevelopment = [
-  'http://localhost:3000',
-  'http://localhost:5173',
-]
-
-const origins = process.env.ORIGIN?.split(',') || []
+const origins = envProvider.get('CORS')?.split(',').map(origin => origin.trim()) || [];
 
 export const corsConfig: FastifyCorsOptions = {
-  origin: '*',
+  origin: origins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 }
