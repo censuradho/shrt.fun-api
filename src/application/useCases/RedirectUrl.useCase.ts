@@ -3,6 +3,7 @@ import { URL_ERRORS } from '@/domain/errors/url.error';
 import { IDeviceService } from '@/domain/interfaces/IDeviceService';
 import { IGeolocationService } from '@/domain/interfaces/IGeolocationService';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
+import { IEnvProvider } from '@/domain/services/EnvProvider';
 import { IUrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
 import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
 import { nanoid } from 'nanoid';
@@ -12,11 +13,12 @@ export class RedirectUrlUseCase {
     private readonly urlCacheService: IUrlCacheService,
     private readonly urlUnitOfWork: IUrlUnitOfWork,
     private readonly geolocationService: IGeolocationService,
-    private readonly deviceService: IDeviceService
+    private readonly deviceService: IDeviceService,
+    private readonly envProvider: IEnvProvider
   ) {}
 
   async execute(slug: string, ip: string, userAgent: string, referrer: string | null) {
-    const shortUrl = `${process.env.DOMAIN_URL}/${slug}`;
+    const shortUrl = `${this.envProvider.get('REDIRECT_CLIENT_URL')}/${slug}`;
     const { country, city } = this.geolocationService.lookup(ip);
     const { device, os, browser } = this.deviceService.parse(userAgent);
 
