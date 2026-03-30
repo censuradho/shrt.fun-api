@@ -52,7 +52,8 @@ model Url {
   supabaseId String?
   user User? @relation(fields: [supabaseId], references: [supabaseId])
 
-  expireAt DateTime?
+  expireAt  DateTime?
+  deletedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
