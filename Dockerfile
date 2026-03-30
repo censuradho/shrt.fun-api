@@ -24,5 +24,5 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "node dist/server.js"]
 
