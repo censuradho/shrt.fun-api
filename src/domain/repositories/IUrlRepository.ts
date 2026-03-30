@@ -15,7 +15,7 @@ export interface IUrlRepository {
   findById (id: string, supabaseId: string): Promise<UrlModel | null>
   incrementHitsCount (id: string): Promise<void>
   delete (id: string): Promise<void>
-  toggleActive (id: string, supabaseId: string): Promise<boolean | null>
+  toggleActive (id: string, supabaseId: string): Promise<{ isActive: boolean; shortUrl: string } | null>
   findManyPaginated (supabaseId: string, pagination: CursorPaginationParams, filters: UrlPaginationFilters): Promise<
     CursorPaginationResult<UrlModel>
   >
