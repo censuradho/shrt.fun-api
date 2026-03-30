@@ -7,4 +7,9 @@ export function routes (app: FastifyInstance) {
   app.register(authRoutes, { prefix: '/auth' })
   app.register(urlRoutesPrivate, { prefix: '/url' })
   app.register(analyticsRoutesPrivate, { prefix: '/analytics' })
+  app.register(
+    () => app.get('/health', async () => {
+      return { status: 'ok' };
+    })
+  )
 }
