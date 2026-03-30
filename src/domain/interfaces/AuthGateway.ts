@@ -2,6 +2,9 @@ export interface SignUpWithEmailAndPasswordParams {
   email: string;
   password: string;
   phone?: string;
+    options: {
+      emailRedirectTo: string | undefined;
+  }
 }
 
 export interface UpdateUserParams {
