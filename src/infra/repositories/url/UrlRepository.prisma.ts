@@ -36,6 +36,7 @@ export class UrlRepository implements IUrlRepository {
 
     const where: UrlWhereInput = {
       supabaseId,
+      deletedAt: null,
       ...(isActive !== undefined && { isActive }),
       ...(search &&  ({
         OR: [
@@ -65,9 +66,10 @@ export class UrlRepository implements IUrlRepository {
   }
 
   async getOriginalUrl(shortUrl: string): Promise<{ originalUrl: string; id: string, isActive: boolean } | null> {
-    const data = await this.prisma.url.findUnique({
+    const data = await this.prisma.url.findFirst({
       where: {
-        shortUrl
+        shortUrl,
+        deletedAt: null,
       },
       select: {
         originalUrl: true,
@@ -98,7 +100,7 @@ export class UrlRepository implements IUrlRepository {
 
   async findById (id: string, supabaseId: string): Promise<UrlModel | null> {
     const data = await this.prisma.url.findFirst({
-      where: { id, supabaseId },
+      where: { id, supabaseId, deletedAt: null },
     });
 
     return data || null;
@@ -126,10 +128,24 @@ export class UrlRepository implements IUrlRepository {
 
   async delete (id: string): Promise<void> {
     await this.prisma.url.delete({
-      where: {
-        id
-      }
+      where: { id }
     })
+  }
+
+  async softDelete (id: string, supabaseId: string): Promise<string | null> {
+    const url = await this.prisma.url.findFirst({
+      where: { id, supabaseId, deletedAt: null },
+      select: { shortUrl: true },
+    });
+
+    if (!url) return null;
+
+    await this.prisma.url.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+
+    return url.shortUrl;
   }
 
   async toggleActive (id: string, supabaseId: string): Promise<{ isActive: boolean; shortUrl: string } | null> {
