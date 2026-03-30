@@ -119,18 +119,23 @@ export class UrlRepository implements IUrlRepository {
     return data?.id || null
   }
 
-  async countByUserCurrentMonth (supabaseId: string): Promise<number> {
+  async countByUserCurrentMonth (supabaseId: string): Promise<{ month: number; today: number }> {
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    const end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
-    return this.prisma.url.count({
-      where: {
-        supabaseId,
-        deletedAt: null,
-        createdAt: { gte: start, lt: end },
-      },
-    });
+    const [month, today] = await Promise.all([
+      this.prisma.url.count({
+        where: { supabaseId, deletedAt: null, createdAt: { gte: monthStart, lt: monthEnd } },
+      }),
+      this.prisma.url.count({
+        where: { supabaseId, deletedAt: null, createdAt: { gte: dayStart, lt: dayEnd } },
+      }),
+    ]);
+
+    return { month, today };
   }
 
   async incrementHitsCount (id: string): Promise<void> {

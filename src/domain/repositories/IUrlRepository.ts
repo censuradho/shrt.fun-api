@@ -17,7 +17,7 @@ export interface IUrlRepository {
   delete (id: string): Promise<void>
   softDelete (id: string, supabaseId: string): Promise<string | null>
   toggleActive (id: string, supabaseId: string): Promise<{ isActive: boolean; shortUrl: string } | null>
-  countByUserCurrentMonth (supabaseId: string): Promise<number>
+  countByUserCurrentMonth (supabaseId: string): Promise<{ month: number; today: number }>
   findManyPaginated (supabaseId: string, pagination: CursorPaginationParams, filters: UrlPaginationFilters): Promise<
     CursorPaginationResult<UrlModel>
   >
