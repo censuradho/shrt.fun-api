@@ -16,6 +16,8 @@ export class AuthenticationController {
     const body = request.body as SignUpDto;
     try {
 
+      this.app.log.info(`[AuthenticationController.signUpWithEmailAndPassword] Starting sign up process for email: ${body.email}`)
+
       await this.signUpWithEmailAndPasswordUseCase.execute({
         email: body.email,
         password: body.password,
