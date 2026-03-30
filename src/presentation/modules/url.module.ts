@@ -18,8 +18,10 @@ import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerate
 import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.useCase';
 import { GeoipLiteGeolocationService } from '@/infra/geolocation/GeoipLiteGeolocationService';
 import { UaParserDeviceService } from '@/infra/device/UaParserDeviceService';
+import { UserRepository } from '@/infra/repositories/user/UserRepository.prisma';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
+const userRepository = new UserRepository(prisma);
 
 const urlUnitOfWork = new UrlUnitOfWork(prisma);
 const findManyLinksPaginatedQuery = new FindManyLinksPaginatedQuery(urlRepository);
@@ -36,9 +38,10 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   );
 
   const createShortUrlUseCase = new CreateShortUrlUseCase(
-    urlRepository, 
-    urlCacheService, 
-    shortUrlGenerateService
+    urlRepository,
+    urlCacheService,
+    shortUrlGenerateService,
+    userRepository,
   );
 
   const redirectUrlUseCase = new RedirectUrlUseCase(
