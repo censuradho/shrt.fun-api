@@ -26,6 +26,11 @@ export class RedirectUrlUseCase {
 
     const cached = await this.urlCacheService.getUrl(shortUrl);
 
+    if (cached && !cached.isActive) {
+      await this.urlCacheService.deleteUrl(shortUrl);
+      throw new AppError(URL_ERRORS.URL_NOT_FOUND, { status: HTTP_ERROR_CODES.NOT_FOUND });
+    }
+
     if (cached) {
       await this.urlUnitOfWork.run(async ({ url, hit }) => {
         await Promise.all([
