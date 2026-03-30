@@ -16,7 +16,7 @@ export class ShortUrlGenerateService implements IShortUrlGenerateService {
   async generate(slug?: string): Promise<string> {
     const hash = slug ? slugify(slug) : generateHash();
     
-    const shortUrl = `${this.envProvider.get('DOMAIN_URL')}/${hash}`;
+    const shortUrl = `${this.envProvider.get('REDIRECT_CLIENT_URL')}/${hash}`;
     
     const existUrl = await this.urlRepository.getIdByShortUrl(shortUrl);
 
