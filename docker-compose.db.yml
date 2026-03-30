@@ -4,7 +4,7 @@ services:
     container_name: mv_api
     restart: always
     ports:
-      - "3000:3333"
+      - "${PORT:-3000}:3333"
     env_file:
       - .env.prod
     depends_on:
