@@ -44,7 +44,8 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     urlCacheService,
     urlUnitOfWork,
     new GeoipLiteGeolocationService(),
-    new UaParserDeviceService()
+    new UaParserDeviceService(),
+    envProvider
   );
 
   const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository);
