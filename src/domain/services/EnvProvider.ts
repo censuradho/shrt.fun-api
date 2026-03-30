@@ -20,6 +20,7 @@ export interface LocalEnvironmentVars {
   DATABASE_URL?: string;
   DOMAIN_URL?: string;
   CLIENT_URL?: string;
+  REDIRECT_CLIENT_URL?: string;
 }
 
 export interface IEnvProvider {
