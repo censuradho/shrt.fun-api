@@ -10,13 +10,15 @@ import { FastifyInstance } from 'fastify';
 import { delay } from '@/utils/delay';
 import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
 import { PlanName } from '@/domain/enums/Plan.enum';
+import { IEnvProvider } from '@/domain/services/EnvProvider';
 
 export class SignUpWithEmailAndPasswordUseCase {
   constructor (
     private readonly authGateway: AuthGateway,
     private readonly userRepository: IUserRepository,
     private readonly planRepository: IPlanRepository,
-    private readonly app: FastifyInstance
+    private readonly envProvider: IEnvProvider,
+    private readonly app: FastifyInstance,
   ) {}
 
   async execute (input: SignUpDto) {
@@ -40,8 +42,20 @@ export class SignUpWithEmailAndPasswordUseCase {
     let userId: string | null = null
 
     try {
-      const supabaseUser = await this.authGateway.signUpWithEmailAndPassword({ email, password })
-      const user = await this.userRepository.create({ email, firstName, lastName, supabaseId: supabaseUser.id, planId: freePlan.id })
+      const supabaseUser = await this.authGateway.signUpWithEmailAndPassword({ 
+        email, 
+        password,
+        options: {
+          emailRedirectTo: this.envProvider.get("CLIENT_URL"),
+        },
+      })
+      const user = await this.userRepository.create({ 
+        email, 
+        firstName, 
+        lastName, 
+        supabaseId: supabaseUser.id, 
+        planId: freePlan.id 
+      })
 
       userId = user
     } catch(error: any)  {
