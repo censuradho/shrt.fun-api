@@ -48,7 +48,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     envProvider
   );
 
-  const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository);
+  const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository, urlCacheService);
 
   const findUrlByIdQuery = new FindUrlByIdQuery(urlRepository);
 
