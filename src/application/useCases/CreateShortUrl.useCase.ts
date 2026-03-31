@@ -25,13 +25,14 @@ export class CreateShortUrlUseCase {
     });
 
     const { month, today } = await this.urlRepository.countByUserCurrentMonth(supabaseId);
-    const dailyLinkLimit = Math.floor(user.plan.monthlyLinkLimit / 30);
+    const dailyLinkLimit = Math.max(1, Math.floor(user.plan.monthlyLinkLimit / 30));
 
     if (month >= user.plan.monthlyLinkLimit) {
       throw new AppError(URL_ERRORS.MONTHLY_LINK_LIMIT_REACHED, {
         status: HTTP_STATUS_CODES.FORBIDDEN,
       });
     }
+
 
     if (today >= dailyLinkLimit) {
       throw new AppError(URL_ERRORS.DAILY_LINK_LIMIT_REACHED, {
