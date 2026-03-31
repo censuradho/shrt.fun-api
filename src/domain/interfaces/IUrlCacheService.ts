@@ -5,4 +5,5 @@ export interface IUrlCacheService {
   getUrl(shortUrl: string): Promise<{ originalUrl: string; urlId: string; isActive: boolean } | null>
   incrementHits(shortUrl: string, ttl?: number): Promise<void>
   deleteUrl(shortUrl: string): Promise<void>
+  incrementTotalClicks(ttl?: number): Promise<void>
 }

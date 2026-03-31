@@ -37,6 +37,12 @@ export class UrlCacheService implements IUrlCacheService {
     await this.cache.delete(cacheKey);
   }
 
+  async incrementTotalClicks(ttl: number = URL_TTL_SECONDS): Promise<void> {
+    const cacheKey = CacheKeyBuilder.totalClicks();
+    const total = await this.cache.get<number>(cacheKey);
+    await this.cache.set(cacheKey, total !== null ? total + 1 : 1, ttl);
+  }
+
   async incrementHits(shortUrl: string, ttl: number = URL_TTL_SECONDS): Promise<void> {
     const cacheKey = CacheKeyBuilder.urlHits(shortUrl);
     const hits = await this.cache.get<number>(cacheKey);
