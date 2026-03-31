@@ -5,6 +5,7 @@ import { IUrlCacheService } from "@/domain/interfaces/IUrlCacheService";
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
 import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import {  addDays } from 'date-fns'
 
 export class CreateAnonymousShortUrl {
   constructor (
@@ -18,13 +19,15 @@ export class CreateAnonymousShortUrl {
 
     const shortUrl = await this.shortUrlGenerateService.generate(slug);
 
+    const expireInSeconds = 60 * 60 * 24 * 6; // 6 days
+
     const urlId = await this.urlRepository.createAnonymous({
       originalUrl: url,
       shortUrl,
       title,
+      expireAt: addDays(new Date(), 6)
     });
 
-    const expireInSeconds = 60 * 60 * 24 * 6; // 6 days
 
     try {
       await Promise.all([
