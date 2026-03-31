@@ -19,9 +19,12 @@ import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.use
 import { GeoipLiteGeolocationService } from '@/infra/geolocation/GeoipLiteGeolocationService';
 import { UaParserDeviceService } from '@/infra/device/UaParserDeviceService';
 import { UserRepository } from '@/infra/repositories/user/UserRepository.prisma';
+import { HitRepository } from '@/infra/repositories/hit/HitRepository';
+import { PublicStatsQuery } from '@/application/queries/publicStats.query';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
 const userRepository = new UserRepository(prisma);
+const hitRepository = new HitRepository(prisma);
 
 const urlUnitOfWork = new UrlUnitOfWork(prisma);
 const findManyLinksPaginatedQuery = new FindManyLinksPaginatedQuery(urlRepository);
@@ -54,6 +57,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
 
   const toggleUrlActiveUseCase = new ToggleUrlActiveUseCase(urlRepository, urlCacheService);
   const deleteUrlUseCase = new DeleteUrlUseCase(urlRepository, urlCacheService);
+  const publicStatsQuery = new PublicStatsQuery(cache, urlRepository, hitRepository);
 
   const findUrlByIdQuery = new FindUrlByIdQuery(urlRepository);
 
@@ -65,6 +69,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     createShortUrlUseCase,
     toggleUrlActiveUseCase,
     deleteUrlUseCase,
+    publicStatsQuery,
     envProvider
   );
 }
