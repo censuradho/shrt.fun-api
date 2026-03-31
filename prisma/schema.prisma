@@ -12,7 +12,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model Hit {
   id String @id
 
@@ -46,6 +45,8 @@ model Url {
   hitsCount Int @default(0)
 
   isActive Boolean @default(true)
+  isAnonymous Boolean @default(false)
+
   description String?
   tags String[]
 
