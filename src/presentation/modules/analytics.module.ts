@@ -5,9 +5,11 @@ import { prisma } from '@/infra/database/prisma';
 import { HitRepository } from '@/infra/repositories/hit/HitRepository';
 import { UrlRepository } from '@/infra/repositories/url/UrlRepository.prisma';
 import { AnalyticsController } from '../controller/analytics.controller';
+import { AnalyticsRepository } from '@/infra/repositories/analytics/AnalyticsRepository.prisma';
 
 const urlRepository = new UrlRepository(prisma);
 const hitRepository = new HitRepository(prisma);
+const analyticsRepository = new AnalyticsRepository(prisma);
 
 export function makeAnalyticsController(): AnalyticsController {
   const findLocationAnalyticsQuery = new FindLocationAnalyticsQuery(urlRepository, hitRepository);
@@ -18,5 +20,6 @@ export function makeAnalyticsController(): AnalyticsController {
     findLocationAnalyticsQuery,
     findCountryAnalyticsByUserQuery,
     findCityAnalyticsByUserQuery,
+    analyticsRepository
   );
 }
