@@ -17,4 +17,5 @@ export interface IHitRepository {
   groupByLocation(urlId: string): Promise<LocationAnalyticsItem[]>;
   groupByCountryByUser(supabaseId: string, pagination: OffsetPaginationParams): Promise<OffsetPaginationResult<LocationClicksItem>>;
   groupByCityByUser(supabaseId: string, pagination: OffsetPaginationParams): Promise<OffsetPaginationResult<LocationClicksItem>>;
+  countAll(): Promise<number>;
 }

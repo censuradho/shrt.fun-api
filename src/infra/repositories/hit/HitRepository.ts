@@ -6,6 +6,10 @@ import { PrismaClient } from "@/generated/prisma/client";
 export class HitRepository implements IHitRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
+  async countAll(): Promise<number> {
+    return this.prisma.hit.count();
+  }
+
   async incrementHitCount(payload: CreateHitEntityDto): Promise<void> {
     await this.prisma.hit.create({
       data: {
