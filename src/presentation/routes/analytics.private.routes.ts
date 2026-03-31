@@ -3,11 +3,21 @@ import { offsetPaginationQueriesDto } from '@/presentation/dtos/paginationQuerie
 import { FastifyInstance } from 'fastify';
 import z from 'zod';
 import { makeAnalyticsController } from '../modules/analytics.module';
+import { topMostAccessedUrlsQueryDto, TopMostAccessedUrlsQueryDto } from '../dtos/analytics.dto';
 
 const urlParamsDto = z.object({ urlId: z.string() });
 
 export async function analyticsRoutesPrivate(app: FastifyInstance) {
   const analyticsController = makeAnalyticsController();
+
+  app.get<{ Querystring: TopMostAccessedUrlsQueryDto }>(
+    '/url/ranking',
+    {
+      preHandler: authMiddleware,
+      schema: { querystring: topMostAccessedUrlsQueryDto },
+    },
+    analyticsController.topMostAccessedUrls.bind(analyticsController)
+  )
 
   app.get(
     '/locations/hits/url/:urlId/',
