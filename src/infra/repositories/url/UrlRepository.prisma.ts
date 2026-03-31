@@ -91,6 +91,7 @@ export class UrlRepository implements IUrlRepository {
         description: payload.description,
         expireAt: payload.expireAt,
         tags: payload.tags,
+        isAnonymous: true,
       },
       select: { id: true }
     })
