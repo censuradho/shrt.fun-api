@@ -119,6 +119,10 @@ export class UrlRepository implements IUrlRepository {
     return data?.id || null
   }
 
+  async countAll (): Promise<number> {
+    return this.prisma.url.count({ where: { deletedAt: null } });
+  }
+
   async countByUserCurrentMonth (supabaseId: string): Promise<{ month: number; today: number }> {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
