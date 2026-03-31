@@ -36,7 +36,8 @@ export class RedirectUrlUseCase {
         await Promise.all([
           url.incrementHitsCount(cached.urlId),
           hit.incrementHitCount({ ...hitPayload, urlId: cached.urlId }),
-          this.urlCacheService.incrementHits(shortUrl)
+          this.urlCacheService.incrementHits(shortUrl),
+          this.urlCacheService.incrementTotalClicks()
         ])
       })
       
@@ -60,6 +61,7 @@ export class RedirectUrlUseCase {
           data.isActive
         ),
         this.urlCacheService.incrementHits(shortUrl),
+        this.urlCacheService.incrementTotalClicks(),
       ])
 
       return data;
