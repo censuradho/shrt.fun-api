@@ -13,6 +13,10 @@ export class CacheKeyBuilder {
   static urlHits (url: string): string {
     return this.build('url', url, 'hits');
   }
+
+  static totalClicks (): string {
+    return this.build('totalClicks');
+  }
   
   private static build(...parts: string[]): string {
     return [this.PREFIX, ...parts].join(this.SEPARATOR);
