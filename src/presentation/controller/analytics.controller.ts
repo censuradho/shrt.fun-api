@@ -3,12 +3,15 @@ import { FindCountryAnalyticsByUserQuery } from '@/application/queries/findCount
 import { FindCityAnalyticsByUserQuery } from '@/application/queries/findLocationAnalyticsByUser.query';
 import { OffsetPaginationQueriesDto } from '@/presentation/dtos/paginationQueries.dto';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { IAnalyticsRepository } from '@/domain/repositories/IAnalyticsRepository';
+import { TopMostAccessedUrlsQueryDto } from '../dtos/analytics.dto';
 
 export class AnalyticsController {
   constructor(
     private readonly findLocationAnalyticsQuery: FindLocationAnalyticsQuery,
     private readonly findCountryAnalyticsByUserQuery: FindCountryAnalyticsByUserQuery,
     private readonly findCityAnalyticsByUserQuery: FindCityAnalyticsByUserQuery,
+    private analyticsRepository: IAnalyticsRepository
   ) {}
 
   async findLocations(request: FastifyRequest, reply: FastifyReply) {
@@ -28,6 +31,21 @@ export class AnalyticsController {
     const userId = request.user.id;
     const { offset, limit } = request.query as OffsetPaginationQueriesDto;
     const data = await this.findCityAnalyticsByUserQuery.execute(userId, { offset, limit });
+    return reply.send(data);
+  }
+
+  async topMostAccessedUrls(request: FastifyRequest<{ Querystring: TopMostAccessedUrlsQueryDto }>, reply: FastifyReply) {
+    const {
+      isActive,
+      limit = 5
+    } = request.query;
+
+    const userId = request.user.id;
+
+    const data = await this.analyticsRepository.topMostAccessedUrls(userId, {
+      isActive,
+      limit,
+    });
     return reply.send(data);
   }
 }
