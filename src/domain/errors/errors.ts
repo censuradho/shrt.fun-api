@@ -5,5 +5,8 @@ export const FIELD_ERROR_MESSAGES = {
   MAX_LENGTH(length: number) {
     return `FIELD_ERROR_MAX_LENGTH_${length}`;
   },
+  MAX_VALUE(value: number) {
+    return `FIELD_ERROR_MAX_VALUE_${value}`;
+  },
   DATE_MUST_BE_IN_FUTURE: 'DATE_MUST_BE_IN_FUTURE'
 }
