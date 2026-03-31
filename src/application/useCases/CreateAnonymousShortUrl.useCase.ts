@@ -24,9 +24,11 @@ export class CreateAnonymousShortUrl {
       title,
     });
 
+    const expireInSeconds = 60 * 60 * 24 * 6; // 6 days
+
     try {
       await Promise.all([
-        this.urlCacheService.setUrl(shortUrl, url, urlId, true, 60 * 60 * 24 * 30),
+        this.urlCacheService.setUrl(shortUrl, url, urlId, true, expireInSeconds),
         this.urlCacheService.incrementTotalUrls(),
       ])
 
