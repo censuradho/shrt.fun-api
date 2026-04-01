@@ -73,8 +73,10 @@ describe('UrlRepository', () => {
 
     it('should include cursor and filters in prisma query', async () => {
       const repo = new UrlRepository(ctx.prisma);
-      const createdAfter = new Date('2026-01-01T00:00:00.000Z');
-      const createdBefore = new Date('2026-01-31T00:00:00.000Z');
+      const createdAfter = new Date('2026-01-01T12:00:00.000Z');
+      const createdBefore = new Date('2026-01-31T12:00:00.000Z');
+      const createdAfterAtStartOfDay = new Date(createdAfter);
+      createdAfterAtStartOfDay.setHours(0, 0, 0, 0);
       const createdBeforeAtEndOfDay = new Date(createdBefore);
       createdBeforeAtEndOfDay.setHours(23, 59, 59, 999);
 
@@ -100,7 +102,7 @@ describe('UrlRepository', () => {
             { originalUrl: { contains: 'mv.api', mode: 'insensitive' } },
             { shortUrl: { contains: 'mv.api', mode: 'insensitive' } },
           ],
-          createdAt: { gte: createdAfter, lte: createdBeforeAtEndOfDay },
+          createdAt: { gte: createdAfterAtStartOfDay, lte: createdBeforeAtEndOfDay },
         },
         take: 11,
         skip: 1,
