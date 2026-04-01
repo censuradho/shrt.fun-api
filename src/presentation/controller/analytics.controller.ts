@@ -37,14 +37,27 @@ export class AnalyticsController {
   async topMostAccessedUrls(request: FastifyRequest<{ Querystring: TopMostAccessedUrlsQueryDto }>, reply: FastifyReply) {
     const {
       isActive,
-      limit = 5
     } = request.query;
 
     const userId = request.user.id;
 
     const data = await this.analyticsRepository.topMostAccessedUrls(userId, {
       isActive,
-      limit,
+      limit: 5,
+    });
+    return reply.send(data);
+  }
+
+  async topMostAccessedUrlsDetail(request: FastifyRequest<{ Querystring: TopMostAccessedUrlsQueryDto }>, reply: FastifyReply) {
+    const {
+      isActive,
+    } = request.query;
+
+    const userId = request.user.id;
+
+    const data = await this.analyticsRepository.topMostAccessedUrlsByLocationDeviceAndOS(userId, {
+      isActive,
+      limit: 5,
     });
     return reply.send(data);
   }
