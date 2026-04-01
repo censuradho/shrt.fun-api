@@ -74,7 +74,9 @@ describe('UrlRepository', () => {
     it('should include cursor and filters in prisma query', async () => {
       const repo = new UrlRepository(ctx.prisma);
       const createdAfter = new Date('2026-01-01T00:00:00.000Z');
-      const createdBefore = new Date('2026-01-31T23:59:59.999Z');
+      const createdBefore = new Date('2026-01-31T00:00:00.000Z');
+      const createdBeforeAtEndOfDay = new Date(createdBefore);
+      createdBeforeAtEndOfDay.setHours(23, 59, 59, 999);
 
       mockCtx.prisma.url.findMany.mockResolvedValue([] as any);
 
@@ -98,7 +100,7 @@ describe('UrlRepository', () => {
             { originalUrl: { contains: 'mv.api', mode: 'insensitive' } },
             { shortUrl: { contains: 'mv.api', mode: 'insensitive' } },
           ],
-          createdAt: { lte: createdBefore },
+          createdAt: { gte: createdAfter, lte: createdBeforeAtEndOfDay },
         },
         take: 11,
         skip: 1,
