@@ -40,14 +40,19 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       },        
     })
 
-    return data.map(d => ({
-      city: d.city,
-      country: d.country,
-      device: d.device,
-      os: d.os,
-      hitsCount: d._count.urlId,
-      shortUrl: result.find(r => r.id === d.urlId)?.shortUrl || '',
-    }))
+    return data.map(d => {
+      const url = result.find(r => r.id === d.urlId)
+
+      return ({
+        city: d.city,
+        country: d.country,
+        device: d.device,
+        os: d.os,
+        hitsCount: d._count.urlId,
+        shortUrl: url?.shortUrl || '',
+        title: url?.title || null,
+      })
+    })
   }
 
   async topMostAccessedUrls(userId: string, options?: TopMostAccessedUrlsOptions): Promise<TopMostAccessedUrlModel[]> {
@@ -66,6 +71,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       select: {
         shortUrl: true,
         hitsCount: true,
+        title: true,
       },
     });
   }
