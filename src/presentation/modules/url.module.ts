@@ -1,4 +1,5 @@
 import { UrlCacheService } from '@/application/services/UrlCacheService';
+import { QRCodeAdapter } from '@/infra/qrcode/QrCodeAdapter';
 import { CreateAnonymousShortUrl } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
 import { ToggleUrlActiveUseCase } from '@/application/useCases/ToggleUrlActive.useCase';
@@ -45,6 +46,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     urlCacheService,
     shortUrlGenerateService,
     userRepository,
+    new QRCodeAdapter(),
   );
 
   const redirectUrlUseCase = new RedirectUrlUseCase(
