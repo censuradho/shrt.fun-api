@@ -74,8 +74,8 @@ describe('AnalyticsRepository', () => {
       const userId = 'user-id';
 
       mockCtx.prisma.url.findMany.mockResolvedValue([
-        { id: 'url-1', shortUrl: 'short-1', title: 'Title 1' },
-        { id: 'url-2', shortUrl: 'short-2', title: 'Title 2' },
+        { id: 'url-1', shortUrl: 'short-1', title: 'Title 1', originalUrl: 'http://example.com/1' },
+        { id: 'url-2', shortUrl: 'short-2', title: 'Title 2', originalUrl: 'http://example.com/2' },
       ] as any);
 
       (mockCtx.prisma.hit.groupBy as any).mockResolvedValue([
@@ -120,6 +120,7 @@ describe('AnalyticsRepository', () => {
           hitsCount: 10,
           shortUrl: 'short-1',
           title: 'Title 1',
+          originalUrl: 'http://example.com/1',
         },
         {
           city: 'City B',
@@ -129,6 +130,7 @@ describe('AnalyticsRepository', () => {
           hitsCount: 5,
           shortUrl: 'short-2',
           title: 'Title 2',
+          originalUrl: 'http://example.com/2',
         },
       ])
     })
