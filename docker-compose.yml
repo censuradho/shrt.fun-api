@@ -5,6 +5,8 @@ services:
     restart: always
     ports:
       - "${PORT:-3000}:3333"
+    environment:
+      HUSKY: 0
     env_file:
       - .env.prod
 
