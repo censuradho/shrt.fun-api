@@ -73,14 +73,12 @@ describe('UrlRepository', () => {
 
     it('should include cursor and filters in prisma query', async () => {
       const repo = new UrlRepository(ctx.prisma);
-      const createdAfter = new Date('2026-01-01T12:00:00.000Z');
-      const createdBefore = new Date('2026-01-31T12:00:00.000Z');
-      const createdAfterAtStartOfDay = new Date(createdAfter);
-      createdAfterAtStartOfDay.setHours(0, 0, 0, 0);
-      const createdBeforeAtEndOfDay = new Date(createdBefore);
-      createdBeforeAtEndOfDay.setHours(23, 59, 59, 999);
+
 
       mockCtx.prisma.url.findMany.mockResolvedValue([] as any);
+
+      const createdAfterAtStartOfDay = new Date('2026-01-01T00:00:00.000Z');
+      const createdBeforeAtEndOfDay = new Date('2026-01-31T23:59:59.999Z');
 
       await repo.findManyPaginated(
         'user-1',
@@ -88,8 +86,8 @@ describe('UrlRepository', () => {
         {
           isActive: true,
           search: 'mv.api',
-          createdAfter,
-          createdBefore,
+          createdAfter: createdAfterAtStartOfDay,
+          createdBefore: createdBeforeAtEndOfDay,
         },
       );
 
