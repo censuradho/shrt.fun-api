@@ -51,8 +51,8 @@ describe('AnalyticsRepository', () => {
     it('should return top urls ordered by hits', async () => {
       const repo = new AnalyticsRepository(ctx.prisma);
       const urls = [
-        { shortUrl: 'https://shrt.fun/a', hitsCount: 100, title: 'A' },
-        { shortUrl: 'https://shrt.fun/b', hitsCount: 50, title: 'B' },
+        { shortUrl: 'https://shrt.fun/a', hitsCount: 100, title: 'A', originalUrl: 'http://example.com/a' },
+        { shortUrl: 'https://shrt.fun/b', hitsCount: 50, title: 'B', originalUrl: 'http://example.com/b' },
       ];
       mockCtx.prisma.url.findMany.mockResolvedValue(urls as any);
 
@@ -63,7 +63,7 @@ describe('AnalyticsRepository', () => {
         where: { supabaseId: 'user-id', deletedAt: null, hitsCount: { gt: 0 } },
         orderBy: { hitsCount: 'desc' },
         take: 9,
-        select: { shortUrl: true, hitsCount: true, title: true },
+        select: { shortUrl: true, hitsCount: true, title: true, originalUrl: true },
       });
     });
   });
