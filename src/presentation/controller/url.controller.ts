@@ -28,10 +28,9 @@ export class UrlController {
   async create (request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
     const payload = request.body as CreateUrlDto
-    const shortUrl = await this.createShortUrlUseCase.execute(userId, payload)
+    const result = await this.createShortUrlUseCase.execute(userId, payload)
 
-
-    return reply.status(201).send({ shortUrl });
+    return reply.status(201).send(result);
   }
 
   async createAnonymous (request: FastifyRequest, reply: FastifyReply) {
