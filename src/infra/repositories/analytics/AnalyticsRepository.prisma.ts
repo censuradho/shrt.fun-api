@@ -31,6 +31,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       where: {
         urlId: { in: result.map(r => r.id) },
       },
+      take: limit,
       orderBy: {
         _count: { urlId: 'desc' }
       },
@@ -57,10 +58,6 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       ...(isActive !== undefined && { isActive }),
       hitsCount: { gt: 0 },
     }
-
-    console.log(
-      await this.topMostAccessedUrlsByLocationDeviceAndOS(userId)
-    )
 
     return this.prisma.url.findMany({
       where,
