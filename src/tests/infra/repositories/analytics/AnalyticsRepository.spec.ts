@@ -11,6 +11,63 @@ beforeEach(() => {
 });
 
 describe('AnalyticsRepository', () => {
+  describe('referrerDistribution', () => {
+    it('should return top referrers grouped', async () => {
+      const repo = new AnalyticsRepository(ctx.prisma);
+      mockCtx.prisma.url.findMany.mockResolvedValue([{ id: 'url-1' }, { id: 'url-2' }] as any);
+      ;(mockCtx.prisma.hit.groupBy as any).mockResolvedValue([
+        { referrer: 'google.com', _count: { urlId: 50 } },
+        { referrer: 'twitter.com', _count: { urlId: 20 } },
+      ]);
+
+      const result = await repo.referrerDistribution('user-id', 9);
+
+      expect(result).toEqual([
+        { referrer: 'google.com', hitsCount: 50 },
+        { referrer: 'twitter.com', hitsCount: 20 },
+      ]);
+    });
+
+    it('should group remaining referrers into Other when exceeding limit', async () => {
+      const repo = new AnalyticsRepository(ctx.prisma);
+      mockCtx.prisma.url.findMany.mockResolvedValue([{ id: 'url-1' }] as any);
+      ;(mockCtx.prisma.hit.groupBy as any).mockResolvedValue([
+        { referrer: 'a.com', _count: { urlId: 10 } },
+        { referrer: 'b.com', _count: { urlId: 8 } },
+        { referrer: 'c.com', _count: { urlId: 5 } },
+      ]);
+
+      const result = await repo.referrerDistribution('user-id', 2);
+
+      expect(result).toEqual([
+        { referrer: 'a.com', hitsCount: 10 },
+        { referrer: 'b.com', hitsCount: 8 },
+        { referrer: 'Other', hitsCount: 5 },
+      ]);
+    });
+  });
+
+  describe('topMostAccessedUrls', () => {
+    it('should return top urls ordered by hits', async () => {
+      const repo = new AnalyticsRepository(ctx.prisma);
+      const urls = [
+        { shortUrl: 'https://shrt.fun/a', hitsCount: 100, title: 'A' },
+        { shortUrl: 'https://shrt.fun/b', hitsCount: 50, title: 'B' },
+      ];
+      mockCtx.prisma.url.findMany.mockResolvedValue(urls as any);
+
+      const result = await repo.topMostAccessedUrls('user-id', { limit: 9 });
+
+      expect(result).toEqual(urls);
+      expect(mockCtx.prisma.url.findMany).toHaveBeenCalledWith({
+        where: { supabaseId: 'user-id', deletedAt: null, hitsCount: { gt: 0 } },
+        orderBy: { hitsCount: 'desc' },
+        take: 9,
+        select: { shortUrl: true, hitsCount: true, title: true },
+      });
+    });
+  });
+
   describe('topMostAccessedUrlsByLocationDeviceAndOS', () => {
     it ('should return top accessed urls grouped by location, device and os', async () => {
       const repo = new AnalyticsRepository(ctx.prisma);
