@@ -48,6 +48,12 @@ export class AnalyticsController {
     return reply.send(data);
   }
 
+  async referrerDistribution(request: FastifyRequest, reply: FastifyReply) {
+    const userId = request.user.id;
+    const data = await this.analyticsRepository.referrerDistribution(userId);
+    return reply.send(data);
+  }
+
   async topMostAccessedUrlsDetail(request: FastifyRequest<{ Querystring: TopMostAccessedUrlsQueryDto }>, reply: FastifyReply) {
     const {
       isActive,
