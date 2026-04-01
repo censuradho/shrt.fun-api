@@ -19,6 +19,7 @@ export class UrlRepository implements IUrlRepository {
         description: payload.description,
         expireAt: payload.expireAt,
         tags: payload.tags,
+        hasQrCode: payload.hasQrCode ?? false,
       },
       select: { id: true }
     })
@@ -157,6 +158,21 @@ export class UrlRepository implements IUrlRepository {
     ]);
 
     return { month, today };
+  }
+
+  async countQrCodeByUserCurrentMonth (supabaseId: string): Promise<number> {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+    return this.prisma.url.count({
+      where: {
+        supabaseId,
+        hasQrCode: true,
+        deletedAt: null,
+        createdAt: { gte: monthStart, lt: monthEnd },
+      },
+    });
   }
 
   async incrementHitsCount (id: string): Promise<void> {
