@@ -9,5 +9,6 @@ export interface UserModel {
   plan: {
     name: string
     monthlyLinkLimit: number
+    monthlyQrCodeLimit: number
   }
 }
