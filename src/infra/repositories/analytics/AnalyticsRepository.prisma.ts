@@ -106,6 +106,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       take: limit,
       select: {
         shortUrl: true,
+        originalUrl: true,
         hitsCount: true,
         title: true,
       },
