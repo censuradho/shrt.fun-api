@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { TopMostAccessedUrlModel } from "@/domain/models/TopMostAccessedUrl.model";
 import { IAnalyticsRepository, TopMostAccessedUrlsOptions } from "@/domain/repositories/IAnalyticsRepository";
 import { TopMostAccessedUrlByLocationDeviceAndOSModel } from "@/domain/models/TopMostAccessedUrlByLocationDeviceAndOS.model";
+import { ReferrerDistributionModel } from "@/domain/models/ReferrerDistribution.model";
 
 export class AnalyticsRepository implements IAnalyticsRepository {
   constructor(private prisma: PrismaClient) {}
@@ -53,6 +54,35 @@ export class AnalyticsRepository implements IAnalyticsRepository {
         title: url?.title || null,
       })
     })
+  }
+
+  async referrerDistribution(userId: string, limit = 9): Promise<ReferrerDistributionModel[]> {
+    const urlIds = await this.prisma.url.findMany({
+      where: { supabaseId: userId },
+      select: { id: true },
+    });
+
+    const rows = await this.prisma.hit.groupBy({
+      by: ['referrer'],
+      where: { urlId: { in: urlIds.map(u => u.id) } },
+      _count: { urlId: true },
+      orderBy: { _count: { referrer: 'desc' } },
+    });
+
+    const top = rows.slice(0, limit);
+    const rest = rows.slice(limit);
+
+    const result: ReferrerDistributionModel[] = top.map(r => ({
+      referrer: r.referrer,
+      hitsCount: r._count.urlId,
+    }));
+
+    if (rest.length > 0) {
+      const otherCount = rest.reduce((acc, r) => acc + r._count.urlId, 0);
+      result.push({ referrer: 'Other', hitsCount: otherCount });
+    }
+
+    return result;
   }
 
   async topMostAccessedUrls(userId: string, options?: TopMostAccessedUrlsOptions): Promise<TopMostAccessedUrlModel[]> {

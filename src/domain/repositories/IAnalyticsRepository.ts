@@ -1,3 +1,4 @@
+import { ReferrerDistributionModel } from './../models/ReferrerDistribution.model';
 import { TopMostAccessedUrlModel } from "../models/TopMostAccessedUrl.model";
 import { TopMostAccessedUrlByLocationDeviceAndOSModel } from "../models/TopMostAccessedUrlByLocationDeviceAndOS.model";
 
@@ -12,4 +13,5 @@ export interface IAnalyticsRepository {
     userId: string, 
     options?: TopMostAccessedUrlsOptions
   ): Promise<TopMostAccessedUrlByLocationDeviceAndOSModel[]>;
+  referrerDistribution(userId: string): Promise<ReferrerDistributionModel[]>
 }
