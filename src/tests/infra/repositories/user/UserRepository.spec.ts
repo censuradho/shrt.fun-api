@@ -36,8 +36,19 @@ describe('UserRepository', () => {
         plan: { id: 'plan-id', name: 'FREE', monthlyLinkLimit: 10 },
       });
       expect(mockCtx.prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { supabaseId: 'sb-id' },
-        include: { plan: { select: { id: true, name: true, monthlyLinkLimit: true } } },
+        where: { 
+          supabaseId: 'sb-id' 
+        },
+        include: { 
+          plan: { 
+            select: { 
+              id: true, 
+              name: true, 
+              monthlyLinkLimit: true,
+              monthlyQrCodeLimit: true,
+            } 
+          } 
+        },
       });
     });
 
