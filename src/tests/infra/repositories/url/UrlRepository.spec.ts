@@ -42,13 +42,13 @@ describe('UrlRepository', () => {
       const shortUrl = 'https://mv.api/xK9aB';
       const expected = { id: 'url-id', originalUrl: 'https://www.google.com' };
 
-      mockCtx.prisma.url.findUnique.mockResolvedValue(expected as any);
+      mockCtx.prisma.url.findFirst.mockResolvedValue(expected as any);
 
       const result = await repo.getOriginalUrl(shortUrl);
 
       expect(result).toEqual(expected);
-      expect(mockCtx.prisma.url.findUnique).toHaveBeenCalledWith({
-        where: { shortUrl },
+      expect(mockCtx.prisma.url.findFirst).toHaveBeenCalledWith({
+        where: { shortUrl, deletedAt: null },
         select: { originalUrl: true, id: true, isActive: true },
       });
     });
@@ -61,9 +61,16 @@ describe('UrlRepository', () => {
       const result = await repo.getOriginalUrl('https://mv.api/notfound');
 
       expect(result).toBeNull();
-      expect(mockCtx.prisma.url.findUnique).toHaveBeenCalledWith({
-        where: { shortUrl: 'https://mv.api/notfound' },
-        select: { originalUrl: true, id: true, isActive: true },
+      expect(mockCtx.prisma.url.findFirst).toHaveBeenCalledWith({
+        where: { 
+          shortUrl: 'https://mv.api/notfound',
+          deletedAt: null
+        },
+        select: {         
+          originalUrl: true,
+          id: true,
+          isActive: true 
+        },
       });
     });
   });
