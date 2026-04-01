@@ -32,7 +32,12 @@ export class UrlRepository implements IUrlRepository {
     filters: UrlPaginationFilters
   ): Promise<CursorPaginationResult<UrlModel>> {
     const { cursor, limit } = pagination;
-    const { isActive, search } = filters
+    const { 
+      isActive, 
+      search,
+      createdAfter,
+      createdBefore
+    } = filters
 
     const where: UrlWhereInput = {
       supabaseId,
@@ -44,6 +49,8 @@ export class UrlRepository implements IUrlRepository {
           { shortUrl: { contains: search, mode: 'insensitive' } },
         ]
       })),
+      ...(createdAfter && { createdAt: { gte: createdAfter } }),
+      ...(createdBefore && { createdAt: { lte: createdBefore } }),
     }
 
     const data = await this.prisma.url.findMany({

@@ -1,11 +1,14 @@
 import { UrlModel } from "@/generated/prisma/models";
 import { CursorPaginationParams, CursorPaginationResult } from "../interfaces/Pagination";
 import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
+import { FindManyLinksFiltersDto } from "@/presentation/dtos/url/findManyLinksQueries.dto";
 
-export interface UrlPaginationFilters {
-  isActive?: boolean
-  search?: string
-}
+export type UrlPaginationFilters = Pick<FindManyLinksFiltersDto,
+  'createdAfter'| 
+  'createdBefore'| 
+  'isActive'| 
+  'search'
+>
 
 export interface IUrlRepository {
   createAnonymous (payload: CreateUrlEntityDto): Promise<string>
