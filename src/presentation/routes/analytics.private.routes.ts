@@ -29,6 +29,14 @@ export async function analyticsRoutesPrivate(app: FastifyInstance) {
   )
 
   app.get(
+    '/url/referrer-distribution',
+    {
+      preHandler: authMiddleware,
+    },
+    analyticsController.referrerDistribution.bind(analyticsController)
+  )
+
+  app.get(
     '/locations/hits/url/:urlId/',
     {
       preHandler: authMiddleware,
