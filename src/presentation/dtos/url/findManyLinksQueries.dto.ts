@@ -19,6 +19,13 @@ export const findManyLinksFiltersDto = cursorPaginationQueriesDto.extend({
 }, {
   message: "'createdBefore' must be greater than 'createdAfter'",
   path: ['createdBefore', 'createdAfter'],
+}).refine((data) => {
+  const { createdAfter } = data;
+
+  return !createdAfter || createdAfter <= new Date();
+}, {
+  message: "'createdAfter' cannot be in the future",
+  path: ['createdAfter'],
 });
 
 
