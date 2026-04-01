@@ -53,6 +53,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
         hitsCount: d._count.urlId,
         shortUrl: url?.shortUrl || '',
         title: url?.title || null,
+        originalUrl: url?.originalUrl || '',
       })
     })
   }
