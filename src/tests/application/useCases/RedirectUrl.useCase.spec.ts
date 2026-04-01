@@ -24,6 +24,7 @@ const makeUrlCacheService = (): IUrlCacheService => ({
   incrementTotalUrls: vi.fn(),
   getTotalUrls: vi.fn(),
   deleteUrl: vi.fn(),
+  incrementTotalClicks: vi.fn(),
 });
 
 
