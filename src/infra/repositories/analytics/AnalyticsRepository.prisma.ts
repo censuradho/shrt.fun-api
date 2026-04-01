@@ -15,12 +15,13 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       limit,
     } = options || {};
 
+    const where: Prisma.UrlWhereInput = { 
+      supabaseId: userId,
+      ...(isActive !== undefined && { isActive }),
+      hitsCount: { gt: 0 },
+    }
     const result = await this.prisma.url.findMany({
-      where: {
-        supabaseId: userId,
-        hitsCount: { gt: 0 },
-        ...(isActive !== undefined && { isActive }),
-      },
+      where,
       take: limit,
       orderBy: { hitsCount: "desc" },
     })
