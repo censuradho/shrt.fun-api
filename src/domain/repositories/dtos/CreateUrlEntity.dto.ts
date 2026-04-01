@@ -5,4 +5,5 @@ export interface CreateUrlEntityDto {
   expireAt?: Date
   description?: string
   tags?: string[]
+  hasQrCode?: boolean
 }
