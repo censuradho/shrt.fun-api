@@ -22,6 +22,7 @@ export interface IUrlRepository {
   toggleActive (id: string, supabaseId: string): Promise<{ isActive: boolean; shortUrl: string } | null>
   countAll (): Promise<number>
   countByUserCurrentMonth (supabaseId: string): Promise<{ month: number; today: number }>
+  countQrCodeByUserCurrentMonth (supabaseId: string): Promise<number>
   findManyPaginated (supabaseId: string, pagination: CursorPaginationParams, filters: UrlPaginationFilters): Promise<
     CursorPaginationResult<UrlModel>
   >
