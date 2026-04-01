@@ -19,6 +19,7 @@ export const createUrlDto = z.object({
     .max(255, FIELD_ERROR_MESSAGES.MAX_LENGTH(255))
     .optional()
     .transform((value) => sanitizeString(value)),
+  generateQrCode: z.boolean().optional().default(false),
 })
 
 export type CreateUrlDto = z.infer<typeof createUrlDto>
