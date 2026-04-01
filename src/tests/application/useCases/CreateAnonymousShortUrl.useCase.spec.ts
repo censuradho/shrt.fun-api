@@ -21,6 +21,9 @@ const makeUrlRepository = (): IUrlRepository => ({
   delete: vi.fn(),
   toggleActive: vi.fn(),
   findManyPaginated: vi.fn(),
+  countAll: vi.fn(),
+  countByUserCurrentMonth: vi.fn(),
+  softDelete: vi.fn(),
 });
 
 const makeUrlCacheService = (): IUrlCacheService => ({
@@ -30,6 +33,7 @@ const makeUrlCacheService = (): IUrlCacheService => ({
   incrementTotalUrls: vi.fn().mockResolvedValue(undefined),
   getTotalUrls: vi.fn(),
   deleteUrl: vi.fn(),
+  incrementTotalClicks: vi.fn(),
 });
 
 const makeShortUrlGenerateService = (): IShortUrlGenerateService => ({
@@ -50,10 +54,12 @@ describe('CreateAnonymousShortUrl', () => {
     const result = await useCase.execute(DTO);
 
     expect(result).toBe(SHORT_URL);
+
     expect(urlRepository.createAnonymous).toHaveBeenCalledWith({
       originalUrl: ORIGINAL_URL,
       shortUrl: SHORT_URL,
       title: 'Google',
+      expireAt: expect.any(Date),
     });
     expect(urlCacheService.setUrl).toHaveBeenCalledWith(SHORT_URL, ORIGINAL_URL, URL_ID, true, expect.any(Number));
     expect(urlCacheService.incrementTotalUrls).toHaveBeenCalled();
