@@ -4,6 +4,7 @@ import { IUrlRepository, UrlPaginationFilters } from "@/domain/repositories/IUrl
 import { nanoid } from "nanoid";
 import { PrismaClient } from "@/generated/prisma/client";
 import { UrlModel, UrlWhereInput } from "@/generated/prisma/models";
+import { endOfDay } from "date-fns";
 
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
@@ -38,6 +39,7 @@ export class UrlRepository implements IUrlRepository {
       createdAfter,
       createdBefore
     } = filters
+    const createdBeforeAtEndOfDay = createdBefore ? endOfDay(createdBefore) : undefined;
 
     const where: UrlWhereInput = {
       supabaseId,
@@ -48,9 +50,14 @@ export class UrlRepository implements IUrlRepository {
           { originalUrl: { contains: search, mode: 'insensitive' } },
           { shortUrl: { contains: search, mode: 'insensitive' } },
         ]
-      })),
-      ...(createdAfter && { createdAt: { gte: createdAfter } }),
-      ...(createdBefore && { createdAt: { lte: createdBefore } }),
+      })), 
+      
+      ...((createdAfter || createdBefore) && {
+        createdAt: {
+          ...(createdAfter && { gte: createdAfter }),
+          ...(createdBeforeAtEndOfDay && { lte: createdBeforeAtEndOfDay }),
+        },
+      }),
     }
 
     const data = await this.prisma.url.findMany({
