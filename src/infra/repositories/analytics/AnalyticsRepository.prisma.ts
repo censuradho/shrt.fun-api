@@ -18,6 +18,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
     const where: Prisma.UrlWhereInput = { 
       supabaseId: userId,
+      deletedAt: null,
       ...(isActive !== undefined && { isActive }),
       hitsCount: { gt: 0 },
     }
@@ -58,7 +59,10 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
   async referrerDistribution(userId: string, limit = 9): Promise<ReferrerDistributionModel[]> {
     const urlIds = await this.prisma.url.findMany({
-      where: { supabaseId: userId },
+      where: { 
+        supabaseId: userId, 
+        deletedAt: null 
+      },
       select: { id: true },
     });
 
@@ -90,6 +94,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
     const where: Prisma.UrlWhereInput = { 
       supabaseId: userId,
+      deletedAt: null,
       ...(isActive !== undefined && { isActive }),
       hitsCount: { gt: 0 },
     }
