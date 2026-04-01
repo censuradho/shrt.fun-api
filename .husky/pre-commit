@@ -1,2 +1,1 @@
 pnpm test:unit
-pnpm commitlint --edit $1
