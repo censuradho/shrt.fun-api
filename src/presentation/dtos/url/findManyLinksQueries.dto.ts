@@ -9,6 +9,17 @@ export const findManyLinksFiltersDto = cursorPaginationQueriesDto.extend({
     .max(255)
     .transform((value) => sanitizeString(value))
     .optional(),
-})
+  createdBefore: z.coerce.date().optional(),
+  createdAfter: z.coerce.date().optional(),
+}).refine((data) => {
+  if (data.createdBefore && data.createdAfter) {
+    return data.createdBefore > data.createdAfter;
+  }
+  return true;
+}, {
+  message: "'createdBefore' must be greater than 'createdAfter'",
+  path: ['createdBefore', 'createdAfter'],
+});
+
 
 export type FindManyLinksFiltersDto = z.infer<typeof findManyLinksFiltersDto>;
