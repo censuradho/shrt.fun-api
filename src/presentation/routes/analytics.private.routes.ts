@@ -19,6 +19,15 @@ export async function analyticsRoutesPrivate(app: FastifyInstance) {
     analyticsController.topMostAccessedUrls.bind(analyticsController)
   )
 
+  app.get<{ Querystring: TopMostAccessedUrlsQueryDto }>(
+    '/url/ranking/details',
+    {
+      preHandler: authMiddleware,
+      schema: { querystring: topMostAccessedUrlsQueryDto },
+    },
+    analyticsController.topMostAccessedUrlsDetail.bind(analyticsController)
+  )
+
   app.get(
     '/locations/hits/url/:urlId/',
     {
