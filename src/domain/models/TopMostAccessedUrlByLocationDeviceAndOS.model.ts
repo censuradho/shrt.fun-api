@@ -5,5 +5,6 @@ export interface TopMostAccessedUrlByLocationDeviceAndOSModel {
   os?: string | null
   hitsCount: number
   shortUrl: string
+  originalUrl: string
   title?: string | null
 }
