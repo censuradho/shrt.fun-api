@@ -11,6 +11,106 @@ beforeEach(() => {
 });
 
 describe('UrlRepository', () => {
+  describe('findManyPaginated', () => {
+    it('should return limited items and nextCursor when has next page', async () => {
+      const repo = new UrlRepository(ctx.prisma);
+
+      mockCtx.prisma.url.findMany.mockResolvedValue([
+        { id: 'url-1', createdAt: new Date('2026-01-03') },
+        { id: 'url-2', createdAt: new Date('2026-01-02') },
+        { id: 'url-3', createdAt: new Date('2026-01-01') },
+      ] as any);
+
+      const result = await repo.findManyPaginated(
+        'user-1',
+        { limit: 2, cursor: undefined },
+        {},
+      );
+
+      expect(result).toEqual({
+        data: [
+          { id: 'url-1', createdAt: new Date('2026-01-03') },
+          { id: 'url-2', createdAt: new Date('2026-01-02') },
+        ],
+        nextCursor: 'url-2',
+      });
+
+      expect(mockCtx.prisma.url.findMany).toHaveBeenCalledWith({
+        where: {
+          supabaseId: 'user-1',
+          deletedAt: null,
+        },
+        take: 3,
+        orderBy: [
+          { createdAt: 'desc' },
+          { id: 'asc' },
+        ],
+      });
+    });
+
+    it('should return all items and null nextCursor when has no next page', async () => {
+      const repo = new UrlRepository(ctx.prisma);
+
+      mockCtx.prisma.url.findMany.mockResolvedValue([
+        { id: 'url-1', createdAt: new Date('2026-01-02') },
+        { id: 'url-2', createdAt: new Date('2026-01-01') },
+      ] as any);
+
+      const result = await repo.findManyPaginated(
+        'user-1',
+        { limit: 2, cursor: undefined },
+        {},
+      );
+
+      expect(result).toEqual({
+        data: [
+          { id: 'url-1', createdAt: new Date('2026-01-02') },
+          { id: 'url-2', createdAt: new Date('2026-01-01') },
+        ],
+        nextCursor: null,
+      });
+    });
+
+    it('should include cursor and filters in prisma query', async () => {
+      const repo = new UrlRepository(ctx.prisma);
+      const createdAfter = new Date('2026-01-01T00:00:00.000Z');
+      const createdBefore = new Date('2026-01-31T23:59:59.999Z');
+
+      mockCtx.prisma.url.findMany.mockResolvedValue([] as any);
+
+      await repo.findManyPaginated(
+        'user-1',
+        { limit: 10, cursor: 'url-cursor' },
+        {
+          isActive: true,
+          search: 'mv.api',
+          createdAfter,
+          createdBefore,
+        },
+      );
+
+      expect(mockCtx.prisma.url.findMany).toHaveBeenCalledWith({
+        where: {
+          supabaseId: 'user-1',
+          deletedAt: null,
+          isActive: true,
+          OR: [
+            { originalUrl: { contains: 'mv.api', mode: 'insensitive' } },
+            { shortUrl: { contains: 'mv.api', mode: 'insensitive' } },
+          ],
+          createdAt: { lte: createdBefore },
+        },
+        take: 11,
+        skip: 1,
+        cursor: { id: 'url-cursor' },
+        orderBy: [
+          { createdAt: 'desc' },
+          { id: 'asc' },
+        ],
+      });
+    });
+  });
+
   describe('create', () => {
     it('should create a url and return its id', async () => {
       const repo = new UrlRepository(ctx.prisma);
