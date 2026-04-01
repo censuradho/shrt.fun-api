@@ -22,6 +22,9 @@ const makeUrlRepository = (): IUrlRepository => ({
   delete: vi.fn(),
   toggleActive: vi.fn(),
   findManyPaginated: vi.fn(),
+  countAll: vi.fn(),
+  countByUserCurrentMonth: vi.fn().mockResolvedValue({ month: 0, today: 0 }),
+  softDelete: vi.fn(),
 });
 
 const makeUrlCacheService = (): IUrlCacheService => ({
@@ -31,6 +34,15 @@ const makeUrlCacheService = (): IUrlCacheService => ({
   incrementTotalUrls: vi.fn().mockResolvedValue(undefined),
   getTotalUrls: vi.fn(),
   deleteUrl: vi.fn(),
+  incrementTotalClicks: vi.fn(),
+});
+
+const makeUserRepository = (): any => ({
+  findById: vi.fn().mockResolvedValue({ id: USER_ID }),
+  findUserBySupabaseId: vi.fn().mockResolvedValue({
+    id: USER_ID,
+    plan: { monthlyLinkLimit: 100 },
+  }),
 });
 
 const makeShortUrlGenerateService = (): IShortUrlGenerateService => ({
@@ -46,8 +58,14 @@ describe('CreateShortUrlUseCase', () => {
     const urlRepository = makeUrlRepository();
     const urlCacheService = makeUrlCacheService();
     const generateService = makeShortUrlGenerateService();
+    const userRepository = makeUserRepository();
 
-    const useCase = new CreateShortUrlUseCase(urlRepository, urlCacheService, generateService);
+    const useCase = new CreateShortUrlUseCase(
+      urlRepository, 
+      urlCacheService, 
+      generateService,
+      userRepository
+    );
     const result = await useCase.execute(USER_ID, DTO);
 
     expect(result).toBe(SHORT_URL);
@@ -65,9 +83,37 @@ describe('CreateShortUrlUseCase', () => {
     const urlCacheService = makeUrlCacheService();
     const generateService = makeShortUrlGenerateService();
 
+    vi.mocked(urlRepository.create).mockResolvedValue(URL_ID);
     vi.mocked(urlCacheService.setUrl).mockRejectedValue(new Error('Redis down'));
 
-    const useCase = new CreateShortUrlUseCase(urlRepository, urlCacheService, generateService);
+    const useCase = new CreateShortUrlUseCase(
+      urlRepository, 
+      urlCacheService, 
+      generateService,
+      makeUserRepository()
+    );
+
+    await expect(useCase.execute(USER_ID, DTO)).rejects.toMatchObject({
+      message: URL_ERRORS.WAS_NOT_POSSIBLE_TO_CREATE_SHORT_URL,
+      status: HTTP_ERROR_CODES.INTERNAL_SERVER_ERROR,
+    });
+
+    expect(urlRepository.delete).toHaveBeenCalledWith(URL_ID);
+  });
+
+  it('should delete url and throw if incrementTotalUrls fails', async () => {
+    const urlRepository = makeUrlRepository();
+    const urlCacheService = makeUrlCacheService();
+    const generateService = makeShortUrlGenerateService();
+
+    vi.mocked(urlCacheService.incrementTotalUrls).mockRejectedValue(new Error('Redis down'));
+
+    const useCase = new CreateShortUrlUseCase(
+      urlRepository,
+      urlCacheService,
+      generateService,
+      makeUserRepository()
+    );
 
     await expect(useCase.execute(USER_ID, DTO)).rejects.toMatchObject({
       message: URL_ERRORS.WAS_NOT_POSSIBLE_TO_CREATE_SHORT_URL,
