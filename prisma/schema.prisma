@@ -49,6 +49,7 @@ model Url {
 
   description String?
   tags String[]
+  hasQrCode Boolean @default(false)
 
   supabaseId String?
   user User? @relation(fields: [supabaseId], references: [supabaseId])
@@ -88,6 +89,7 @@ model Plan {
 
   name String
   monthlyLinkLimit Int 
+  monthlyQrCodeLimit Int @default(1)
 
   users User[]
 
