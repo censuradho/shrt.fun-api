@@ -9,7 +9,7 @@ export class UserRepository implements IUserRepository {
   async findUserBySupabaseId(supabaseId: string): Promise<UserModel | null> {
     const user = await this.prisma.user.findUnique({
       where: { supabaseId },
-      include: { plan: { select: { id: true, name: true, monthlyLinkLimit: true } } },
+      include: { plan: { select: { id: true, name: true, monthlyLinkLimit: true, monthlyQrCodeLimit: true } } },
     });
 
     return user ? ({
@@ -27,7 +27,16 @@ export class UserRepository implements IUserRepository {
   async me (id: string): Promise<UserModel | null> {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { plan: { select: { id: true, name: true, monthlyLinkLimit: true } } },
+      include: { 
+        plan: { 
+          select: { 
+            id: true, 
+            name: true, 
+            monthlyLinkLimit: true, 
+            monthlyQrCodeLimit: true 
+          } 
+        } 
+      },
     });
 
     return user ? ({
