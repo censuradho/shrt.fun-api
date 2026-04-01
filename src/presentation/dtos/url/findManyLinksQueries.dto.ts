@@ -1,6 +1,7 @@
 import z from "zod";
 import { cursorPaginationQueriesDto } from "../paginationQueries.dto";
 import { sanitizeString } from "@/shered/sanitizeString";
+import { endOfDay, startOfDay } from "date-fns";
 
 export const findManyLinksFiltersDto = cursorPaginationQueriesDto.extend({
   isActive: z.enum(['true', 'false']).transform(v => v === 'true').optional(),
@@ -9,8 +10,8 @@ export const findManyLinksFiltersDto = cursorPaginationQueriesDto.extend({
     .max(255)
     .transform((value) => sanitizeString(value))
     .optional(),
-  createdBefore: z.coerce.date().optional(),
-  createdAfter: z.coerce.date().optional(),
+  createdBefore: z.coerce.date().transform(date => endOfDay(date)).optional(),
+  createdAfter: z.coerce.date().transform(date => startOfDay(date)).optional(),
 }).refine((data) => {
   if (data.createdBefore && data.createdAfter) {
     return data.createdBefore > data.createdAfter;
