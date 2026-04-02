@@ -10,3 +10,5 @@ src/tmp
 
 prisma/generated
 src/generated
+
+_scripts
