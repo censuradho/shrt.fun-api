@@ -7,6 +7,7 @@ import { IShortUrlGenerateService } from '@/domain/interfaces/IShortUrlGenerateS
 import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { toQrUrl } from '@/utils/toQrUrl';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 const ORIGINAL_URL = 'https://www.google.com';
@@ -79,7 +80,7 @@ describe('CreateShortUrlUseCase', () => {
     const result = await useCase.execute(USER_ID, DTO_WITH_QR);
 
     expect(result).toEqual({ shortUrl: SHORT_URL, qrCode: QR_CODE });
-    expect(qrCodePort.generate).toHaveBeenCalledWith(SHORT_URL, DTO_WITH_QR.qrOptions);
+    expect(qrCodePort.generate).toHaveBeenCalledWith(toQrUrl(SHORT_URL), DTO_WITH_QR.qrOptions);
     expect(urlRepository.create).toHaveBeenCalledWith(USER_ID, expect.objectContaining({
       hasQrCode: true,
       qrCodeOptions: DTO_WITH_QR.qrOptions,
