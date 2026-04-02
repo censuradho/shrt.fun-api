@@ -8,6 +8,8 @@ import { IUserRepository } from "@/domain/repositories/IUserRepository";
 import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
 import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from "@/shered/httpStatusCodes";
 import { toQrUrl } from "@/utils/toQrUrl";
+import { PlanName } from "@/domain/enums/Plan.enum";
+import { QR_CODE_FREE_COLORS } from "@/domain/enums/QrCodeFreeColors.enum";
 
 export interface CreateShortUrlResult  {
   shortUrl: string
@@ -45,6 +47,15 @@ export class CreateShortUrlUseCase {
       throw new AppError(URL_ERRORS.DAILY_LINK_LIMIT_REACHED, {
         status: HTTP_STATUS_CODES.FORBIDDEN,
       });
+    }
+
+    if (generateQrCode && user.plan.name === PlanName.FREE) {
+      const backgroundColor = dto.qrOptions?.backgroundColor
+      if (backgroundColor && !(QR_CODE_FREE_COLORS as readonly string[]).includes(backgroundColor)) {
+        throw new AppError(URL_ERRORS.QR_CODE_BACKGROUND_COLOR_NOT_ALLOWED_ON_FREE_PLAN, {
+          status: HTTP_STATUS_CODES.FORBIDDEN,
+        })
+      }
     }
 
     if (generateQrCode) {
