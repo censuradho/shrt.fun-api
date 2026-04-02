@@ -22,7 +22,7 @@ export class GenerateQRCodePreviewQuery {
         status: HTTP_ERROR_CODES.FORBIDDEN
       })
     }
-
+    
     if (!user) throw new AppError(AUTHENTICATION_ERROR_MESSAGES.UNAUTHORIZED, {
       status: HTTP_ERROR_CODES.UNAUTHORIZED
     })
