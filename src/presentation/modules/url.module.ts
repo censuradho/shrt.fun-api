@@ -22,6 +22,7 @@ import { UaParserDeviceService } from '@/infra/device/UaParserDeviceService';
 import { UserRepository } from '@/infra/repositories/user/UserRepository.prisma';
 import { HitRepository } from '@/infra/repositories/hit/HitRepository';
 import { PublicStatsQuery } from '@/application/queries/publicStats.query';
+import { GetLinkQRCodeQuery } from '@/application/queries/getLinkQRCode.query';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
 const userRepository = new UserRepository(prisma);
@@ -64,6 +65,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   const publicStatsQuery = new PublicStatsQuery(cache, urlRepository, hitRepository);
 
   const findUrlByIdQuery = new FindUrlByIdQuery(urlRepository);
+  const getLinkQRCodeQuery = new GetLinkQRCodeQuery(urlRepository, qrCodeAdapter);
 
   return new UrlController(
     createAnonymousShortUrlUseCase,
@@ -76,5 +78,6 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     publicStatsQuery,
     envProvider,
     qrCodeAdapter,
+    getLinkQRCodeQuery,
   );
 }
