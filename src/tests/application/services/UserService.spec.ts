@@ -30,7 +30,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   userCacheService.getUser.mockResolvedValue(null);
   userCacheService.setUser.mockResolvedValue(undefined);
-  userRepository.me.mockResolvedValue(null);
+  userRepository.findUserBySupabaseId.mockResolvedValue(null);
 });
 
 describe('UserService', () => {
@@ -42,16 +42,16 @@ describe('UserService', () => {
       const result = await service.getUser('user-1');
 
       expect(result).toEqual(CACHED_USER);
-      expect(userRepository.me).not.toHaveBeenCalled();
+      expect(userRepository.findUserBySupabaseId).not.toHaveBeenCalled();
     });
 
     it('should fetch from repository on cache miss and populate cache', async () => {
-      userRepository.me.mockResolvedValue(USER_MODEL);
+      userRepository.findUserBySupabaseId.mockResolvedValue(USER_MODEL);
       const service = new UserService(userRepository, userCacheService);
 
       const result = await service.getUser('user-1');
 
-      expect(userRepository.me).toHaveBeenCalledWith('user-1');
+      expect(userRepository.findUserBySupabaseId).toHaveBeenCalledWith('user-1');
       expect(userCacheService.setUser).toHaveBeenCalledWith(USER_MODEL);
       expect(result).toEqual(USER_MODEL);
     });
@@ -61,7 +61,7 @@ describe('UserService', () => {
 
       const result = await service.getUser('user-1');
 
-      expect(userRepository.me).toHaveBeenCalledWith('user-1');
+      expect(userRepository.findUserBySupabaseId).toHaveBeenCalledWith('user-1');
       expect(userCacheService.setUser).not.toHaveBeenCalled();
       expect(result).toBeNull();
     });
