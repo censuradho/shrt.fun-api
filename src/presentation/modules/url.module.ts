@@ -41,12 +41,14 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     shortUrlGenerateService
   );
 
+  const qrCodeAdapter = new QRCodeAdapter()
+
   const createShortUrlUseCase = new CreateShortUrlUseCase(
     urlRepository,
     urlCacheService,
     shortUrlGenerateService,
     userRepository,
-    new QRCodeAdapter(),
+    qrCodeAdapter,
   );
 
   const redirectUrlUseCase = new RedirectUrlUseCase(
@@ -72,6 +74,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     toggleUrlActiveUseCase,
     deleteUrlUseCase,
     publicStatsQuery,
-    envProvider
+    envProvider,
+    qrCodeAdapter,
   );
 }
