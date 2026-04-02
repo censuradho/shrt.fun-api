@@ -1,5 +1,5 @@
 import { IQRCodePort, QRCodeOptions } from '@/domain/interfaces/QRCodePort'
-import { readFileSync } from 'fs'
+import { watermarkLogo } from '../../assets/watermark-logo'
 import { QrMatrixGenerator } from './renderer/QrMatrixGenerator'
 import { QrDotsRenderer } from './renderer/QrDotsRenderer'
 import { QrCornersRenderer } from './renderer/QrCornersRenderer'
@@ -14,8 +14,6 @@ export class QRCodeAdapter implements IQRCodePort {
   private readonly cornersRenderer = new QrCornersRenderer()
   private readonly imageInjector = new QrImageInjector()
   private readonly svgAssembler = new QrSvgAssembler()
-
-  private defaultWatermark: string | undefined
 
   async generate(url: string, options: QRCodeOptions = {}): Promise<string> {
     const matrix = await this.matrixGenerator.generate(url)
@@ -39,18 +37,9 @@ export class QRCodeAdapter implements IQRCodePort {
       svg = this.svgAssembler.inject(svg, this.imageInjector.centerLogoElement(options.centerLogo, SVG_SIZE))
     }
 
-    const watermark = options.watermarkLogo ?? this.loadDefaultWatermark()
+    const watermark = options.watermarkLogo ?? watermarkLogo
     svg = this.svgAssembler.inject(svg, this.imageInjector.watermarkElement(watermark, SVG_SIZE, backgroundColor, dotsColor))
 
     return svg
-  }
-
-  private loadDefaultWatermark(): string {
-    if (!this.defaultWatermark) {
-      const assetUrl = new URL('../../assets/watermark-logo.svg', import.meta.url)
-      this.defaultWatermark = readFileSync(assetUrl, 'utf-8')
-    }
-
-    return this.defaultWatermark
   }
 }
