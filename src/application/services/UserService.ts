@@ -12,7 +12,7 @@ export class UserService implements IUserService {
     const cached = await this.userCacheService.getUser(userId)
     if (cached) return cached
 
-    const user = await this.userRepository.me(userId)
+    const user = await this.userRepository.findUserBySupabaseId(userId)
     if (user) await this.userCacheService.setUser(user)
 
     return user
