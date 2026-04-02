@@ -8,5 +8,8 @@ export const FIELD_ERROR_MESSAGES = {
   MAX_VALUE(value: number) {
     return `FIELD_ERROR_MAX_VALUE_${value}`;
   },
+  MAX_FILE_SIZE(size: number) {
+    return `FIELD_ERROR_MAX_FILE_SIZE_${size}`;
+  },
   DATE_MUST_BE_IN_FUTURE: 'DATE_MUST_BE_IN_FUTURE'
 }
