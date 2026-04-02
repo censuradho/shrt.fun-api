@@ -92,6 +92,15 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
     urlController.getLinkQRCode.bind(urlController)
   );
 
+  app.patch(
+    '/:id/qrcode',
+    {
+      preHandler: authMiddleware,
+      schema: { params: urlParamsDto, body: qrOptionsDto },
+    },
+    urlController.updateQrCodeOptions.bind(urlController)
+  );
+
   app.post(
     '/qrcode/preview',
     {
