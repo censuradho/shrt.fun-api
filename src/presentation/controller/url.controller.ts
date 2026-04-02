@@ -10,6 +10,7 @@ import { CreateShortUrlUseCase } from "@/application/useCases/CreateShortUrl.use
 import { ToggleUrlActiveUseCase } from "@/application/useCases/ToggleUrlActive.useCase";
 import { DeleteUrlUseCase } from "@/application/useCases/DeleteUrl.useCase";
 import { PublicStatsQuery } from "@/application/queries/publicStats.query";
+import { GetLinkQRCodeQuery } from "@/application/queries/getLinkQRCode.query";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
 import { IQRCodePort, QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 
@@ -25,6 +26,7 @@ export class UrlController {
     private readonly publicStatsQuery: PublicStatsQuery,
     private readonly envProvider: IEnvProvider,
     private readonly qrCodePort: IQRCodePort,
+    private readonly getLinkQRCodeQuery: GetLinkQRCodeQuery,
   ) {}
 
   async create (request: FastifyRequest, reply: FastifyReply) {
@@ -86,6 +88,12 @@ export class UrlController {
 
     const result = await this.findManyLinksPaginatedQuery.execute(request.user.id, queries)
 
+    return reply.send(result);
+  }
+
+  async getLinkQRCode (request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string };
+    const result = await this.getLinkQRCodeQuery.execute(id, request.user.id);
     return reply.send(result);
   }
 
