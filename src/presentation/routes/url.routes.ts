@@ -8,4 +8,9 @@ export async function urlRoutesPublic(app: FastifyInstance) {
     '/:slug',
     urlController.redirect.bind(urlController)
   );
+
+  app.get(
+    '/qr/:slug',
+    urlController.redirectQr.bind(urlController)
+  );
 }
