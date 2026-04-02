@@ -37,8 +37,10 @@ export class QRCodeAdapter implements IQRCodePort {
       svg = this.svgAssembler.inject(svg, this.imageInjector.centerLogoElement(options.centerLogo, SVG_SIZE))
     }
 
-    const watermark = options.watermarkLogo ?? watermarkLogo
-    svg = this.svgAssembler.inject(svg, this.imageInjector.watermarkElement(watermark, SVG_SIZE, backgroundColor, dotsColor))
+    if (!options.hideWatermark) {
+      const watermark = options.watermarkLogo ?? watermarkLogo
+      svg = this.svgAssembler.inject(svg, this.imageInjector.watermarkElement(watermark, SVG_SIZE, backgroundColor, dotsColor))
+    }
 
     return svg
   }
