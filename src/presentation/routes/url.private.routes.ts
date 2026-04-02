@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { makeUrlController } from '../modules/url.module';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { findManyLinksFiltersDto } from '../dtos/url/findManyLinksQueries.dto';
-import { createUrlDto } from '../dtos/url/createUrl.dto';
+import { createUrlDto, qrOptionsDto } from '../dtos/url/createUrl.dto';
 import z from 'zod';
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
@@ -81,5 +81,14 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
       schema: { params: urlParamsDto },
     },
     urlController.delete.bind(urlController)
+  );
+
+  app.post(
+    '/qrcode/preview',
+    {
+      preHandler: authMiddleware,
+      schema: { body: qrOptionsDto },
+    },
+    urlController.previewQrCode.bind(urlController)
   );
 }
