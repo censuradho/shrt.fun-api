@@ -14,14 +14,16 @@ export class FindManyLinksPaginatedQuery {
       isActive, 
       search,
       createdAfter,
-      createdBefore
+      createdBefore,
+      source
     } = queries;
 
     const filters: UrlPaginationFilters = {
       isActive,
       search,
       createdAfter,
-      createdBefore
+      createdBefore,
+      source
     }
 
     const pagination: CursorPaginationParams = {
