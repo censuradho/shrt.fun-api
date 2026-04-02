@@ -13,8 +13,8 @@ const URL_ID = 'url-id';
 const USER_ID = 'user-id';
 const QR_CODE = 'data:image/png;base64,abc123';
 
-const DTO = { url: ORIGINAL_URL, slug: undefined, title: 'Google', generateQrCode: false };
-const DTO_WITH_QR = { ...DTO, generateQrCode: true };
+const DTO = { url: ORIGINAL_URL, slug: undefined, title: 'Google', generateQrCode: false, qrOptions: undefined };
+const DTO_WITH_QR = { ...DTO, generateQrCode: true, qrOptions: { dotsStyle: 'rounded' as const, dotsColor: '#000000' } };
 
 const makeUrlRepository = (): IUrlRepository => ({
   create: vi.fn().mockResolvedValue(URL_ID),
@@ -111,7 +111,7 @@ describe('CreateShortUrlUseCase', () => {
     const result = await useCase.execute(USER_ID, DTO_WITH_QR);
 
     expect(result).toEqual({ shortUrl: SHORT_URL, qrCode: QR_CODE });
-    expect(qrCodePort.generate).toHaveBeenCalledWith(SHORT_URL);
+    expect(qrCodePort.generate).toHaveBeenCalledWith(SHORT_URL, DTO_WITH_QR.qrOptions);
     expect(urlRepository.create).toHaveBeenCalledWith(USER_ID, expect.objectContaining({ hasQrCode: true }));
   });
 
