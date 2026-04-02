@@ -112,7 +112,10 @@ describe('CreateShortUrlUseCase', () => {
 
     expect(result).toEqual({ shortUrl: SHORT_URL, qrCode: QR_CODE });
     expect(qrCodePort.generate).toHaveBeenCalledWith(SHORT_URL, DTO_WITH_QR.qrOptions);
-    expect(urlRepository.create).toHaveBeenCalledWith(USER_ID, expect.objectContaining({ hasQrCode: true }));
+    expect(urlRepository.create).toHaveBeenCalledWith(USER_ID, expect.objectContaining({
+      hasQrCode: true,
+      qrCodeOptions: DTO_WITH_QR.qrOptions,
+    }));
   });
 
   it('should not create url if qrcode generation fails', async () => {
