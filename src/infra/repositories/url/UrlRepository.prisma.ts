@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { PrismaClient } from "@/generated/prisma/client";
 import { UrlWhereInput } from "@/generated/prisma/models";
 import { UrlModel } from "@/domain/models/UrlModel";
+import { HitSourceEnum } from "@/domain/enums/Hit.enum";
 
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
@@ -39,7 +40,8 @@ export class UrlRepository implements IUrlRepository {
       isActive, 
       search,
       createdAfter,
-      createdBefore
+      createdBefore,
+      source
     } = filters
 
     const where: UrlWhereInput = {
@@ -52,7 +54,9 @@ export class UrlRepository implements IUrlRepository {
           { shortUrl: { contains: search, mode: 'insensitive' } },
         ]
       })), 
-      
+      ...(source  && ({
+        hasQrCode: source === HitSourceEnum.QR
+      })),
       ...((createdAfter || createdBefore) && {
         createdAt: {
           ...(createdAfter && { gte: createdAfter }),
