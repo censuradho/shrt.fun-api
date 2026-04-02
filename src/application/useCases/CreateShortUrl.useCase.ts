@@ -7,6 +7,7 @@ import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IUserRepository } from "@/domain/repositories/IUserRepository";
 import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
 import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from "@/shered/httpStatusCodes";
+import { toQrUrl } from "@/utils/toQrUrl";
 
 export interface CreateShortUrlResult  {
   shortUrl: string
@@ -59,7 +60,7 @@ export class CreateShortUrlUseCase {
     const shortUrl = await this.shortUrlGenerateService.generate(slug);
 
     const qrCode = generateQrCode
-      ? await this.qrCodePort.generate(shortUrl, dto.qrOptions ?? {})
+      ? await this.qrCodePort.generate(toQrUrl(shortUrl), dto.qrOptions ?? {})
       : undefined;
 
     const urlId = await this.urlRepository.create(supabaseId, {
