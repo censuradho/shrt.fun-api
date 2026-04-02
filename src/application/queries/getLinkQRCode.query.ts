@@ -3,6 +3,7 @@ import { URL_ERRORS } from "@/domain/errors/url.error";
 import type { IQRCodePort, QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 import { IUrlRepository } from "@/domain/repositories/IUrlRepository";
 import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { toQrUrl } from "@/utils/toQrUrl";
 
 export class GetLinkQRCodeQuery {
   constructor(
@@ -22,7 +23,7 @@ export class GetLinkQRCodeQuery {
     })
 
     const qrCode = await this.qrCodePort.generate(
-      url.shortUrl,
+      toQrUrl(url.shortUrl),
       url.qrCodeOptions as QRCodeOptions
     )
 
