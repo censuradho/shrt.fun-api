@@ -49,7 +49,25 @@ export class UrlController {
       request.params.slug,
       request.ip,
       request.headers['user-agent'] || '',
-      request.headers['referer'] || null
+      request.headers['referer'] || null,
+      'url'
+    );
+
+    if (!data.isActive)
+      return reply
+        .status(HTTP_STATUS_CODES.NOT_FOUND)
+        .redirect(`${this.envProvider.get('DOMAIN_URL')}/static/not-found`, HTTP_REDIRECT_CODES.FOUND)
+
+    return reply.redirect(data.originalUrl, HTTP_REDIRECT_CODES.FOUND)
+  }
+
+  async redirectQr (request: FastifyRequest<{ Params: { slug: string } }>, reply: FastifyReply) {
+    const data = await this.redirectUrlUseCase.execute(
+      request.params.slug,
+      request.ip,
+      request.headers['user-agent'] || '',
+      request.headers['referer'] || null,
+      'qr'
     );
 
     if (!data.isActive)
