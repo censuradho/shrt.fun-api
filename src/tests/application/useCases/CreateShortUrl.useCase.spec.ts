@@ -8,6 +8,8 @@ import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
 import { toQrUrl } from '@/utils/toQrUrl';
+import { PlanName } from '@/domain/enums/Plan.enum';
+import { QR_CODE_FREE_COLORS } from '@/domain/enums/QrCodeFreeColors.enum';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 const ORIGINAL_URL = 'https://www.google.com';
@@ -23,11 +25,15 @@ const urlCacheService = mock<IUrlCacheService>();
 const shortUrlGenerateService = mock<IShortUrlGenerateService>();
 const qrCodePort = mock<IQRCodePort>();
 
-const makeUserRepository = (overrides?: { monthlyQrCodeLimit?: number }): any => ({
+const makeUserRepository = (overrides?: { monthlyQrCodeLimit?: number; planName?: string }): any => ({
   findById: vi.fn().mockResolvedValue({ id: USER_ID }),
   findUserBySupabaseId: vi.fn().mockResolvedValue({
     id: USER_ID,
-    plan: { monthlyLinkLimit: 100, monthlyQrCodeLimit: overrides?.monthlyQrCodeLimit ?? 10 },
+    plan: {
+      name: overrides?.planName ?? PlanName.GROWTH,
+      monthlyLinkLimit: 100,
+      monthlyQrCodeLimit: overrides?.monthlyQrCodeLimit ?? 10,
+    },
   }),
   create: vi.fn(),
   checkIfExistsByEmail: vi.fn(),
@@ -100,6 +106,52 @@ describe('CreateShortUrlUseCase', () => {
 
     await expect(useCase.execute(USER_ID, DTO_WITH_QR)).rejects.toThrow('QR service down');
     expect(urlRepository.create).not.toHaveBeenCalled();
+  });
+
+  it('should throw QR_CODE_BACKGROUND_COLOR_NOT_ALLOWED_ON_FREE_PLAN when free user uses a non-allowed color', async () => {
+    const useCase = new CreateShortUrlUseCase(
+      urlRepository,
+      urlCacheService,
+      shortUrlGenerateService,
+      makeUserRepository({ planName: PlanName.FREE }),
+      qrCodePort,
+    );
+
+    await expect(useCase.execute(USER_ID, { ...DTO_WITH_QR, qrOptions: { backgroundColor: '#ffffff' } })).rejects.toMatchObject({
+      message: URL_ERRORS.QR_CODE_BACKGROUND_COLOR_NOT_ALLOWED_ON_FREE_PLAN,
+      status: HTTP_STATUS_CODES.FORBIDDEN,
+    });
+    expect(qrCodePort.generate).not.toHaveBeenCalled();
+  });
+
+  it('should allow free user to use an allowed background color', async () => {
+    const useCase = new CreateShortUrlUseCase(
+      urlRepository,
+      urlCacheService,
+      shortUrlGenerateService,
+      makeUserRepository({ planName: PlanName.FREE }),
+      qrCodePort,
+    );
+
+    const result = await useCase.execute(USER_ID, { ...DTO_WITH_QR, qrOptions: { backgroundColor: QR_CODE_FREE_COLORS[0] } });
+
+    expect(result).toEqual({ shortUrl: SHORT_URL, qrCode: QR_CODE });
+    expect(qrCodePort.generate).toHaveBeenCalled();
+  });
+
+  it('should allow paid user to use any background color', async () => {
+    const useCase = new CreateShortUrlUseCase(
+      urlRepository,
+      urlCacheService,
+      shortUrlGenerateService,
+      makeUserRepository({ planName: PlanName.GROWTH }),
+      qrCodePort,
+    );
+
+    const result = await useCase.execute(USER_ID, { ...DTO_WITH_QR, qrOptions: { backgroundColor: '#ffffff' } });
+
+    expect(result).toEqual({ shortUrl: SHORT_URL, qrCode: QR_CODE });
+    expect(qrCodePort.generate).toHaveBeenCalled();
   });
 
   it('should throw MONTHLY_QR_CODE_LIMIT_REACHED when qrcode limit is reached', async () => {
