@@ -1,5 +1,6 @@
-import { UrlModel } from "@/generated/prisma/models";
+
 import { CursorPaginationParams, CursorPaginationResult } from "../interfaces/Pagination";
+import { UrlModel } from "../models/UrlModel";
 import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
 import { FindManyLinksFiltersDto } from "@/presentation/dtos/url/findManyLinksQueries.dto";
 

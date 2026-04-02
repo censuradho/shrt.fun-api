@@ -3,7 +3,8 @@ import { CreateUrlEntityDto } from "@/domain/repositories/dtos/CreateUrlEntity.d
 import { IUrlRepository, UrlPaginationFilters } from "@/domain/repositories/IUrlRepository";
 import { nanoid } from "nanoid";
 import { PrismaClient } from "@/generated/prisma/client";
-import { UrlModel, UrlWhereInput } from "@/generated/prisma/models";
+import { UrlWhereInput } from "@/generated/prisma/models";
+import { UrlModel } from "@/domain/models/UrlModel";
 
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
