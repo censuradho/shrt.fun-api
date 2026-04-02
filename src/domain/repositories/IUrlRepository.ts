@@ -8,7 +8,8 @@ export type UrlPaginationFilters = Pick<FindManyLinksFiltersDto,
   'createdAfter'| 
   'createdBefore'| 
   'isActive'| 
-  'search'
+  'search' |
+  'source'
 >
 
 export interface IUrlRepository {
