@@ -6,12 +6,6 @@ import { QrCornersRenderer } from './renderer/QrCornersRenderer'
 import { QrImageInjector } from './renderer/QrImageInjector'
 import { QrSvgAssembler } from './renderer/QrSvgAssembler'
 
-const DEFAULT_WATERMARK = (() => {
-  const assetUrl = new URL('../../assets/watermark-logo.svg', import.meta.url)
-  const file = readFileSync(assetUrl)
-  return `data:image/svg+xml;base64,${file.toString('base64')}`
-})()
-
 const SVG_SIZE = 400
 
 export class QRCodeAdapter implements IQRCodePort {
@@ -21,10 +15,13 @@ export class QRCodeAdapter implements IQRCodePort {
   private readonly imageInjector = new QrImageInjector()
   private readonly svgAssembler = new QrSvgAssembler()
 
+  private defaultWatermark: string | undefined
+
   async generate(url: string, options: QRCodeOptions = {}): Promise<string> {
     const matrix = await this.matrixGenerator.generate(url)
-    const cellSize = SVG_SIZE / (matrix.size + 4) // +4 para quiet zone (2 de cada lado)
+    const cellSize = SVG_SIZE / (matrix.size + 4)
     const backgroundColor = options.backgroundColor ?? '#ffffff'
+    const dotsColor = options.dotsColor ?? '#000000'
 
     const qrContent = [
       this.dotsRenderer.render(matrix, cellSize, options),
@@ -42,10 +39,18 @@ export class QRCodeAdapter implements IQRCodePort {
       svg = this.svgAssembler.inject(svg, this.imageInjector.centerLogoElement(options.centerLogo, SVG_SIZE))
     }
 
-    const watermark = options.watermarkLogo ?? DEFAULT_WATERMARK
-
-    svg = this.svgAssembler.inject(svg, this.imageInjector.watermarkElement(watermark, SVG_SIZE, backgroundColor))
+    const watermark = options.watermarkLogo ?? this.loadDefaultWatermark()
+    svg = this.svgAssembler.inject(svg, this.imageInjector.watermarkElement(watermark, SVG_SIZE, backgroundColor, dotsColor))
 
     return svg
+  }
+
+  private loadDefaultWatermark(): string {
+    if (!this.defaultWatermark) {
+      const assetUrl = new URL('../../assets/watermark-logo.svg', import.meta.url)
+      this.defaultWatermark = readFileSync(assetUrl, 'utf-8')
+    }
+
+    return this.defaultWatermark
   }
 }
