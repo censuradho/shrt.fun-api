@@ -23,6 +23,7 @@ export class HitRepository implements IHitRepository {
         device: payload.device,
         os: payload.os,
         browser: payload.browser,
+        source: payload.source,
       }
     })
   }
