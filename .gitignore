@@ -1,6 +1,7 @@
 node_modules
 .env
 .env.prod
+.skip-tests-until
 
 /prisma/prisma
 dist
