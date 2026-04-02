@@ -10,4 +10,6 @@ export interface UrlModel {
   expireAt?: Date | null
   createdAt: Date
   updatedAt: Date
+  hasQrCode: boolean
+  qrCodeOptions: Record<string, any> | null
 }
