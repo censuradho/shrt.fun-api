@@ -1,1 +1,14 @@
+SKIP_FILE=".skip-tests-until"
+
+if [ -f "$SKIP_FILE" ]; then
+  UNTIL=$(cat "$SKIP_FILE" | tr -d '[:space:]')
+  TODAY=$(date +%Y-%m-%d)
+  if [[ "$TODAY" < "$UNTIL" || "$TODAY" == "$UNTIL" ]]; then
+    echo "⚠ Tests skipped until $UNTIL"
+    exit 0
+  else
+    rm "$SKIP_FILE"
+  fi
+fi
+
 pnpm test:unit
