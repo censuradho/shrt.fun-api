@@ -11,8 +11,9 @@ import { ToggleUrlActiveUseCase } from "@/application/useCases/ToggleUrlActive.u
 import { DeleteUrlUseCase } from "@/application/useCases/DeleteUrl.useCase";
 import { PublicStatsQuery } from "@/application/queries/publicStats.query";
 import { GetLinkQRCodeQuery } from "@/application/queries/getLinkQRCode.query";
+import { GenerateQRCodePreviewQuery } from "@/application/queries/generateQRCodePreview.query";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
-import { IQRCodePort, QRCodeOptions } from "@/domain/interfaces/QRCodePort";
+import { QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 
 export class UrlController {
   constructor (
@@ -25,8 +26,8 @@ export class UrlController {
     private readonly deleteUrlUseCase: DeleteUrlUseCase,
     private readonly publicStatsQuery: PublicStatsQuery,
     private readonly envProvider: IEnvProvider,
-    private readonly qrCodePort: IQRCodePort,
     private readonly getLinkQRCodeQuery: GetLinkQRCodeQuery,
+    private readonly generateQRCodePreviewQuery: GenerateQRCodePreviewQuery,
   ) {}
 
   async create (request: FastifyRequest, reply: FastifyReply) {
@@ -117,10 +118,7 @@ export class UrlController {
 
   async previewQrCode (request: FastifyRequest, reply: FastifyReply) {
     const options = request.body as QRCodeOptions
-    const clientUrl = this.envProvider.get('CLIENT_URL') ?? ''
-
-    const qrCode = await this.qrCodePort.generate(clientUrl, options)
-
+    const qrCode = await this.generateQRCodePreviewQuery.execute(request.user.id, options)
     return reply.send({ qrCode })
   }
 }
