@@ -47,6 +47,7 @@ export class UrlController {
       request.headers['user-agent'] || '',
       request.headers['referer'] || null
     );
+
     if (!data.isActive) 
       return reply
         .status(HTTP_STATUS_CODES.NOT_FOUND)
