@@ -1,4 +1,6 @@
-export type HitSource = 'url' | 'qr'
+import { HitSourceEnum } from "@/domain/enums/Hit.enum"
+
+export type HitSource = typeof HitSourceEnum[keyof typeof HitSourceEnum]
 
 export interface CreateHitEntityDto {
   urlId: string
