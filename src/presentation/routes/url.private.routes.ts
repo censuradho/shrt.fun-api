@@ -83,6 +83,15 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
     urlController.delete.bind(urlController)
   );
 
+  app.get(
+    '/:id/qrcode',
+    {
+      preHandler: authMiddleware,
+      schema: { params: urlParamsDto },
+    },
+    urlController.getLinkQRCode.bind(urlController)
+  );
+
   app.post(
     '/qrcode/preview',
     {
