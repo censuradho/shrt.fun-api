@@ -6,6 +6,7 @@ import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
 import { UrlModel } from '@/domain/models/UrlModel';
+import { toQrUrl } from '@/utils/toQrUrl';
 
 const urlRepository = mock<IUrlRepository>();
 const qrCodePort = mock<IQRCodePort>();
@@ -39,7 +40,7 @@ describe('GetLinkQRCodeQuery', () => {
     const result = await query.execute('url-id', 'user-id');
 
     expect(urlRepository.findById).toHaveBeenCalledWith('url-id', 'user-id');
-    expect(qrCodePort.generate).toHaveBeenCalledWith(url.shortUrl, url.qrCodeOptions);
+    expect(qrCodePort.generate).toHaveBeenCalledWith(toQrUrl(url.shortUrl), url.qrCodeOptions);
     expect(result).toEqual({ qrCode: 'data:image/png;base64,abc' });
   });
 
