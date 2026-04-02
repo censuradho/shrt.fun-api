@@ -1,3 +1,5 @@
+import { JsonValue } from "@prisma/client/runtime/client"
+
 export interface UrlModel {
   id: string
   originalUrl: string
@@ -11,5 +13,5 @@ export interface UrlModel {
   createdAt: Date
   updatedAt: Date
   hasQrCode: boolean
-  qrCodeOptions: Record<string, any> | null
+  qrCodeOptions?: JsonValue | null
 }
