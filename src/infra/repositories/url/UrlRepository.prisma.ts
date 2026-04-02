@@ -212,7 +212,7 @@ export class UrlRepository implements IUrlRepository {
 
   async updateQrCodeOptions (id: string, supabaseId: string, options: Record<string, unknown>): Promise<boolean> {
     const url = await this.prisma.url.findFirst({
-      where: { id, supabaseId, deletedAt: null, hasQrCode: true },
+      where: { id, supabaseId, deletedAt: null },
       select: { id: true },
     })
 
@@ -220,7 +220,7 @@ export class UrlRepository implements IUrlRepository {
 
     await this.prisma.url.update({
       where: { id },
-      data: { qrCodeOptions: options as any },
+      data: { qrCodeOptions: options as any, hasQrCode: true },
     })
 
     return true
