@@ -3,7 +3,7 @@ import { sanitizeString } from "@/shered/sanitizeString";
 import { slugValidation, urlValidation } from "@/shered/validations";
 import z from "zod";
 
-const qrOptionsDto = z.object({
+export const qrOptionsDto = z.object({
   dotsStyle: z.enum(['square', 'rounded', 'dots', 'classy', 'classy-rounded', 'extra-rounded', 'mixed', 'fluid']).optional(),
   dotsColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
   backgroundColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
