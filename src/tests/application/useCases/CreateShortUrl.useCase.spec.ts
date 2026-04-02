@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.useCase';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
@@ -16,31 +17,10 @@ const QR_CODE = 'data:image/png;base64,abc123';
 const DTO = { url: ORIGINAL_URL, slug: undefined, title: 'Google', generateQrCode: false, qrOptions: undefined };
 const DTO_WITH_QR = { ...DTO, generateQrCode: true, qrOptions: { dotsStyle: 'rounded' as const, dotsColor: '#000000' } };
 
-const makeUrlRepository = (): IUrlRepository => ({
-  create: vi.fn().mockResolvedValue(URL_ID),
-  createAnonymous: vi.fn(),
-  getIdByShortUrl: vi.fn(),
-  getOriginalUrl: vi.fn(),
-  findById: vi.fn(),
-  incrementHitsCount: vi.fn(),
-  delete: vi.fn(),
-  toggleActive: vi.fn(),
-  findManyPaginated: vi.fn(),
-  countAll: vi.fn(),
-  countByUserCurrentMonth: vi.fn().mockResolvedValue({ month: 0, today: 0 }),
-  countQrCodeByUserCurrentMonth: vi.fn().mockResolvedValue(0),
-  softDelete: vi.fn(),
-});
-
-const makeUrlCacheService = (): IUrlCacheService => ({
-  setUrl: vi.fn().mockResolvedValue(undefined),
-  getUrl: vi.fn(),
-  incrementHits: vi.fn(),
-  incrementTotalUrls: vi.fn().mockResolvedValue(undefined),
-  getTotalUrls: vi.fn(),
-  deleteUrl: vi.fn(),
-  incrementTotalClicks: vi.fn(),
-});
+const urlRepository = mock<IUrlRepository>();
+const urlCacheService = mock<IUrlCacheService>();
+const shortUrlGenerateService = mock<IShortUrlGenerateService>();
+const qrCodePort = mock<IQRCodePort>();
 
 const makeUserRepository = (overrides?: { monthlyQrCodeLimit?: number }): any => ({
   findById: vi.fn().mockResolvedValue({ id: USER_ID }),
@@ -54,31 +34,24 @@ const makeUserRepository = (overrides?: { monthlyQrCodeLimit?: number }): any =>
   me: vi.fn(),
 });
 
-const makeShortUrlGenerateService = (): IShortUrlGenerateService => ({
-  generate: vi.fn().mockResolvedValue(SHORT_URL),
-});
-
-const makeQrCodePort = (): IQRCodePort => ({
-  generate: vi.fn().mockResolvedValue(QR_CODE),
-});
-
 beforeEach(() => {
   vi.clearAllMocks();
+  urlRepository.create.mockResolvedValue(URL_ID);
+  urlRepository.countByUserCurrentMonth.mockResolvedValue({ month: 0, today: 0 });
+  urlRepository.countQrCodeByUserCurrentMonth.mockResolvedValue(0);
+  urlCacheService.setUrl.mockResolvedValue(undefined);
+  urlCacheService.incrementTotalUrls.mockResolvedValue(undefined);
+  shortUrlGenerateService.generate.mockResolvedValue(SHORT_URL);
+  qrCodePort.generate.mockResolvedValue(QR_CODE);
 });
 
 describe('CreateShortUrlUseCase', () => {
   it('should create a short url and populate cache', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
-    const userRepository = makeUserRepository();
-    const qrCodePort = makeQrCodePort();
-
     const useCase = new CreateShortUrlUseCase(
       urlRepository,
       urlCacheService,
-      generateService,
-      userRepository,
+      shortUrlGenerateService,
+      makeUserRepository(),
       qrCodePort,
     );
     const result = await useCase.execute(USER_ID, DTO);
@@ -96,15 +69,10 @@ describe('CreateShortUrlUseCase', () => {
   });
 
   it('should generate qrcode when generateQrCode is true', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
-    const qrCodePort = makeQrCodePort();
-
     const useCase = new CreateShortUrlUseCase(
       urlRepository,
       urlCacheService,
-      generateService,
+      shortUrlGenerateService,
       makeUserRepository(),
       qrCodePort,
     );
@@ -119,17 +87,12 @@ describe('CreateShortUrlUseCase', () => {
   });
 
   it('should not create url if qrcode generation fails', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
-    const qrCodePort = makeQrCodePort();
-
-    vi.mocked(qrCodePort.generate).mockRejectedValue(new Error('QR service down'));
+    qrCodePort.generate.mockRejectedValue(new Error('QR service down'));
 
     const useCase = new CreateShortUrlUseCase(
       urlRepository,
       urlCacheService,
-      generateService,
+      shortUrlGenerateService,
       makeUserRepository(),
       qrCodePort,
     );
@@ -139,15 +102,14 @@ describe('CreateShortUrlUseCase', () => {
   });
 
   it('should throw MONTHLY_QR_CODE_LIMIT_REACHED when qrcode limit is reached', async () => {
-    const urlRepository = makeUrlRepository();
-    vi.mocked(urlRepository.countQrCodeByUserCurrentMonth).mockResolvedValue(10);
+    urlRepository.countQrCodeByUserCurrentMonth.mockResolvedValue(10);
 
     const useCase = new CreateShortUrlUseCase(
       urlRepository,
-      makeUrlCacheService(),
-      makeShortUrlGenerateService(),
+      urlCacheService,
+      shortUrlGenerateService,
       makeUserRepository({ monthlyQrCodeLimit: 10 }),
-      makeQrCodePort(),
+      qrCodePort,
     );
 
     await expect(useCase.execute(USER_ID, DTO_WITH_QR)).rejects.toMatchObject({
@@ -157,18 +119,14 @@ describe('CreateShortUrlUseCase', () => {
   });
 
   it('should delete url and throw if cache fails', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
-
-    vi.mocked(urlCacheService.setUrl).mockRejectedValue(new Error('Redis down'));
+    urlCacheService.setUrl.mockRejectedValue(new Error('Redis down'));
 
     const useCase = new CreateShortUrlUseCase(
       urlRepository,
       urlCacheService,
-      generateService,
+      shortUrlGenerateService,
       makeUserRepository(),
-      makeQrCodePort(),
+      qrCodePort,
     );
 
     await expect(useCase.execute(USER_ID, DTO)).rejects.toMatchObject({
@@ -180,18 +138,14 @@ describe('CreateShortUrlUseCase', () => {
   });
 
   it('should delete url and throw if incrementTotalUrls fails', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
-
-    vi.mocked(urlCacheService.incrementTotalUrls).mockRejectedValue(new Error('Redis down'));
+    urlCacheService.incrementTotalUrls.mockRejectedValue(new Error('Redis down'));
 
     const useCase = new CreateShortUrlUseCase(
       urlRepository,
       urlCacheService,
-      generateService,
+      shortUrlGenerateService,
       makeUserRepository(),
-      makeQrCodePort(),
+      qrCodePort,
     );
 
     await expect(useCase.execute(USER_ID, DTO)).rejects.toMatchObject({

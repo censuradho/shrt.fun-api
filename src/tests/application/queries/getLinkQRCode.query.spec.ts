@@ -1,17 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 import { GetLinkQRCodeQuery } from '@/application/queries/getLinkQRCode.query';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
 import { UrlModel } from '@/domain/models/UrlModel';
-import { mockDeep } from 'vitest-mock-extended';
 
-const urlRepository = mockDeep<IUrlRepository>();
-
-const makeQRCodePort = (): IQRCodePort => ({
-  generate: vi.fn(),
-});
+const urlRepository = mock<IUrlRepository>();
+const qrCodePort = mock<IQRCodePort>();
 
 const makeUrl = (overrides: Partial<UrlModel> = {}): UrlModel => ({
   id: 'url-id',
@@ -34,11 +31,9 @@ beforeEach(() => vi.clearAllMocks());
 
 describe('GetLinkQRCodeQuery', () => {
   it('should return the generated qr code', async () => {
-    const qrCodePort = makeQRCodePort();
     const url = makeUrl();
-
-    vi.mocked(urlRepository.findById).mockResolvedValue(url);
-    vi.mocked(qrCodePort.generate).mockResolvedValue('data:image/png;base64,abc');
+    urlRepository.findById.mockResolvedValue(url);
+    qrCodePort.generate.mockResolvedValue('data:image/png;base64,abc');
 
     const query = new GetLinkQRCodeQuery(urlRepository, qrCodePort);
     const result = await query.execute('url-id', 'user-id');
@@ -49,9 +44,7 @@ describe('GetLinkQRCodeQuery', () => {
   });
 
   it('should throw URL_NOT_FOUND when url does not exist', async () => {
-    const qrCodePort = makeQRCodePort();
-
-    vi.mocked(urlRepository.findById).mockResolvedValue(null);
+    urlRepository.findById.mockResolvedValue(null);
 
     const query = new GetLinkQRCodeQuery(urlRepository, qrCodePort);
 
@@ -63,9 +56,7 @@ describe('GetLinkQRCodeQuery', () => {
   });
 
   it('should throw QR_CODE_NOT_GENERATED when hasQrCode is false', async () => {
-    const qrCodePort = makeQRCodePort();
-
-    vi.mocked(urlRepository.findById).mockResolvedValue(makeUrl({ hasQrCode: false }));
+    urlRepository.findById.mockResolvedValue(makeUrl({ hasQrCode: false }));
 
     const query = new GetLinkQRCodeQuery(urlRepository, qrCodePort);
 
@@ -77,9 +68,7 @@ describe('GetLinkQRCodeQuery', () => {
   });
 
   it('should throw QR_CODE_NOT_GENERATED when qrCodeOptions is null', async () => {
-    const qrCodePort = makeQRCodePort();
-
-    vi.mocked(urlRepository.findById).mockResolvedValue(makeUrl({ hasQrCode: true, qrCodeOptions: null }));
+    urlRepository.findById.mockResolvedValue(makeUrl({ hasQrCode: true, qrCodeOptions: null }));
 
     const query = new GetLinkQRCodeQuery(urlRepository, qrCodePort);
 

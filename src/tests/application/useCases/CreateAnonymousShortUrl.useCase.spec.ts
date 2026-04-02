@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 import { CreateAnonymousShortUrl } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
@@ -11,50 +12,24 @@ const ORIGINAL_URL = 'https://www.google.com';
 const URL_ID = 'url-id';
 const DTO = { url: ORIGINAL_URL, slug: undefined, title: 'Google' };
 
-const makeUrlRepository = (): IUrlRepository => ({
-  create: vi.fn(),
-  createAnonymous: vi.fn().mockResolvedValue(URL_ID),
-  getIdByShortUrl: vi.fn(),
-  getOriginalUrl: vi.fn(),
-  findById: vi.fn(),
-  incrementHitsCount: vi.fn(),
-  delete: vi.fn(),
-  toggleActive: vi.fn(),
-  findManyPaginated: vi.fn(),
-  countAll: vi.fn(),
-  countByUserCurrentMonth: vi.fn(),
-  softDelete: vi.fn(),
-});
-
-const makeUrlCacheService = (): IUrlCacheService => ({
-  setUrl: vi.fn().mockResolvedValue(undefined),
-  getUrl: vi.fn(),
-  incrementHits: vi.fn(),
-  incrementTotalUrls: vi.fn().mockResolvedValue(undefined),
-  getTotalUrls: vi.fn(),
-  deleteUrl: vi.fn(),
-  incrementTotalClicks: vi.fn(),
-});
-
-const makeShortUrlGenerateService = (): IShortUrlGenerateService => ({
-  generate: vi.fn().mockResolvedValue(SHORT_URL),
-});
+const urlRepository = mock<IUrlRepository>();
+const urlCacheService = mock<IUrlCacheService>();
+const shortUrlGenerateService = mock<IShortUrlGenerateService>();
 
 beforeEach(() => {
   vi.clearAllMocks();
+  urlRepository.createAnonymous.mockResolvedValue(URL_ID);
+  urlCacheService.setUrl.mockResolvedValue(undefined);
+  urlCacheService.incrementTotalUrls.mockResolvedValue(undefined);
+  shortUrlGenerateService.generate.mockResolvedValue(SHORT_URL);
 });
 
 describe('CreateAnonymousShortUrl', () => {
   it('should create an anonymous short url and populate cache', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
-
-    const useCase = new CreateAnonymousShortUrl(urlRepository, urlCacheService, generateService);
+    const useCase = new CreateAnonymousShortUrl(urlRepository, urlCacheService, shortUrlGenerateService);
     const result = await useCase.execute(DTO);
 
     expect(result).toBe(SHORT_URL);
-
     expect(urlRepository.createAnonymous).toHaveBeenCalledWith({
       originalUrl: ORIGINAL_URL,
       shortUrl: SHORT_URL,
@@ -66,13 +41,9 @@ describe('CreateAnonymousShortUrl', () => {
   });
 
   it('should delete url and throw if cache fails', async () => {
-    const urlRepository = makeUrlRepository();
-    const urlCacheService = makeUrlCacheService();
-    const generateService = makeShortUrlGenerateService();
+    urlCacheService.setUrl.mockRejectedValue(new Error('Redis down'));
 
-    vi.mocked(urlCacheService.setUrl).mockRejectedValue(new Error('Redis down'));
-
-    const useCase = new CreateAnonymousShortUrl(urlRepository, urlCacheService, generateService);
+    const useCase = new CreateAnonymousShortUrl(urlRepository, urlCacheService, shortUrlGenerateService);
 
     await expect(useCase.execute(DTO)).rejects.toMatchObject({
       message: URL_ERRORS.WAS_NOT_POSSIBLE_TO_CREATE_SHORT_URL,

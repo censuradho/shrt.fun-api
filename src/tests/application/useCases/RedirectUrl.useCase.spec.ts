@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { IUrlUnitOfWork, IUrlUoWRepositories } from '@/infra/repositories/url/UrlUnitOfWork';
@@ -17,24 +18,9 @@ const SHORT_URL = `${DOMAIN}/${SLUG}`;
 const ORIGINAL_URL = 'https://www.google.com';
 const URL_ID = 'url-id';
 
-const makeUrlCacheService = (): IUrlCacheService => ({
-  getUrl: vi.fn(),
-  setUrl: vi.fn(),
-  incrementHits: vi.fn(),
-  incrementTotalUrls: vi.fn(),
-  getTotalUrls: vi.fn(),
-  deleteUrl: vi.fn(),
-  incrementTotalClicks: vi.fn(),
-});
-
-
-const makeGeolocationService = (): IGeolocationService => ({
-  lookup: vi.fn().mockReturnValue({ country: null, city: null }),
-});
-
-const makeDeviceService = (): IDeviceService => ({
-  parse: vi.fn().mockReturnValue({ device: 'desktop', os: null, browser: null }),
-});
+const urlCacheService = mock<IUrlCacheService>();
+const geolocationService = mock<IGeolocationService>();
+const deviceService = mock<IDeviceService>();
 
 const urlRepositoryMock = {
   getOriginalUrl: vi.fn(),
@@ -58,92 +44,78 @@ const makeEnvProvider = () => ({
   get: vi.fn().mockReturnValue(DOMAIN),
 });
 
-const makeUseCase = (
-  cacheService: IUrlCacheService,
-  uow: IUrlUnitOfWork,
-  geo = makeGeolocationService(),
-  device = makeDeviceService()
-) => new RedirectUrlUseCase(cacheService, uow, geo, device, makeEnvProvider());
+const makeUseCase = (uow: IUrlUnitOfWork) =>
+  new RedirectUrlUseCase(urlCacheService, uow, geolocationService, deviceService, makeEnvProvider());
 
 beforeEach(() => {
   vi.clearAllMocks();
+  geolocationService.lookup.mockReturnValue({ country: null, city: null });
+  deviceService.parse.mockReturnValue({ device: 'desktop', os: null, browser: null });
 });
 
 describe('RedirectUrlUseCase', () => {
   describe('when URL is cached', () => {
     it('should return cached data without hitting the database', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
+      urlCacheService.getUrl.mockResolvedValue({ originalUrl: ORIGINAL_URL, urlId: URL_ID, isActive: true });
 
-      vi.mocked(cacheService.getUrl).mockResolvedValue({ originalUrl: ORIGINAL_URL, urlId: URL_ID, isActive: true });
-
-      const result = await makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER);
+      const result = await makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER);
 
       expect(result).toEqual(expect.objectContaining({ originalUrl: ORIGINAL_URL, urlId: URL_ID }));
       expect(urlRepositoryMock.getOriginalUrl).not.toHaveBeenCalled();
     });
 
     it('should call incrementHitsCount and incrementHitCount inside uow', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
+      urlCacheService.getUrl.mockResolvedValue({ originalUrl: ORIGINAL_URL, urlId: URL_ID, isActive: true });
 
-      vi.mocked(cacheService.getUrl).mockResolvedValue({ originalUrl: ORIGINAL_URL, urlId: URL_ID, isActive: true });
-
-      await makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER);
+      await makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER);
 
       expect(urlRepositoryMock.incrementHitsCount).toHaveBeenCalledWith(URL_ID);
       expect(hitRepositoryMock.incrementHitCount).toHaveBeenCalledWith(expect.objectContaining({ urlId: URL_ID }));
     });
 
     it('should call incrementHits on cache service', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
+      urlCacheService.getUrl.mockResolvedValue({ originalUrl: ORIGINAL_URL, urlId: URL_ID, isActive: true });
 
-      vi.mocked(cacheService.getUrl).mockResolvedValue({ originalUrl: ORIGINAL_URL, urlId: URL_ID, isActive: true });
+      await makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER);
 
-      await makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER);
-
-      expect(cacheService.incrementHits).toHaveBeenCalledWith(SHORT_URL);
+      expect(urlCacheService.incrementHits).toHaveBeenCalledWith(SHORT_URL);
     });
   });
 
   describe('when URL is not cached', () => {
     it('should return data from database and populate cache', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
-
-      vi.mocked(cacheService.getUrl).mockResolvedValue(null);
+      urlCacheService.getUrl.mockResolvedValue(null);
       urlRepositoryMock.getOriginalUrl.mockResolvedValue({ id: URL_ID, originalUrl: ORIGINAL_URL, isActive: true });
 
-      const result = await makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER);
+      const result = await makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER);
 
       expect(result).toEqual(expect.objectContaining({ originalUrl: ORIGINAL_URL, id: URL_ID }));
-      expect(cacheService.setUrl).toHaveBeenCalledWith(SHORT_URL, ORIGINAL_URL, URL_ID, true);
-      expect(cacheService.incrementHits).toHaveBeenCalledWith(SHORT_URL);
+      expect(urlCacheService.setUrl).toHaveBeenCalledWith(SHORT_URL, ORIGINAL_URL, URL_ID, true);
+      expect(urlCacheService.incrementHits).toHaveBeenCalledWith(SHORT_URL);
     });
 
     it('should call incrementHitsCount and incrementHitCount inside uow', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
-
-      vi.mocked(cacheService.getUrl).mockResolvedValue(null);
+      urlCacheService.getUrl.mockResolvedValue(null);
       urlRepositoryMock.getOriginalUrl.mockResolvedValue({ id: URL_ID, originalUrl: ORIGINAL_URL, isActive: true });
 
-      await makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER);
+      await makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER);
 
       expect(urlRepositoryMock.incrementHitsCount).toHaveBeenCalledWith(URL_ID);
       expect(hitRepositoryMock.incrementHitCount).toHaveBeenCalledWith(expect.objectContaining({ urlId: URL_ID }));
     });
 
     it('should throw AppError with URL_NOT_FOUND when url does not exist', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
-
-      vi.mocked(cacheService.getUrl).mockResolvedValue(null);
+      urlCacheService.getUrl.mockResolvedValue(null);
       urlRepositoryMock.getOriginalUrl.mockResolvedValue(null);
 
       await expect(
-        makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER)
+        makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER)
       ).rejects.toMatchObject({
         message: URL_ERRORS.URL_NOT_FOUND,
         status: HTTP_ERROR_CODES.NOT_FOUND,
@@ -151,17 +123,15 @@ describe('RedirectUrlUseCase', () => {
     });
 
     it('should not call setUrl when url does not exist', async () => {
-      const cacheService = makeUrlCacheService();
       const uow = makeUnitOfWork();
-
-      vi.mocked(cacheService.getUrl).mockResolvedValue(null);
+      urlCacheService.getUrl.mockResolvedValue(null);
       urlRepositoryMock.getOriginalUrl.mockResolvedValue(null);
 
       await expect(
-        makeUseCase(cacheService, uow).execute(SLUG, IP, USER_AGENT, REFERRER)
+        makeUseCase(uow).execute(SLUG, IP, USER_AGENT, REFERRER)
       ).rejects.toThrow(AppError);
 
-      expect(cacheService.setUrl).not.toHaveBeenCalled();
+      expect(urlCacheService.setUrl).not.toHaveBeenCalled();
     });
   });
 });
