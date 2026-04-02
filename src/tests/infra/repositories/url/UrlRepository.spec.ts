@@ -248,12 +248,12 @@ describe('UrlRepository', () => {
 
       expect(result).toBe(true);
       expect(mockCtx.prisma.url.findFirst).toHaveBeenCalledWith({
-        where: { id: 'url-id', supabaseId: 'user-id', deletedAt: null, hasQrCode: true },
+        where: { id: 'url-id', supabaseId: 'user-id', deletedAt: null },
         select: { id: true },
       });
       expect(mockCtx.prisma.url.update).toHaveBeenCalledWith({
         where: { id: 'url-id' },
-        data: { qrCodeOptions: options },
+        data: { qrCodeOptions: options, hasQrCode: true },
       });
     });
 
