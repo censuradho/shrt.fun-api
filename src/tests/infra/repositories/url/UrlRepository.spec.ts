@@ -235,4 +235,37 @@ describe('UrlRepository', () => {
       });
     });
   });
+
+  describe('updateQrCodeOptions', () => {
+    it('should update qrCodeOptions and return true when url exists and has qrcode', async () => {
+      const repo = new UrlRepository(ctx.prisma);
+      const options = { dotsStyle: 'rounded', dotsColor: '#ff0000' };
+
+      mockCtx.prisma.url.findFirst.mockResolvedValue({ id: 'url-id' } as any);
+      mockCtx.prisma.url.update.mockResolvedValue({} as any);
+
+      const result = await repo.updateQrCodeOptions('url-id', 'user-id', options);
+
+      expect(result).toBe(true);
+      expect(mockCtx.prisma.url.findFirst).toHaveBeenCalledWith({
+        where: { id: 'url-id', supabaseId: 'user-id', deletedAt: null, hasQrCode: true },
+        select: { id: true },
+      });
+      expect(mockCtx.prisma.url.update).toHaveBeenCalledWith({
+        where: { id: 'url-id' },
+        data: { qrCodeOptions: options },
+      });
+    });
+
+    it('should return false and not update when url is not found', async () => {
+      const repo = new UrlRepository(ctx.prisma);
+
+      mockCtx.prisma.url.findFirst.mockResolvedValue(null);
+
+      const result = await repo.updateQrCodeOptions('url-id', 'user-id', {});
+
+      expect(result).toBe(false);
+      expect(mockCtx.prisma.url.update).not.toHaveBeenCalled();
+    });
+  });
 });
