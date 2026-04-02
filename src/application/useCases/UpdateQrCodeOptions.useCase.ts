@@ -6,6 +6,7 @@ import { QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 import { IUrlRepository } from "@/domain/repositories/IUrlRepository";
 import { IUserService } from "@/domain/interfaces/IUserService";
 import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { AUTHENTICATION_ERROR_MESSAGES } from "@/domain/errors/authentication.errors";
 
 export class UpdateQrCodeOptionsUseCase {
   constructor(
@@ -17,7 +18,7 @@ export class UpdateQrCodeOptionsUseCase {
     const user = await this.userService.getUser(supabaseId)
 
     if (!user) {
-      throw new AppError(URL_ERRORS.URL_NOT_FOUND, { status: HTTP_ERROR_CODES.NOT_FOUND })
+      throw new AppError(AUTHENTICATION_ERROR_MESSAGES.UNAUTHORIZED, { status: HTTP_ERROR_CODES.FORBIDDEN })
     }
 
     if (user.plan.name === PlanName.FREE) {
