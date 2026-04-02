@@ -26,6 +26,7 @@ import { GetLinkQRCodeQuery } from '@/application/queries/getLinkQRCode.query';
 import { GenerateQRCodePreviewQuery } from '@/application/queries/generateQRCodePreview.query';
 import { UserCacheService } from '@/application/services/UserCacheService';
 import { UserService } from '@/application/services/UserService';
+import { UpdateQrCodeOptionsUseCase } from '@/application/useCases/UpdateQrCodeOptions.useCase';
 
 const urlRepository: IUrlRepository = new UrlRepository(prisma);
 const userRepository = new UserRepository(prisma);
@@ -72,6 +73,7 @@ export function makeUrlController(app: FastifyInstance): UrlController {
   const userCacheService = new UserCacheService(cache);
   const userService = new UserService(userRepository, userCacheService);
   const generateQRCodePreviewQuery = new GenerateQRCodePreviewQuery(qrCodeAdapter, userService, envProvider);
+  const updateQrCodeOptionsUseCase = new UpdateQrCodeOptionsUseCase(urlRepository, userService);
 
   return new UrlController(
     createAnonymousShortUrlUseCase,
@@ -85,5 +87,6 @@ export function makeUrlController(app: FastifyInstance): UrlController {
     envProvider,
     getLinkQRCodeQuery,
     generateQRCodePreviewQuery,
+    updateQrCodeOptionsUseCase,
   );
 }
