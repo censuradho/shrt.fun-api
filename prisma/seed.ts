@@ -8,6 +8,7 @@ async function main() {
       id: 'plan_free',
       name: 'FREE',
       monthlyLinkLimit: 60,
+      monthlyQrCodeLimit: 50,
     },
   })
 
@@ -18,6 +19,7 @@ async function main() {
       id: 'plan_growth',
       name: 'GROWTH',
       monthlyLinkLimit: 500,
+      monthlyQrCodeLimit: 50,
     },
   })
 
