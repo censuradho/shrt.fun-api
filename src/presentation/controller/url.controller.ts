@@ -12,6 +12,7 @@ import { DeleteUrlUseCase } from "@/application/useCases/DeleteUrl.useCase";
 import { PublicStatsQuery } from "@/application/queries/publicStats.query";
 import { GetLinkQRCodeQuery } from "@/application/queries/getLinkQRCode.query";
 import { GenerateQRCodePreviewQuery } from "@/application/queries/generateQRCodePreview.query";
+import { UpdateQrCodeOptionsUseCase } from "@/application/useCases/UpdateQrCodeOptions.useCase";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
 import { QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 
@@ -28,6 +29,7 @@ export class UrlController {
     private readonly envProvider: IEnvProvider,
     private readonly getLinkQRCodeQuery: GetLinkQRCodeQuery,
     private readonly generateQRCodePreviewQuery: GenerateQRCodePreviewQuery,
+    private readonly updateQrCodeOptionsUseCase: UpdateQrCodeOptionsUseCase,
   ) {}
 
   async create (request: FastifyRequest, reply: FastifyReply) {
@@ -114,6 +116,13 @@ export class UrlController {
     const { id } = request.params as { id: string };
     const result = await this.getLinkQRCodeQuery.execute(id, request.user.id);
     return reply.send(result);
+  }
+
+  async updateQrCodeOptions (request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string }
+    const options = request.body as QRCodeOptions
+    await this.updateQrCodeOptionsUseCase.execute(id, request.user.id, options)
+    return reply.status(204).send()
   }
 
   async previewQrCode (request: FastifyRequest, reply: FastifyReply) {
