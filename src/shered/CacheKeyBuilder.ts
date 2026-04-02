@@ -18,6 +18,10 @@ export class CacheKeyBuilder {
     return this.build('totalClicks');
   }
   
+  static user(userId: string): string {
+    return this.build('user', userId)
+  }
+
   private static build(...parts: string[]): string {
     return [this.PREFIX, ...parts].join(this.SEPARATOR);
   }
