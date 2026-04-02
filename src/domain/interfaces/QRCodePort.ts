@@ -20,6 +20,7 @@ export interface QRCodeOptions {
   cornersDotStyle?: QRCodeCornersDotStyle
   centerLogo?: string     // base64
   watermarkLogo?: string  // base64 — renderizado no canto inferior direito
+  hideWatermark?: boolean
 }
 
 export interface IQRCodePort {
