@@ -1,3 +1,4 @@
+import { HitSourceEnum } from '@/domain/enums/Hit.enum';
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { IDeviceService } from '@/domain/interfaces/IDeviceService';
@@ -18,7 +19,7 @@ export class RedirectUrlUseCase {
     private readonly envProvider: IEnvProvider
   ) {}
 
-  async execute(slug: string, ip: string, userAgent: string, referrer: string | null, source: HitSource = 'url') {
+  async execute(slug: string, ip: string, userAgent: string, referrer: string | null, source: HitSource = HitSourceEnum.URL) {
     const shortUrl = `${this.envProvider.get('REDIRECT_CLIENT_URL')}/${slug}`;
     const { country, city } = this.geolocationService.lookup(ip);
     const { device, os, browser } = this.deviceService.parse(userAgent);
