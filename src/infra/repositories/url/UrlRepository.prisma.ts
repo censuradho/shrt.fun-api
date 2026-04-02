@@ -210,6 +210,22 @@ export class UrlRepository implements IUrlRepository {
     return url.shortUrl;
   }
 
+  async updateQrCodeOptions (id: string, supabaseId: string, options: Record<string, unknown>): Promise<boolean> {
+    const url = await this.prisma.url.findFirst({
+      where: { id, supabaseId, deletedAt: null, hasQrCode: true },
+      select: { id: true },
+    })
+
+    if (!url) return false
+
+    await this.prisma.url.update({
+      where: { id },
+      data: { qrCodeOptions: options as any },
+    })
+
+    return true
+  }
+
   async toggleActive (id: string, supabaseId: string): Promise<{ isActive: boolean; shortUrl: string } | null> {
     const url = await this.prisma.url.findFirst({
       where: { id, user: { supabaseId } },

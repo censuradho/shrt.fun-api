@@ -22,6 +22,7 @@ export interface IUrlRepository {
   delete (id: string): Promise<void>
   softDelete (id: string, supabaseId: string): Promise<string | null>
   toggleActive (id: string, supabaseId: string): Promise<{ isActive: boolean; shortUrl: string } | null>
+  updateQrCodeOptions (id: string, supabaseId: string, options: Record<string, unknown>): Promise<boolean>
   countAll (): Promise<number>
   countByUserCurrentMonth (supabaseId: string): Promise<{ month: number; today: number }>
   countQrCodeByUserCurrentMonth (supabaseId: string): Promise<number>
