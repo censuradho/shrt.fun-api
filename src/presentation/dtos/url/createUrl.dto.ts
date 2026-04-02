@@ -3,6 +3,16 @@ import { sanitizeString } from "@/shered/sanitizeString";
 import { slugValidation, urlValidation } from "@/shered/validations";
 import z from "zod";
 
+const qrOptionsDto = z.object({
+  dotsStyle: z.enum(['square', 'rounded', 'dots', 'classy', 'classy-rounded', 'extra-rounded', 'mixed', 'fluid']).optional(),
+  dotsColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
+  backgroundColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
+  cornersSquareStyle: z.enum(['dot', 'square', 'extra-rounded']).optional(),
+  cornersDotStyle: z.enum(['dot', 'square']).optional(),
+  centerLogo: z.string().optional(),
+  watermarkLogo: z.string().optional(),
+}).optional()
+
 export const createUrlDto = z.object({
   url: z
     .url(FIELD_ERROR_MESSAGES.INVALID_FIELD)
@@ -20,6 +30,7 @@ export const createUrlDto = z.object({
     .optional()
     .transform((value) => sanitizeString(value)),
   generateQrCode: z.boolean().optional().default(false),
+  qrOptions: qrOptionsDto,
 })
 
 export type CreateUrlDto = z.infer<typeof createUrlDto>
