@@ -6,4 +6,5 @@ export interface CreateUrlEntityDto {
   description?: string
   tags?: string[]
   hasQrCode?: boolean
+  qrCodeOptions?: Record<string, any>
 }
