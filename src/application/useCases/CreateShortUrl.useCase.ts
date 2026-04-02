@@ -59,7 +59,7 @@ export class CreateShortUrlUseCase {
     const shortUrl = await this.shortUrlGenerateService.generate(slug);
 
     const qrCode = generateQrCode
-      ? await this.qrCodePort.generate(shortUrl)
+      ? await this.qrCodePort.generate(shortUrl, dto.qrOptions ?? {})
       : undefined;
 
     const urlId = await this.urlRepository.create(supabaseId, {
