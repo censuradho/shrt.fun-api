@@ -11,15 +11,21 @@ export class QrImageInjector {
     return `<image href="${logo}" xlink:href="${logo}" x="${pos}" y="${pos}" width="${logoSize}" height="${logoSize}"/>`
   }
 
-  watermarkElement(logo: string, svgSize: number, backgroundColor: string): string {
+  watermarkElement(svgContent: string, svgSize: number, backgroundColor: string, color: string): string {
     const bgSize = WATERMARK_SIZE + WATERMARK_PADDING * 2
     const bgX = svgSize - bgSize - WATERMARK_MARGIN
     const bgY = svgSize - bgSize - WATERMARK_MARGIN
     const imgX = bgX + WATERMARK_PADDING
     const imgY = bgY + WATERMARK_PADDING
 
+    const viewBox = svgContent.match(/viewBox="([^"]*)"/)?.[1] ?? '0 0 100 100'
+    const innerContent = svgContent
+      .replace(/<svg[^>]*>/, '')
+      .replace(/<\/svg>/, '')
+      .replace(/\sfill="[^"]*"/g, '')
+
     const bg = `<rect x="${bgX}" y="${bgY}" width="${bgSize}" height="${bgSize}" fill="${backgroundColor}" rx="4"/>`
-    const img = `<image href="${logo}" xlink:href="${logo}" x="${imgX}" y="${imgY}" width="${WATERMARK_SIZE}" height="${WATERMARK_SIZE}" preserveAspectRatio="xMidYMid meet"/>`
+    const img = `<svg x="${imgX}" y="${imgY}" width="${WATERMARK_SIZE}" height="${WATERMARK_SIZE}" viewBox="${viewBox}" preserveAspectRatio="xMidYMid meet"><g fill="${color}">${innerContent}</g></svg>`
 
     return bg + img
   }
