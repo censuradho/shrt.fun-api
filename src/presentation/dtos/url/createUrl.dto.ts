@@ -9,8 +9,8 @@ export const qrOptionsDto = z.object({
   backgroundColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
   cornersSquareStyle: z.enum(['dot', 'square', 'extra-rounded']).optional(),
   cornersDotStyle: z.enum(['dot', 'square']).optional(),
-  centerLogo: z.string().optional(),
-  watermarkLogo: z.string().optional(),
+  centerLogo: z.string().regex(/^data:image\/(png|jpeg|jpg|svg\+xml);base64,/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
+  watermarkLogo: z.string().regex(/^data:image\/(png|jpeg|jpg|svg\+xml);base64,/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
 }).optional()
 
 export const createUrlDto = z.object({
