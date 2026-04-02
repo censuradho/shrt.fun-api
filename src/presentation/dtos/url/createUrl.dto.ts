@@ -14,10 +14,15 @@ export const qrOptionsDto = z.object({
   cornersDotStyle: z.enum(['dot', 'square']).optional(),
   centerLogo: z
     .string()
-    .regex(/^data:image\/(png|jpeg|jpg|svg\+xml);base64,/, FIELD_ERROR_MESSAGES.INVALID_FIELD)
+    .regex(/^data:image\/(png|jpeg|jpg);base64,[A-Za-z0-9+/]+=*$/, FIELD_ERROR_MESSAGES.INVALID_FIELD)
     .max(MAX_CENTER_LOGO_SIZE, FIELD_ERROR_MESSAGES.MAX_FILE_SIZE(MAX_CENTER_LOGO_SIZE))
     .optional(),
-  watermarkLogo: z.string().regex(/^data:image\/(png|jpeg|jpg|svg\+xml);base64,/, FIELD_ERROR_MESSAGES.INVALID_FIELD).optional(),
+  watermarkLogo: z
+    .string()
+    .regex(/^data:image\/(png|jpeg|jpg);base64,[A-Za-z0-9+/]+=*$/, FIELD_ERROR_MESSAGES.INVALID_FIELD)
+    .max(MAX_CENTER_LOGO_SIZE, FIELD_ERROR_MESSAGES.MAX_FILE_SIZE(MAX_CENTER_LOGO_SIZE))
+    .optional(),
+  hideWatermark: z.boolean().optional(),
 }).optional()
 
 export const createUrlDto = z.object({
