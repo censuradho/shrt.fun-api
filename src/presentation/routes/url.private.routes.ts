@@ -86,6 +86,17 @@ export async function urlRoutesPrivate(app: FastifyInstance) {
   app.post(
     '/qrcode/preview',
     {
+      config: {
+        rateLimit: {
+          max: 50,
+          timeWindow: '1 hour',
+          errorResponseBuilder: () => {
+            throw new AppError(URL_ERRORS.ONLY_50_QR_CODE_PREVIEWS_PER_HOUR, {
+              status: HTTP_STATUS_CODES.TOO_MANY_REQUESTS
+            })
+          }
+        }
+      },
       preHandler: authMiddleware,
       schema: { body: qrOptionsDto },
     },
