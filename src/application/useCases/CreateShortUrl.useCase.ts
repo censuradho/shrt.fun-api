@@ -67,6 +67,9 @@ export class CreateShortUrlUseCase {
       shortUrl,
       title,
       hasQrCode: generateQrCode,
+      ...(generateQrCode && ({
+        qrCodeOptions: dto.qrOptions,
+      }))
     });
 
     try {
