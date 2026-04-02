@@ -20,6 +20,7 @@ export class UrlRepository implements IUrlRepository {
         expireAt: payload.expireAt,
         tags: payload.tags,
         hasQrCode: payload.hasQrCode ?? false,
+        qrCodeOptions: payload.qrCodeOptions ? JSON.stringify(payload.qrCodeOptions) : null,
       },
       select: { id: true }
     })
