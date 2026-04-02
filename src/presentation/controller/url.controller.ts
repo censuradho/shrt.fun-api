@@ -11,6 +11,7 @@ import { ToggleUrlActiveUseCase } from "@/application/useCases/ToggleUrlActive.u
 import { DeleteUrlUseCase } from "@/application/useCases/DeleteUrl.useCase";
 import { PublicStatsQuery } from "@/application/queries/publicStats.query";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
+import { IQRCodePort, QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 
 export class UrlController {
   constructor (
@@ -22,7 +23,8 @@ export class UrlController {
     private readonly toggleUrlActiveUseCase: ToggleUrlActiveUseCase,
     private readonly deleteUrlUseCase: DeleteUrlUseCase,
     private readonly publicStatsQuery: PublicStatsQuery,
-    private readonly envProvider: IEnvProvider
+    private readonly envProvider: IEnvProvider,
+    private readonly qrCodePort: IQRCodePort,
   ) {}
 
   async create (request: FastifyRequest, reply: FastifyReply) {
@@ -48,7 +50,7 @@ export class UrlController {
       request.headers['referer'] || null
     );
 
-    if (!data.isActive) 
+    if (!data.isActive)
       return reply
         .status(HTTP_STATUS_CODES.NOT_FOUND)
         .redirect(`${this.envProvider.get('DOMAIN_URL')}/static/not-found`, HTTP_REDIRECT_CODES.FOUND)
@@ -85,5 +87,14 @@ export class UrlController {
     const result = await this.findManyLinksPaginatedQuery.execute(request.user.id, queries)
 
     return reply.send(result);
+  }
+
+  async previewQrCode (request: FastifyRequest, reply: FastifyReply) {
+    const options = request.body as QRCodeOptions
+    const clientUrl = this.envProvider.get('CLIENT_URL') ?? ''
+
+    const qrCode = await this.qrCodePort.generate(clientUrl, options)
+
+    return reply.send({ qrCode })
   }
 }
