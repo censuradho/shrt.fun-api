@@ -7,4 +7,5 @@ export const QR_CODE_FREE_COLORS = [
   "#2A5BD7",
   "#6B52D1",
   "#000000",
+  "#ffffff",
 ] as const;
