@@ -117,7 +117,7 @@ describe('CreateShortUrlUseCase', () => {
       qrCodePort,
     );
 
-    await expect(useCase.execute(USER_ID, { ...DTO_WITH_QR, qrOptions: { backgroundColor: '#ffffff' } })).rejects.toMatchObject({
+    await expect(useCase.execute(USER_ID, { ...DTO_WITH_QR, qrOptions: { backgroundColor: '#dddddd' } })).rejects.toMatchObject({
       message: URL_ERRORS.QR_CODE_BACKGROUND_COLOR_NOT_ALLOWED_ON_FREE_PLAN,
       status: HTTP_STATUS_CODES.FORBIDDEN,
     });

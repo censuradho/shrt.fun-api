@@ -46,7 +46,7 @@ describe('UpdateQrCodeOptionsUseCase', () => {
     userService.getUser.mockResolvedValue(makeUser(PlanName.FREE));
     const useCase = new UpdateQrCodeOptionsUseCase(urlRepository, userService);
 
-    await expect(useCase.execute('url-1', 'user-1', { backgroundColor: '#ffffff' })).rejects.toMatchObject({
+    await expect(useCase.execute('url-1', 'user-1', { backgroundColor: '#dddddd' })).rejects.toMatchObject({
       message: URL_ERRORS.QR_CODE_BACKGROUND_COLOR_NOT_ALLOWED_ON_FREE_PLAN,
       status: HTTP_ERROR_CODES.FORBIDDEN,
     });
