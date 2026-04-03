@@ -1,4 +1,4 @@
-import { CacheGateway } from '@/modules/link/domain/interfaces/CacheGateway';
+import { CacheGateway } from '@/infra/domain/CacheGateway';
 import { UserModel } from '@/modules/user/domain/models/User.model';
 import { CachedUser } from '@/modules/user/domain/interfaces/IUserService';
 import { CacheKeyBuilder } from '@/shared/kernel/CacheKeyBuilder';

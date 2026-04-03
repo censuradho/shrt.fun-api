@@ -10,7 +10,7 @@ import { RedirectUrlUseCase } from '@/modules/link/application/use-cases/Redirec
 import { ToggleUrlActiveUseCase } from '@/modules/link/application/use-cases/ToggleUrlActive.useCase';
 import { UpdateQrCodeOptionsUseCase } from '@/modules/link/application/use-cases/UpdateQrCodeOptions.useCase';
 import { QRCodeOptions } from '@/modules/link/domain/interfaces/QRCodePort';
-import { IEnvProvider } from '@/shared/types/interfaces/EnvProvider';
+import { IEnvProvider } from '@/infra/domain/EnvProvider';
 import { CreateUrlDto } from '@/modules/link/application/dtos/create-url.dto';
 import { FindManyLinksFiltersDto } from '@/modules/link/application/dtos/find-many-links-filters.dto';
 import { HTTP_REDIRECT_CODES, HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';

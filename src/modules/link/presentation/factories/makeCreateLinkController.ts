@@ -9,7 +9,7 @@ import { DeleteUrlUseCase } from '@/modules/link/application/use-cases/DeleteUrl
 import { RedirectUrlUseCase } from '@/modules/link/application/use-cases/RedirectUrl.useCase';
 import { ToggleUrlActiveUseCase } from '@/modules/link/application/use-cases/ToggleUrlActive.useCase';
 import { UpdateQrCodeOptionsUseCase } from '@/modules/link/application/use-cases/UpdateQrCodeOptions.useCase';
-import { CacheGateway } from '@/modules/link/domain/interfaces/CacheGateway';
+import { CacheGateway } from '@/infra/domain/CacheGateway';
 import { UrlCacheService } from '@/modules/link/domain/services/UrlCacheService';
 import { ShortUrlGenerateService } from '@/modules/link/domain/services/ShortUrlGenerateService';
 import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';

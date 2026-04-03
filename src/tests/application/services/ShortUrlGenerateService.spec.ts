@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ShortUrlGenerateService } from '@/modules/link/domain/services/ShortUrlGenerateService';
 import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
-import { IEnvProvider } from '@/shared/types/interfaces/EnvProvider';
+import { IEnvProvider } from '@/infra/domain/EnvProvider';
 import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
 import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 

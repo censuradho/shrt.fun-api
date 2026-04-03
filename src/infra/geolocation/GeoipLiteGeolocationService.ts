@@ -1,4 +1,4 @@
-import { GeolocationResult, IGeolocationService } from '@/modules/link/domain/interfaces/IGeolocationService';
+import { GeolocationResult, IGeolocationService } from '@/infra/domain/IGeolocationService';
 import geoip from 'geoip-lite';
 
 export class GeoipLiteGeolocationService implements IGeolocationService {

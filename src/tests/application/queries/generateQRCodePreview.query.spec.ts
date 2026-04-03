@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 import { GenerateQRCodePreviewQuery } from '@/modules/link/application/queries/generateQRCodePreview.query';
 import { IQRCodePort } from '@/modules/link/domain/interfaces/QRCodePort';
 import { IUserService, CachedUser } from '@/modules/user/domain/interfaces/IUserService';
-import { IEnvProvider } from '@/shared/types/interfaces/EnvProvider';
+import { IEnvProvider } from '@/infra/domain/EnvProvider';
 import { PlanName } from '@/shared/constants/Plan.enum';
 import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
 import { USER_ERRORS_MESSAGES } from '@/modules/user/domain/errors/user.errors';

@@ -1,4 +1,4 @@
-import { CacheGateway } from "@/modules/link/domain/interfaces/CacheGateway";
+import { CacheGateway } from "@/infra/domain/CacheGateway";
 import { Redis } from "ioredis";
 
 export class RedisCacheGateway implements CacheGateway {
