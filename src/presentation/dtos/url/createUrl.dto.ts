@@ -1,6 +1,6 @@
 import { FIELD_ERROR_MESSAGES } from "@/domain/errors/errors";
 import { sanitizeString } from "@/shered/sanitizeString";
-import { slugValidation, urlValidation } from "@/shered/validations";
+import { slugValidation, slugNotBanned, urlValidation } from "@/shered/validations";
 import { base64MaxSize } from "@/shered/base64MaxSize";
 import z from "zod";
 
@@ -33,6 +33,7 @@ export const createUrlDto = z.object({
   slug: z
     .string()
     .refine(slug => slugValidation(slug), FIELD_ERROR_MESSAGES.INVALID_FIELD)
+    .refine(slug => slugNotBanned(slug), FIELD_ERROR_MESSAGES.INVALID_FIELD)
     .max(100, FIELD_ERROR_MESSAGES.MAX_LENGTH(100))
     .optional()
     .transform((value) => sanitizeString(value)),
