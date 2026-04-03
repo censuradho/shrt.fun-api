@@ -37,7 +37,7 @@ app.setErrorHandler(errorHandler);
 
 app.addHook('onRequest', async (request, reply) => {
   const isRedirectDomain = request.hostname === getDomain(envProvider.get('REDIRECT_CLIENT_URL') || '');
-  const isSlugRoute = /^\/[^/]+$/.test(request.url);
+  const isSlugRoute = /^\/[^/]+$/.test(request.url) || /^\/qr\/[^/]+$/.test(request.url);
 
   if (isRedirectDomain && !isSlugRoute) {
     reply.status(404).send({ error: 'Not found' });
@@ -53,7 +53,8 @@ app.register(fastifyRateLimit, rateLimitConfig).after(() => {
       max: 4,
       timeWindow: 500
     })
-  }, function (_, reply) {
+  }, function (request, reply) {
+    request.log.warn({ method: request.method, url: request.url }, 'Route not found');
     reply.status(HTTP_ERROR_CODES.NOT_FOUND).send({ error: 'Route not found' });
   })
 })
