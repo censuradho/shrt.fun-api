@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { UaParserDeviceService } from '@/modules/link/infra/device/UaParserDeviceService';
+import { UaParserDeviceService } from '@/infra/device/UaParserDeviceService';
 
 const service = new UaParserDeviceService();
 

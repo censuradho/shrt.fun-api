@@ -1,5 +1,5 @@
 
-import { CursorPaginationParams, CursorPaginationResult } from "../interfaces/Pagination";
+import { CursorPaginationParams, CursorPaginationResult } from "@/shared/types/Pagination";
 import { UrlModel } from "../models/UrlModel";
 import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
 import { FindManyLinksFiltersDto } from "@/modules/link/application/dtos/find-many-links-filters.dto";

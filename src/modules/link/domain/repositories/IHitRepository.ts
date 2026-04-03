@@ -1,4 +1,4 @@
-import { OffsetPaginationParams, OffsetPaginationResult } from "../interfaces/Pagination";
+import { OffsetPaginationParams, OffsetPaginationResult } from "@/shared/types/Pagination";
 import { CreateHitEntityDto } from "./dtos/CreateHitEntity.dto";
 
 export interface LocationAnalyticsItem {
