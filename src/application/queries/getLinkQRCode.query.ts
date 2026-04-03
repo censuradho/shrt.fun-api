@@ -2,7 +2,7 @@ import { AppError } from "@/domain/errors/AppError";
 import { URL_ERRORS } from "@/domain/errors/url.error";
 import type { IQRCodePort, QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 import { IUrlRepository } from "@/domain/repositories/IUrlRepository";
-import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_ERROR_CODES } from "@/shared/httpStatusCodes";
 import { toQrUrl } from "@/utils/toQrUrl";
 
 export class GetLinkQRCodeQuery {

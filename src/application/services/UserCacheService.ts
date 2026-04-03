@@ -1,7 +1,7 @@
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { UserModel } from '@/domain/models/User.model';
 import { CachedUser } from '@/domain/interfaces/IUserService';
-import { CacheKeyBuilder } from '@/shered/CacheKeyBuilder';
+import { CacheKeyBuilder } from '@/shared/CacheKeyBuilder';
 
 const USER_TTL_SECONDS = 300;
 

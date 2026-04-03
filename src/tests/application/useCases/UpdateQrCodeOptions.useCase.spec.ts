@@ -6,7 +6,7 @@ import { IUserService, CachedUser } from '@/domain/interfaces/IUserService';
 import { PlanName } from '@/domain/enums/Plan.enum';
 import { QR_CODE_FREE_COLORS } from '@/domain/enums/QrCodeFreeColors.enum';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
 
 const urlRepository = mock<IUrlRepository>();

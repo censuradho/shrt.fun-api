@@ -5,7 +5,7 @@ import { QR_CODE_FREE_COLORS } from "@/domain/enums/QrCodeFreeColors.enum";
 import { QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 import { IUrlRepository } from "@/domain/repositories/IUrlRepository";
 import { IUserService } from "@/domain/interfaces/IUserService";
-import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_ERROR_CODES } from "@/shared/httpStatusCodes";
 import { AUTHENTICATION_ERROR_MESSAGES } from "@/domain/errors/authentication.errors";
 
 export class UpdateQrCodeOptionsUseCase {

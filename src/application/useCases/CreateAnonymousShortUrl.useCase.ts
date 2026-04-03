@@ -4,7 +4,7 @@ import { IShortUrlGenerateService } from "@/domain/interfaces/IShortUrlGenerateS
 import { IUrlCacheService } from "@/domain/interfaces/IUrlCacheService";
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
-import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_ERROR_CODES } from "@/shared/httpStatusCodes";
 import {  addDays } from 'date-fns'
 
 export class CreateAnonymousShortUrl {

@@ -5,7 +5,7 @@ import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IShortUrlGenerateService } from '@/domain/interfaces/IShortUrlGenerateService';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 const ORIGINAL_URL = 'https://www.google.com';

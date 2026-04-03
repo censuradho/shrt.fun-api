@@ -7,7 +7,7 @@ import { IEnvProvider } from '@/domain/services/EnvProvider';
 import { PlanName } from '@/domain/enums/Plan.enum';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { USER_ERRORS_MESSAGES } from '@/domain/errors/user.errors';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
 
 const qrCodePort = mock<IQRCodePort>();

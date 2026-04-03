@@ -4,7 +4,7 @@ import { GetLinkQRCodeQuery } from '@/application/queries/getLinkQRCode.query';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 import { UrlModel } from '@/domain/models/UrlModel';
 import { toQrUrl } from '@/utils/toQrUrl';
 

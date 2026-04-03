@@ -1,6 +1,6 @@
 import { AUTHENTICATION_ERROR_MESSAGES } from "@/domain/errors/authentication.errors";
 import { FIELD_ERROR_MESSAGES } from "@/domain/errors/errors";
-import { sanitizeString } from "@/shered/sanitizeString";
+import { sanitizeString } from "@/shared/sanitizeString";
 import z from "zod";
 
 export const signUpDto = z.object({

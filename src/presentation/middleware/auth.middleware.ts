@@ -3,7 +3,7 @@ import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.er
 import { supabaseClient } from '@/infra/auth/client';
 import { SupabaseAuthGateway } from '@/infra/auth/SupabaseAuthGateway';
 import { envProvider } from '@/infra/config/ProcessEnvProvider';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 export async function authMiddleware(request: FastifyRequest, reply: FastifyReply) {

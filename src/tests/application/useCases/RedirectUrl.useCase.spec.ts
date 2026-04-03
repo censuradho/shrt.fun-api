@@ -7,7 +7,7 @@ import { IGeolocationService } from '@/domain/interfaces/IGeolocationService';
 import { IDeviceService } from '@/domain/interfaces/IDeviceService';
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 
 const IP = '127.0.0.1';
 const USER_AGENT = 'Mozilla/5.0';

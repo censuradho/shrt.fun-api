@@ -1,6 +1,6 @@
 import z from "zod";
 import { cursorPaginationQueriesDto } from "../paginationQueries.dto";
-import { sanitizeString } from "@/shered/sanitizeString";
+import { sanitizeString } from "@/shared/sanitizeString";
 import { endOfDay, startOfDay } from "date-fns";
 import { HitSourceEnum } from "@/domain/enums/Hit.enum";
 

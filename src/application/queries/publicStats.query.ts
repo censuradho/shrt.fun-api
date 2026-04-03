@@ -1,7 +1,7 @@
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { IHitRepository } from '@/domain/repositories/IHitRepository';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { CacheKeyBuilder } from '@/shered/CacheKeyBuilder';
+import { CacheKeyBuilder } from '@/shared/CacheKeyBuilder';
 
 const STATS_TTL = 60 * 60 * 24; // 24h
 

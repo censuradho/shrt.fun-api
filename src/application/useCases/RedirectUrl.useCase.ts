@@ -7,7 +7,7 @@ import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { HitSource } from '@/domain/repositories/dtos/CreateHitEntity.dto';
 import { IEnvProvider } from '@/domain/services/EnvProvider';
 import { IUrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 import { nanoid } from 'nanoid';
 
 export class RedirectUrlUseCase {

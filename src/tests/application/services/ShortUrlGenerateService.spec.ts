@@ -3,7 +3,7 @@ import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerate
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IEnvProvider } from '@/domain/services/EnvProvider';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 
 const DOMAIN = 'https://shrt.fun';
 

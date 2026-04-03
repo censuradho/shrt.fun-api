@@ -3,9 +3,9 @@ import { URL_ERRORS } from "@/domain/errors/url.error";
 import { IShortUrlGenerateService } from "@/domain/interfaces/IShortUrlGenerateService";
 import { IUrlRepository } from "@/domain/repositories/IUrlRepository";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
-import { generateHash } from "@/shered/generateHash";
-import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
-import { slugify } from "@/shered/slugify";
+import { generateHash } from "@/shared/generateHash";
+import { HTTP_ERROR_CODES } from "@/shared/httpStatusCodes";
+import { slugify } from "@/shared/slugify";
 
 export class ShortUrlGenerateService implements IShortUrlGenerateService {
   constructor (

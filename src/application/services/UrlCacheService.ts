@@ -1,6 +1,6 @@
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { CacheKeyBuilder } from '@/shered/CacheKeyBuilder';
+import { CacheKeyBuilder } from '@/shared/CacheKeyBuilder';
 
 const URL_TTL_SECONDS = 3600; // 1 hour — standard for URL shortener caches
 

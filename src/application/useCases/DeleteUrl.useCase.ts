@@ -2,7 +2,7 @@ import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
 
 export class DeleteUrlUseCase {
   constructor(

@@ -4,7 +4,7 @@ import { ToggleUrlActiveUseCase } from '@/application/useCases/ToggleUrlActive.u
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
 
 const URL_ID = 'url-id';
 const USER_ID = 'supabase-user-id';

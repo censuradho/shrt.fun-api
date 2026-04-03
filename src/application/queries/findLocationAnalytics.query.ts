@@ -2,7 +2,7 @@ import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
 import { IHitRepository } from '@/domain/repositories/IHitRepository';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 
 export class FindLocationAnalyticsQuery {
   constructor(

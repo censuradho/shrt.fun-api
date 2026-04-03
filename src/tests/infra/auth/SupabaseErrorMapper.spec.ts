@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { SupabaseErrorMapper } from '@/infra/auth/SupabaseErrorMapper';
-import { HTTP_ERROR_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
 
 describe('SupabaseErrorMapper', () => {
   describe('toAppError', () => {

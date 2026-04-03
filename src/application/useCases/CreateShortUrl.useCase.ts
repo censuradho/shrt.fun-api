@@ -6,7 +6,7 @@ import { IUrlCacheService } from "@/domain/interfaces/IUrlCacheService";
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IUserRepository } from "@/domain/repositories/IUserRepository";
 import { CreateUrlDto } from "@/presentation/dtos/url/createUrl.dto";
-import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from "@/shared/httpStatusCodes";
 import { toQrUrl } from "@/utils/toQrUrl";
 import { PlanName } from "@/domain/enums/Plan.enum";
 import { QR_CODE_FREE_COLORS } from "@/domain/enums/QrCodeFreeColors.enum";

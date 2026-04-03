@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 import { UrlCacheService } from '@/application/services/UrlCacheService';
 import { CacheGateway } from '@/domain/interfaces/CacheGateway';
-import { CacheKeyBuilder } from '@/shered/CacheKeyBuilder';
+import { CacheKeyBuilder } from '@/shared/CacheKeyBuilder';
 
 const cacheGateway = mock<CacheGateway>();
 

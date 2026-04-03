@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { slugValidation, urlValidation } from '@/shered/validations';
+import { slugValidation, urlValidation } from '@/shared/validations';
 
 describe('slugValidation', () => {
   it('should return true for valid slugs', () => {

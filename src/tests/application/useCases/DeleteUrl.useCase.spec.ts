@@ -4,7 +4,7 @@ import { DeleteUrlUseCase } from '@/application/useCases/DeleteUrl.useCase';
 import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 

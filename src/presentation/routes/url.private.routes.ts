@@ -6,7 +6,7 @@ import { createUrlDto, qrOptionsDto } from '../dtos/url/createUrl.dto';
 import z from 'zod';
 import { AppError } from '@/domain/errors/AppError';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
 
 const urlParamsDto = z.object({ id: z.string() });
 

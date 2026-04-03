@@ -3,7 +3,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { SignUpDto } from "../dtos/authentication/signUp.dto";
 import { AppError } from "@/domain/errors/AppError";
 import { IUserRepository } from "@/domain/repositories/IUserRepository";
-import { ErrorLog } from "@/shered/ErrorLog";
+import { ErrorLog } from "@/shared/ErrorLog";
 
 export class AuthenticationController {
   constructor(

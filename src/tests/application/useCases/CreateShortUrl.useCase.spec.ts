@@ -6,7 +6,7 @@ import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
 import { IShortUrlGenerateService } from '@/domain/interfaces/IShortUrlGenerateService';
 import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
 import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
 import { toQrUrl } from '@/utils/toQrUrl';
 import { PlanName } from '@/domain/enums/Plan.enum';
 import { QR_CODE_FREE_COLORS } from '@/domain/enums/QrCodeFreeColors.enum';

@@ -1,5 +1,5 @@
 import { AppError } from "@/domain/errors/AppError";
-import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_ERROR_CODES } from "@/shared/httpStatusCodes";
 
 export interface SupabaseErrorLike {
   status?: number;

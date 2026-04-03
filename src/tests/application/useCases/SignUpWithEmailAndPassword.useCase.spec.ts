@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { SignUpWithEmailAndPasswordUseCase } from '@/application/useCases/SignUpWithEmailAndPassword.useCase';
 import { USER_ERRORS_MESSAGES } from '@/domain/errors/user.errors';
 import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
-import { HTTP_STATUS_CODES } from '@/shered/httpStatusCodes';
+import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
 
 vi.mock('@/utils/delay', () => ({ delay: vi.fn().mockResolvedValue(undefined) }));
 

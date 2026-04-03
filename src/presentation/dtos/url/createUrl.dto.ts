@@ -1,7 +1,7 @@
 import { FIELD_ERROR_MESSAGES } from "@/domain/errors/errors";
-import { sanitizeString } from "@/shered/sanitizeString";
-import { slugValidation, slugNotBanned, urlValidation } from "@/shered/validations";
-import { base64MaxSize } from "@/shered/base64MaxSize";
+import { sanitizeString } from "@/shared/sanitizeString";
+import { slugValidation, slugNotBanned, urlValidation } from "@/shared/validations";
+import { base64MaxSize } from "@/shared/base64MaxSize";
 import z from "zod";
 
 const MAX_CENTER_LOGO_SIZE = base64MaxSize(2 * 1024 * 1024) // 2MB

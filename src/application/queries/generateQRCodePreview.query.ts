@@ -4,7 +4,7 @@ import { PlanName } from "@/domain/enums/Plan.enum";
 import { IQRCodePort, QRCodeOptions } from "@/domain/interfaces/QRCodePort";
 import { IEnvProvider } from "@/domain/services/EnvProvider";
 import { IUserService } from "@/domain/interfaces/IUserService";
-import { HTTP_ERROR_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_ERROR_CODES } from "@/shared/httpStatusCodes";
 import { AUTHENTICATION_ERROR_MESSAGES } from "@/domain/errors/authentication.errors";
 
 export class GenerateQRCodePreviewQuery {

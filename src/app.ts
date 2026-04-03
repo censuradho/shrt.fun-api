@@ -14,7 +14,7 @@ import { redisPlugin } from './infra/http/plugins/redis';
 import { rateLimitConfig } from './infra/config/rateLimit';
 import { errorHandler } from './presentation/middleware/error-handler';
 import { urlRoutesPublic } from './presentation/routes/url.routes';
-import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
+import { HTTP_ERROR_CODES } from './shared/httpStatusCodes';
 import { routes } from "./presentation/routes/routes";
 
 const app = Fastify({

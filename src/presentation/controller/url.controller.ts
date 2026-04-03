@@ -2,7 +2,7 @@ import { CreateAnonymousShortUrl } from "@/application/useCases/CreateAnonymousS
 import { RedirectUrlUseCase } from "@/application/useCases/RedirectUrl.useCase";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreateUrlDto } from "../dtos/url/createUrl.dto";
-import { HTTP_REDIRECT_CODES, HTTP_STATUS_CODES } from "@/shered/httpStatusCodes";
+import { HTTP_REDIRECT_CODES, HTTP_STATUS_CODES } from "@/shared/httpStatusCodes";
 import { FindManyLinksFiltersDto } from "../dtos/url/findManyLinksQueries.dto";
 import { FindManyLinksPaginatedQuery } from "@/application/queries/findManyLinksPaginated.query";
 import { FindUrlByIdQuery } from "@/application/queries/findUrlById.query";

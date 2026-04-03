@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CacheKeyBuilder } from '@/shered/CacheKeyBuilder';
+import { CacheKeyBuilder } from '@/shared/CacheKeyBuilder';
 
 describe('CacheKeyBuilder', () => {
   it('should build totalUrl key', () => {
