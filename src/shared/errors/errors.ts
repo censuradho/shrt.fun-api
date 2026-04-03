@@ -11,5 +11,8 @@ export const FIELD_ERROR_MESSAGES = {
   MAX_FILE_SIZE(size: number) {
     return `FIELD_ERROR_MAX_FILE_SIZE_${size}`;
   },
+  MIN_LENGTH(size: number) {
+    return `FIELD_ERROR_MIN_LENGTH_${size}`;
+  },
   DATE_MUST_BE_IN_FUTURE: 'DATE_MUST_BE_IN_FUTURE'
 }
