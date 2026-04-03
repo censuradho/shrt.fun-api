@@ -9,6 +9,8 @@ export class UpdateShortUrlUseCase {
 
   async execute (id: string, supabaseId: string, payload: UpdateUrlEntityDto) {
     const url = await this.urlRepository.findById(id, supabaseId)
+
+    
     if (!url)
       throw new AppError(URL_ERRORS.URL_NOT_FOUND, {
         status: HTTP_ERROR_CODES.NOT_FOUND
