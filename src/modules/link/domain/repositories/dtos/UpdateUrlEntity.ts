@@ -1,6 +1,6 @@
 export interface UpdateUrlEntityDto {
   title?: string
-  expireAt?: Date
+  expireAt?: Date | null
   description?: string
   tags?: string[]
 }
