@@ -1,14 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { GenerateQRCodePreviewQuery } from '@/application/queries/generateQRCodePreview.query';
-import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
-import { IUserService, CachedUser } from '@/domain/interfaces/IUserService';
-import { IEnvProvider } from '@/domain/services/EnvProvider';
-import { PlanName } from '@/domain/enums/Plan.enum';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { USER_ERRORS_MESSAGES } from '@/domain/errors/user.errors';
-import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
-import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
+import { GenerateQRCodePreviewQuery } from '@/modules/link/application/queries/generateQRCodePreview.query';
+import { IQRCodePort } from '@/modules/link/domain/interfaces/QRCodePort';
+import { IUserService, CachedUser } from '@/modules/user/domain/interfaces/IUserService';
+import { IEnvProvider } from '@/shared/types/interfaces/EnvProvider';
+import { PlanName } from '@/shared/constants/Plan.enum';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { USER_ERRORS_MESSAGES } from '@/modules/user/domain/errors/user.errors';
+import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
+import { AUTHENTICATION_ERROR_MESSAGES } from '@/modules/auth/domain/errors/authentication.errors';
 
 const qrCodePort = mock<IQRCodePort>();
 const userService = mock<IUserService>();

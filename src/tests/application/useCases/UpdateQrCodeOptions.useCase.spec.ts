@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { UpdateQrCodeOptionsUseCase } from '@/application/useCases/UpdateQrCodeOptions.useCase';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IUserService, CachedUser } from '@/domain/interfaces/IUserService';
-import { PlanName } from '@/domain/enums/Plan.enum';
-import { QR_CODE_FREE_COLORS } from '@/domain/enums/QrCodeFreeColors.enum';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
-import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
+import { UpdateQrCodeOptionsUseCase } from '@/modules/link/application/use-cases/UpdateQrCodeOptions.useCase';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IUserService, CachedUser } from '@/modules/user/domain/interfaces/IUserService';
+import { PlanName } from '@/shared/constants/Plan.enum';
+import { QR_CODE_FREE_COLORS } from '@/modules/link/domain/enums/QrCodeFreeColors.enum';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
+import { AUTHENTICATION_ERROR_MESSAGES } from '@/modules/auth/domain/errors/authentication.errors';
 
 const urlRepository = mock<IUrlRepository>();
 const userService = mock<IUserService>();

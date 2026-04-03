@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { RedirectUrlUseCase } from '@/application/useCases/RedirectUrl.useCase';
-import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { IUrlUnitOfWork, IUrlUoWRepositories } from '@/infra/repositories/url/UrlUnitOfWork';
-import { IGeolocationService } from '@/domain/interfaces/IGeolocationService';
-import { IDeviceService } from '@/domain/interfaces/IDeviceService';
-import { AppError } from '@/domain/errors/AppError';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
+import { RedirectUrlUseCase } from '@/modules/link/application/use-cases/RedirectUrl.useCase';
+import { IUrlCacheService } from '@/modules/link/domain/interfaces/IUrlCacheService';
+import { IUrlUnitOfWork, IUrlUoWRepositories } from '@/modules/link/infra/repositories/UrlUnitOfWork';
+import { IGeolocationService } from '@/modules/link/domain/interfaces/IGeolocationService';
+import { IDeviceService } from '@/modules/link/domain/interfaces/IDeviceService';
+import { AppError } from '@/shared/errors/AppError';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 
 const IP = '127.0.0.1';
 const USER_AGENT = 'Mozilla/5.0';

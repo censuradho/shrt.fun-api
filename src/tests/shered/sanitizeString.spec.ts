@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeString } from '@/shared/sanitizeString';
+import { sanitizeString } from '@/shared/helpers/sanitizeString';
 
 describe('sanitizeString', () => {
   it('should remove single quotes, double quotes, semicolons and backslashes', () => {

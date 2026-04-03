@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ShortUrlGenerateService } from '@/application/services/ShortUrlGenerateService';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IEnvProvider } from '@/domain/services/EnvProvider';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
+import { ShortUrlGenerateService } from '@/modules/link/domain/services/ShortUrlGenerateService';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IEnvProvider } from '@/shared/types/interfaces/EnvProvider';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 
 const DOMAIN = 'https://shrt.fun';
 
@@ -15,7 +15,12 @@ const makeUrlRepository = (): IUrlRepository => ({
   findById: vi.fn(),
   incrementHitsCount: vi.fn(),
   delete: vi.fn(),
+  softDelete: vi.fn(),
   toggleActive: vi.fn(),
+  updateQrCodeOptions: vi.fn(),
+  countAll: vi.fn(),
+  countByUserCurrentMonth: vi.fn(),
+  countQrCodeByUserCurrentMonth: vi.fn(),
   findManyPaginated: vi.fn(),
 });
 

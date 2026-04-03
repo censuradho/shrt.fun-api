@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { DeleteUrlUseCase } from '@/application/useCases/DeleteUrl.useCase';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
+import { DeleteUrlUseCase } from '@/modules/link/application/use-cases/DeleteUrl.useCase';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IUrlCacheService } from '@/modules/link/domain/interfaces/IUrlCacheService';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 

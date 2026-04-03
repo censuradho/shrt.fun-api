@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { UserService } from '@/application/services/UserService';
-import { UserCacheService } from '@/application/services/UserCacheService';
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
-import { CachedUser } from '@/domain/interfaces/IUserService';
-import { UserModel } from '@/domain/models/User.model';
+import { UserService } from '@/modules/user/domain/services/UserService';
+import { UserCacheService } from '@/modules/user/domain/services/UserCacheService';
+import { IUserRepository } from '@/modules/user/domain/repositories/IUserRepository';
+import { CachedUser } from '@/modules/user/domain/interfaces/IUserService';
+import { UserModel } from '@/modules/user/domain/models/User.model';
 
 const userRepository = mock<IUserRepository>();
 const userCacheService = mock<UserCacheService>();

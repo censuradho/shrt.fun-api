@@ -1,16 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { CreateAnonymousShortUrl } from '@/application/useCases/CreateAnonymousShortUrl.useCase';
-import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IShortUrlGenerateService } from '@/domain/interfaces/IShortUrlGenerateService';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
+import { CreateAnonymousShortUrl } from '@/modules/link/application/use-cases/CreateAnonymousShortUrl.useCase';
+import { IUrlCacheService } from '@/modules/link/domain/interfaces/IUrlCacheService';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IShortUrlGenerateService } from '@/modules/link/domain/interfaces/IShortUrlGenerateService';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 const ORIGINAL_URL = 'https://www.google.com';
 const URL_ID = 'url-id';
-const DTO = { url: ORIGINAL_URL, slug: undefined, title: 'Google' };
+const DTO = { url: ORIGINAL_URL, slug: undefined, title: 'Google', generateQrCode: false };
 
 const urlRepository = mock<IUrlRepository>();
 const urlCacheService = mock<IUrlCacheService>();

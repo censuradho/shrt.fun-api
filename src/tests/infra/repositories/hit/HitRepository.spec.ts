@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MockContext, Context, createMockContext } from '../../../prismaContext';
-import { HitRepository } from '@/infra/repositories/hit/HitRepository';
-import { CreateHitEntityDto } from '@/domain/repositories/dtos/CreateHitEntity.dto';
+import { HitRepository } from '@/modules/link/infra/repositories/HitRepository';
+import { CreateHitEntityDto } from '@/modules/link/domain/repositories/dtos/CreateHitEntity.dto';
 
 let mockCtx: MockContext;
 let ctx: Context;

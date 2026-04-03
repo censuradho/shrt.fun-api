@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { SignUpWithEmailAndPasswordUseCase } from '@/application/useCases/SignUpWithEmailAndPassword.useCase';
-import { USER_ERRORS_MESSAGES } from '@/domain/errors/user.errors';
-import { AUTHENTICATION_ERROR_MESSAGES } from '@/domain/errors/authentication.errors';
-import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
+import { SignUpWithEmailAndPasswordUseCase } from '@/modules/auth/application/use-cases/SignUpWithEmailAndPassword.useCase';
+import { USER_ERRORS_MESSAGES } from '@/modules/user/domain/errors/user.errors';
+import { AUTHENTICATION_ERROR_MESSAGES } from '@/modules/auth/domain/errors/authentication.errors';
+import { HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';
 
-vi.mock('@/utils/delay', () => ({ delay: vi.fn().mockResolvedValue(undefined) }));
+vi.mock('@/shared/utils/delay', () => ({ delay: vi.fn().mockResolvedValue(undefined) }));
 
 const INPUT = {
   email: 'test@example.com',

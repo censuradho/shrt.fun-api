@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { ToggleUrlActiveUseCase } from '@/application/useCases/ToggleUrlActive.useCase';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
+import { ToggleUrlActiveUseCase } from '@/modules/link/application/use-cases/ToggleUrlActive.useCase';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IUrlCacheService } from '@/modules/link/domain/interfaces/IUrlCacheService';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';
 
 const URL_ID = 'url-id';
 const USER_ID = 'supabase-user-id';

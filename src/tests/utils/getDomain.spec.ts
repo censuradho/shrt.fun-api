@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getDomain } from '@/utils/getDomain';
+import { getDomain } from '@/shared/utils/getDomain';
 
 describe('getDomain', () => {
   it('should extract domain from https URL', () => {

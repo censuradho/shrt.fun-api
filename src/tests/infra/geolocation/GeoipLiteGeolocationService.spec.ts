@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { GeoipLiteGeolocationService } from '@/infra/geolocation/GeoipLiteGeolocationService';
+import { GeoipLiteGeolocationService } from '@/modules/link/infra/geolocation/GeoipLiteGeolocationService';
 
 vi.mock('geoip-lite', () => ({
   default: {

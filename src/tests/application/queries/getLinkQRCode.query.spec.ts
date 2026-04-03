@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { GetLinkQRCodeQuery } from '@/application/queries/getLinkQRCode.query';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES } from '@/shared/httpStatusCodes';
-import { UrlModel } from '@/domain/models/UrlModel';
-import { toQrUrl } from '@/utils/toQrUrl';
+import { GetLinkQRCodeQuery } from '@/modules/link/application/queries/getLinkQRCode.query';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IQRCodePort } from '@/modules/link/domain/interfaces/QRCodePort';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
+import { UrlModel } from '@/modules/link/domain/models/UrlModel';
+import { toQrUrl } from '@/shared/utils/toQrUrl';
 
 const urlRepository = mock<IUrlRepository>();
 const qrCodePort = mock<IQRCodePort>();

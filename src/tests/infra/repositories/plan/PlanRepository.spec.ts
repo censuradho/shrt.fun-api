@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MockContext, Context, createMockContext } from '@/tests/prismaContext';
-import { PlanRepository } from '@/infra/repositories/plan/PlanRepository.prisma';
+import { PlanRepository } from '@/modules/auth/infra/repositories/PlanRepository.prisma';
 
 let mockCtx: MockContext;
 let ctx: Context;

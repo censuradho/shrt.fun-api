@@ -1,4 +1,4 @@
-import { AnalyticsRepository } from "@/infra/repositories/analytics/AnalyticsRepository.prisma";
+import { AnalyticsRepository } from "@/modules/analytics/infra/repositories/AnalyticsRepository.prisma";
 import { Context, createMockContext, MockContext } from "@/tests/prismaContext";
 import { beforeEach, describe, expect, it } from "vitest";
 

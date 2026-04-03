@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MockContext, Context, createMockContext } from '@/tests/prismaContext';
-import { UrlUnitOfWork } from '@/infra/repositories/url/UrlUnitOfWork';
+import { UrlUnitOfWork } from '@/modules/link/infra/repositories/UrlUnitOfWork';
 
 let mockCtx: MockContext;
 let ctx: Context;

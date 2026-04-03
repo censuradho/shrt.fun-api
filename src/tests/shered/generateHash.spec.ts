@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateHash } from '@/shared/generateHash';
+import { generateHash } from '@/shared/helpers/generateHash';
 
 describe('generateHash', () => {
   it('should generate a hash with default length of 8', () => {

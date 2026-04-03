@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
-import { CreateShortUrlUseCase } from '@/application/useCases/CreateShortUrl.useCase';
-import { IUrlCacheService } from '@/domain/interfaces/IUrlCacheService';
-import { IUrlRepository } from '@/domain/repositories/IUrlRepository';
-import { IShortUrlGenerateService } from '@/domain/interfaces/IShortUrlGenerateService';
-import { IQRCodePort } from '@/domain/interfaces/QRCodePort';
-import { URL_ERRORS } from '@/domain/errors/url.error';
-import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from '@/shared/httpStatusCodes';
-import { toQrUrl } from '@/utils/toQrUrl';
-import { PlanName } from '@/domain/enums/Plan.enum';
-import { QR_CODE_FREE_COLORS } from '@/domain/enums/QrCodeFreeColors.enum';
+import { CreateShortUrlUseCase } from '@/modules/link/application/use-cases/CreateShortUrl.useCase';
+import { IUrlCacheService } from '@/modules/link/domain/interfaces/IUrlCacheService';
+import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
+import { IShortUrlGenerateService } from '@/modules/link/domain/interfaces/IShortUrlGenerateService';
+import { IQRCodePort } from '@/modules/link/domain/interfaces/QRCodePort';
+import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
+import { HTTP_ERROR_CODES, HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';
+import { toQrUrl } from '@/shared/utils/toQrUrl';
+import { PlanName } from '@/shared/constants/Plan.enum';
+import { QR_CODE_FREE_COLORS } from '@/modules/link/domain/enums/QrCodeFreeColors.enum';
 
 const SHORT_URL = 'https://shrt.fun/abc123';
 const ORIGINAL_URL = 'https://www.google.com';

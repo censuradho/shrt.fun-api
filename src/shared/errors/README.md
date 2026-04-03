@@ -1,0 +1,1 @@
+Erros compartilhados entre modulos.
