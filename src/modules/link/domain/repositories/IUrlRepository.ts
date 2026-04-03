@@ -3,6 +3,7 @@ import { CursorPaginationParams, CursorPaginationResult } from "@/shared/types/P
 import { UrlModel } from "../models/UrlModel";
 import { CreateUrlEntityDto } from "./dtos/CreateUrlEntity.dto";
 import { FindManyLinksFiltersDto } from "@/modules/link/application/dtos/find-many-links-filters.dto";
+import { UpdateUrlEntityDto } from "./dtos/UpdateUrlEntity";
 
 export type UrlPaginationFilters = Pick<FindManyLinksFiltersDto,
   'createdAfter'| 
@@ -29,4 +30,5 @@ export interface IUrlRepository {
   findManyPaginated (supabaseId: string, pagination: CursorPaginationParams, filters: UrlPaginationFilters): Promise<
     CursorPaginationResult<UrlModel>
   >
+  update (id: string, supabaseId: string, payload: UpdateUrlEntityDto): Promise<void>
 }

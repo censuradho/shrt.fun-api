@@ -6,10 +6,23 @@ import { PrismaClient } from "@/generated/prisma/client";
 import { UrlWhereInput } from "@/generated/prisma/models";
 import { UrlModel } from "@/modules/link/domain/models/UrlModel";
 import { HitSourceEnum } from "@/modules/link/domain/enums/Hit.enum";
+import { UpdateUrlEntityDto } from "../../domain/repositories/dtos/UpdateUrlEntity";
 
 export class UrlRepository implements IUrlRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
+  async update (id: string, supabaseId: string, payload: UpdateUrlEntityDto): Promise<void> {
+    await this.prisma.url.update({
+      where: { id, supabaseId, deletedAt: null },
+      data: {
+        title: payload.title,
+        description: payload.description,
+        expireAt: payload.expireAt,
+        tags: payload.tags,
+      }
+    })
+  }
+  
   async create (supabaseId: string, payload: CreateUrlEntityDto): Promise<string> {
     const data= await this.prisma.url.create({
       data: {

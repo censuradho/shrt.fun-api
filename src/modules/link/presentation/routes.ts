@@ -6,6 +6,7 @@ import { HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';
 import { FastifyInstance } from 'fastify';
 import z from 'zod';
 import { createUrlDto, qrOptionsDto } from './schemas/create-url.schema';
+import { updateUrlDto } from '../application/dtos/update-url.dto';
 import { findManyLinksFiltersDto } from './schemas/find-many-links.schema';
 
 const urlParamsDto = z.object({ id: z.string() });
@@ -79,6 +80,15 @@ export async function registerLinkRoutes(app: FastifyInstance) {
       },
     },
     urlController.create.bind(urlController),
+  );
+
+  app.put(
+    '/:id',
+    {
+      preHandler: authMiddleware,
+      schema: { params: urlParamsDto, body: updateUrlDto },
+    },
+    urlController.update.bind(urlController),
   );
 
   app.delete(

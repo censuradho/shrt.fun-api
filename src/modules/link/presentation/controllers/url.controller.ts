@@ -9,9 +9,11 @@ import { DeleteUrlUseCase } from '@/modules/link/application/use-cases/DeleteUrl
 import { RedirectUrlUseCase } from '@/modules/link/application/use-cases/RedirectUrl.useCase';
 import { ToggleUrlActiveUseCase } from '@/modules/link/application/use-cases/ToggleUrlActive.useCase';
 import { UpdateQrCodeOptionsUseCase } from '@/modules/link/application/use-cases/UpdateQrCodeOptions.useCase';
+import { UpdateShortUrlUseCase } from '@/modules/link/application/use-cases/UpdateShortUrl.useCase';
 import { QRCodeOptions } from '@/modules/link/domain/interfaces/QRCodePort';
-import { IEnvProvider } from '@/infra/domain/EnvProvider';
+import { IEnvProvider } from '@/domain/EnvProvider';
 import { CreateUrlDto } from '@/modules/link/application/dtos/create-url.dto';
+import { UpdateUrlDto } from '@/modules/link/application/dtos/update-url.dto';
 import { FindManyLinksFiltersDto } from '@/modules/link/application/dtos/find-many-links-filters.dto';
 import { HTTP_REDIRECT_CODES, HTTP_STATUS_CODES } from '@/shared/constants/httpStatusCodes';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -30,6 +32,7 @@ export class UrlController {
     private readonly getLinkQRCodeQuery: GetLinkQRCodeQuery,
     private readonly generateQRCodePreviewQuery: GenerateQRCodePreviewQuery,
     private readonly updateQrCodeOptionsUseCase: UpdateQrCodeOptionsUseCase,
+    private readonly updateShortUrlUseCase: UpdateShortUrlUseCase,
   ) {}
 
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -131,5 +134,12 @@ export class UrlController {
     const options = request.body as QRCodeOptions;
     const qrCode = await this.generateQRCodePreviewQuery.execute(request.user.id, options);
     return reply.send({ qrCode });
+  }
+
+  async update(request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string };
+    const payload = request.body as UpdateUrlDto;
+    await this.updateShortUrlUseCase.execute(id, request.user.id, payload);
+    return reply.status(HTTP_STATUS_CODES.NO_CONTENT).send();
   }
 }
