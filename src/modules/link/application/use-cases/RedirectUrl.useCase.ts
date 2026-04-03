@@ -1,11 +1,11 @@
 import { HitSourceEnum } from '@/modules/link/domain/enums/Hit.enum';
 import { AppError } from '@/shared/errors/AppError';
 import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
-import { IDeviceService } from '@/infra/domain/IDeviceService';
-import { IGeolocationService } from '@/infra/domain/IGeolocationService';
+import { IDeviceService } from '@/domain/IDeviceService';
+import { IGeolocationService } from '@/domain/IGeolocationService';
 import { IUrlCacheService } from '@/modules/link/domain/interfaces/IUrlCacheService';
 import { HitSource } from '@/modules/link/domain/repositories/dtos/CreateHitEntity.dto';
-import { IEnvProvider } from '@/infra/domain/EnvProvider';
+import { IEnvProvider } from '@/domain/EnvProvider';
 import { IUrlUnitOfWork } from '@/modules/link/infra/repositories/UrlUnitOfWork';
 import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 import { nanoid } from 'nanoid';

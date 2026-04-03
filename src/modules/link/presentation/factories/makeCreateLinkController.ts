@@ -9,7 +9,8 @@ import { DeleteUrlUseCase } from '@/modules/link/application/use-cases/DeleteUrl
 import { RedirectUrlUseCase } from '@/modules/link/application/use-cases/RedirectUrl.useCase';
 import { ToggleUrlActiveUseCase } from '@/modules/link/application/use-cases/ToggleUrlActive.useCase';
 import { UpdateQrCodeOptionsUseCase } from '@/modules/link/application/use-cases/UpdateQrCodeOptions.useCase';
-import { CacheGateway } from '@/infra/domain/CacheGateway';
+import { UpdateShortUrlUseCase } from '@/modules/link/application/use-cases/UpdateShortUrl.useCase';
+import { CacheGateway } from '@/domain/CacheGateway';
 import { UrlCacheService } from '@/modules/link/domain/services/UrlCacheService';
 import { ShortUrlGenerateService } from '@/modules/link/domain/services/ShortUrlGenerateService';
 import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
@@ -74,6 +75,7 @@ export function makeCreateLinkController(app: FastifyInstance): UrlController {
   const userService = new UserService(userRepository, userCacheService);
   const generateQRCodePreviewQuery = new GenerateQRCodePreviewQuery(qrCodeAdapter, userService, envProvider);
   const updateQrCodeOptionsUseCase = new UpdateQrCodeOptionsUseCase(urlRepository, userService);
+  const updateShortUrlUseCase = new UpdateShortUrlUseCase(urlRepository);
 
   return new UrlController(
     createAnonymousShortUrlUseCase,
@@ -88,6 +90,7 @@ export function makeCreateLinkController(app: FastifyInstance): UrlController {
     getLinkQRCodeQuery,
     generateQRCodePreviewQuery,
     updateQrCodeOptionsUseCase,
+    updateShortUrlUseCase,
   );
 }
 

@@ -10,7 +10,7 @@ import { FastifyInstance } from 'fastify';
 import { delay } from '@/shared/utils/delay';
 import { AUTHENTICATION_ERROR_MESSAGES } from '@/modules/auth/domain/errors/authentication.errors';
 import { PlanName } from '@/shared/constants/Plan.enum';
-import { IEnvProvider } from '@/infra/domain/EnvProvider';
+import { IEnvProvider } from '@/domain/EnvProvider';
 
 export class SignUpWithEmailAndPasswordUseCase {
   constructor (

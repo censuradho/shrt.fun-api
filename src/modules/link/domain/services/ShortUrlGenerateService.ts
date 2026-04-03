@@ -2,10 +2,10 @@ import { AppError } from "@/shared/errors/AppError";
 import { URL_ERRORS } from "@/modules/link/domain/errors/url.error";
 import { IShortUrlGenerateService } from "@/modules/link/domain/interfaces/IShortUrlGenerateService";
 import { IUrlRepository } from "@/modules/link/domain/repositories/IUrlRepository";
-import { IEnvProvider } from "@/shared/types/interfaces/EnvProvider";
 import { generateHash } from "@/shared/helpers/generateHash";
 import { HTTP_ERROR_CODES } from "@/shared/constants/httpStatusCodes";
 import { slugify } from "@/shared/helpers/slugify";
+import { IEnvProvider } from "@/domain/EnvProvider";
 
 export class ShortUrlGenerateService implements IShortUrlGenerateService {
   constructor (

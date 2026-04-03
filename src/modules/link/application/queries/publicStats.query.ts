@@ -1,4 +1,4 @@
-import { CacheGateway } from '@/infra/domain/CacheGateway';
+import { CacheGateway } from '@/domain/CacheGateway';
 import { IHitRepository } from '@/modules/link/domain/repositories/IHitRepository';
 import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
 import { CacheKeyBuilder } from '@/shared/kernel/CacheKeyBuilder';

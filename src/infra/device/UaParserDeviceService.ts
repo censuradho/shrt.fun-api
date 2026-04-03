@@ -1,4 +1,4 @@
-import { DeviceResult, IDeviceService } from '@/infra/domain/IDeviceService';
+import { DeviceResult, IDeviceService } from '@/domain/IDeviceService';
 import { UAParser } from 'ua-parser-js';
 
 export class UaParserDeviceService implements IDeviceService {

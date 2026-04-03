@@ -1,42 +1,25 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { mockDeep } from 'vitest-mock-extended';
 import { ShortUrlGenerateService } from '@/modules/link/domain/services/ShortUrlGenerateService';
 import { IUrlRepository } from '@/modules/link/domain/repositories/IUrlRepository';
-import { IEnvProvider } from '@/infra/domain/EnvProvider';
+import { IEnvProvider } from '@/domain/EnvProvider';
 import { URL_ERRORS } from '@/modules/link/domain/errors/url.error';
 import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 
 const DOMAIN = 'https://shrt.fun';
 
-const makeUrlRepository = (): IUrlRepository => ({
-  create: vi.fn(),
-  createAnonymous: vi.fn(),
-  getIdByShortUrl: vi.fn().mockResolvedValue(null),
-  getOriginalUrl: vi.fn(),
-  findById: vi.fn(),
-  incrementHitsCount: vi.fn(),
-  delete: vi.fn(),
-  softDelete: vi.fn(),
-  toggleActive: vi.fn(),
-  updateQrCodeOptions: vi.fn(),
-  countAll: vi.fn(),
-  countByUserCurrentMonth: vi.fn(),
-  countQrCodeByUserCurrentMonth: vi.fn(),
-  findManyPaginated: vi.fn(),
-});
-
-const makeEnvProvider = (): IEnvProvider => ({
-  get: vi.fn().mockReturnValue(DOMAIN),
-});
+let urlRepository: ReturnType<typeof mockDeep<IUrlRepository>>;
+let envProvider: ReturnType<typeof mockDeep<IEnvProvider>>;
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  urlRepository = mockDeep<IUrlRepository>();
+  envProvider = mockDeep<IEnvProvider>();
+  urlRepository.getIdByShortUrl.mockResolvedValue(null);
+  envProvider.get.mockReturnValue(DOMAIN);
 });
 
 describe('ShortUrlGenerateService', () => {
   it('should generate a short url with auto hash when no slug is provided', async () => {
-    const urlRepository = makeUrlRepository();
-    const envProvider = makeEnvProvider();
-
     const service = new ShortUrlGenerateService(urlRepository, envProvider);
     const result = await service.generate();
 
@@ -45,9 +28,6 @@ describe('ShortUrlGenerateService', () => {
   });
 
   it('should generate a short url from slug when provided', async () => {
-    const urlRepository = makeUrlRepository();
-    const envProvider = makeEnvProvider();
-
     const service = new ShortUrlGenerateService(urlRepository, envProvider);
     const result = await service.generate('my-custom-slug');
 
@@ -55,10 +35,7 @@ describe('ShortUrlGenerateService', () => {
   });
 
   it('should throw SHORT_URL_ALREADY_EXISTS when slug is already taken', async () => {
-    const urlRepository = makeUrlRepository();
-    const envProvider = makeEnvProvider();
-
-    vi.mocked(urlRepository.getIdByShortUrl).mockResolvedValue('existing-id');
+    urlRepository.getIdByShortUrl.mockResolvedValue('existing-id');
 
     const service = new ShortUrlGenerateService(urlRepository, envProvider);
 

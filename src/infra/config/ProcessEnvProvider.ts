@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { IEnvProvider, LocalEnvironmentVars } from "@/infra/domain/EnvProvider";
+import { IEnvProvider, LocalEnvironmentVars } from "@/domain/EnvProvider";
 
 export class ProcessEnvProvider implements IEnvProvider {
   get(key: keyof LocalEnvironmentVars): string | undefined {
