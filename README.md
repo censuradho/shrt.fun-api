@@ -1,5 +1,30 @@
 # mv-api
 
+**API de encurtador de URLs com analytics em tempo real e geolocalização.**
+
+Uma plataforma performática para criar URLs curtas, gerar QR codes, e acompanhar engajamentos detalhados por localização, dispositivo e navegador. Ideal para campanhas de marketing, tracking de links e análise de audiência geográfica.
+
+### Features
+- 🔗 Encurtamento de URLs com slugs customizáveis
+- 📊 Analytics em tempo real (hits, engajamentos, cliques)
+- 🌍 Rastreamento geográfico (país, cidade) com mapa de engajamentos
+- 📱 Detecção automática de dispositivo (mobile/desktop) e SO
+- 🎯 Geração de QR codes com opções de customização
+- 🔐 Autenticação com JWT (email/senha + OAuth via Supabase)
+- ⚡ Cache inteligente com Redis
+- 🛡️ Rate limiting e proteção contra abuso
+- 📈 Paginação otimizada para grandes volumes de dados
+- 🐳 Deploy containerizado com Docker
+
+### Stack Técnico
+- **Runtime**: Node.js >= 24
+- **Framework**: Fastify (HTTP rápido e tipo-seguro)
+- **Banco de Dados**: PostgreSQL + Prisma ORM
+- **Cache**: Redis
+- **Auth**: JWT + Supabase
+- **Geolocalização**: geoip-lite
+- **TypeScript**: 100% type-safe
+
 ## Requisitos
 
 - Node.js >= 24
