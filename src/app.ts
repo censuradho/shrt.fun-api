@@ -16,8 +16,6 @@ import { errorHandler } from './presentation/middleware/error-handler';
 import { urlRoutesPublic } from './presentation/routes/url.routes';
 import { HTTP_ERROR_CODES } from './shered/httpStatusCodes';
 import { routes } from "./presentation/routes/routes";
-import { getDomain } from "./utils/getDomain";
-import { envProvider } from "./infra/config/ProcessEnvProvider";
 
 const app = Fastify({
   trustProxy: true,
@@ -35,14 +33,6 @@ app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 app.setErrorHandler(errorHandler);
 
-app.addHook('onRequest', async (request, reply) => {
-  const isRedirectDomain = request.hostname === getDomain(envProvider.get('REDIRECT_CLIENT_URL') || '');
-  const isSlugRoute = /^\/[^/]+$/.test(request.url) || /^\/qr\/[^/]+$/.test(request.url);
-
-  if (isRedirectDomain && !isSlugRoute) {
-    reply.status(404).send({ error: 'Not found' });
-  }
-});
 
 app.register(fastifyCors, corsConfig)
 app.register(redisPlugin)
