@@ -36,6 +36,7 @@ export const createUrlDto = z.object({
     .string()
     .refine((slug) => slugValidation(slug), FIELD_ERROR_MESSAGES.INVALID_FIELD)
     .refine((slug) => slugNotBanned(slug), FIELD_ERROR_MESSAGES.INVALID_FIELD)
+    .refine(slug => !slug || slug.length >= 3, FIELD_ERROR_MESSAGES.MIN_LENGTH(3))
     .max(100, FIELD_ERROR_MESSAGES.MAX_LENGTH(100))
     .optional()
     .transform((value) => sanitizeString(value)),
