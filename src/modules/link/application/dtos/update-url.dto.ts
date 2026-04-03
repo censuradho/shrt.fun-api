@@ -17,7 +17,7 @@ export const updateUrlDto = z.object({
     .array(z.string().max(50, FIELD_ERROR_MESSAGES.MAX_LENGTH(50)))
     .max(10, FIELD_ERROR_MESSAGES.MAX_LENGTH(10))
     .optional(),
-  expireAt: z.coerce.date().optional(),
+  expireAt: z.coerce.date().nullable().optional(),
 });
 
 export type UpdateUrlDto = z.infer<typeof updateUrlDto>;
