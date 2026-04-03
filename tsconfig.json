@@ -13,10 +13,9 @@
     "module": "ESNext",
     "target": "ES2023",
     "strictNullChecks": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "prisma/generated/*": ["prisma/generated/*"]
+      "@/*": ["./src/*"],
+      "prisma/generated/*": ["./prisma/generated/*"]
     },
     "outDir": "./dist",
     "rootDir": "./",
