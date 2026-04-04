@@ -14,6 +14,7 @@ import { redisPlugin } from '@/infra/http/plugins/redis';
 import { analyticsModule } from '@/modules/analytics';
 import { authModule } from '@/modules/auth';
 import { linkModule, linkPublicModule } from '@/modules/link';
+import { userModule } from '@/modules/user/plugin';
 import { HTTP_ERROR_CODES } from '@/shared/constants/httpStatusCodes';
 import { errorHandler } from './error-handler';
 
@@ -57,6 +58,7 @@ app.register(linkPublicModule);
 app.register(authModule, { prefix: '/v1' });
 app.register(linkModule, { prefix: '/v1' });
 app.register(analyticsModule, { prefix: '/v1' });
+app.register(userModule, { prefix: '/v1' });
 app.get('/v1/health', async () => ({ status: 'ok' }));
 
 export { app };
