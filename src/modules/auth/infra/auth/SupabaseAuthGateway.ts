@@ -1,5 +1,5 @@
+import { IEnvProvider } from "@/domain/EnvProvider";
 import { AuthGateway, AuthUser, SignUpWithEmailAndPasswordParams, UpdateUserParams } from "@/modules/auth/domain/interfaces/AuthGateway";
-import { IEnvProvider } from "@/shared/types/interfaces/EnvProvider";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export class SupabaseAuthGateway implements AuthGateway {
