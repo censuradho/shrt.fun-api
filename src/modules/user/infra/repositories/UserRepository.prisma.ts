@@ -73,6 +73,18 @@ export class UserRepository implements IUserRepository {
     return count > 0;
   }
 
+  async checkIfUsernameExists(username: string): Promise<boolean> {
+    const count = await this.prisma.user.count({ where: { username } });
+    return count > 0;
+  }
+
+  async updateUsername(supabaseId: string, username: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { supabaseId },
+      data: { username },
+    });
+  }
+
   async delete(id: string): Promise<void> {
     await this.prisma.user.delete({ where: { id } });
   }
