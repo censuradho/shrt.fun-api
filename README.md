@@ -39,6 +39,13 @@ Copie o arquivo de exemplo e preencha os valores:
 cp .env.example .env
 ```
 
+## 📚 Documentação de Arquitetura
+
+**Para IA entender a estrutura automaticamente, consulte:**
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) - Documentação completa (Clean Architecture + DDD)
+- [`.copilot-instructions.md`](./.copilot-instructions.md) - Instruções para GitHub Copilot
+- [`CLAUDE.md`](./.claude.md) - Instruções para Claude/Claude Code
+
 ## Desenvolvimento
 
 Sobe apenas os bancos (Postgres + Redis) via Docker e roda o servidor localmente:
@@ -114,6 +121,7 @@ rm .skip-tests-until
 ## Referências
 
 - [tsconfig bases por versão do Node.js](https://github.com/tsconfig/bases?tab=readme-ov-file)
+
 
 ## Testes
 
