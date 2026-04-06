@@ -1,15 +1,16 @@
 import fp from "fastify-plugin";
 import Redis from "ioredis";
+import { envProvider } from "@/infra/config/ProcessEnvProvider";
 
 const createRedis = () => {
-  const isDevelopment = process.env.NODE_ENV !== "production";
+  const isDevelopment = envProvider.get('NODE_ENV') !== "production";
 
   if (isDevelopment) return new Redis({
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT) || 6379,
+    host: envProvider.get('REDIS_HOST'),
+    port: Number(envProvider.get('REDIS_PORT')) || 6379,
   })
 
-  const productionOption = process.env.REDIS_URL as string;
+  const productionOption = envProvider.get('REDIS_URL') as string;
 
   return new Redis(productionOption);
 }
