@@ -1,5 +1,8 @@
 import { envProvider } from '@/infra/config/ProcessEnvProvider.js';
+import { validateEnvOrThrow } from '@/infra/config/env.dto';
 import { app } from './app';
+
+validateEnvOrThrow();
 
 app.listen(
   {
