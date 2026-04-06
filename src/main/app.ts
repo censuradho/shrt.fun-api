@@ -9,6 +9,7 @@ import {
 } from 'fastify-type-provider-zod';
 
 import { corsConfig } from '@/infra/config/cors';
+import { envProvider } from '@/infra/config/ProcessEnvProvider';
 import { rateLimitConfig } from '@/infra/config/rateLimit';
 import { redisPlugin } from '@/infra/http/plugins/redis';
 import { analyticsModule } from '@/modules/analytics';
@@ -20,7 +21,7 @@ import { errorHandler } from './error-handler';
 
 const app = Fastify({
   trustProxy: true,
-  logger: process.env.NODE_ENV !== 'production'
+  logger: envProvider.get('NODE_ENV') !== 'production'
     ? {
       transport: {
         target: 'pino-pretty',
