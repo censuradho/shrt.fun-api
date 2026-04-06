@@ -30,14 +30,23 @@ export const EnvDto = z.object({
 
 export type EnvDto = z.infer<typeof EnvDto>;
 
-const parsedEnv = EnvDto.safeParse(process.env);
+let cachedEnv: EnvDto | null = null;
 
-if (!parsedEnv.success) {
-  const messages = parsedEnv.error.issues
-    .map((issue) => `${issue.path.join('.') || 'env'}: ${issue.message}`)
-    .join('; ');
+export function validateEnvOrThrow(): EnvDto {
+  if (cachedEnv) return cachedEnv;
 
-  throw new Error(`Invalid environment variables: ${messages}`);
+  const parsedEnv = EnvDto.safeParse(process.env);
+
+  if (!parsedEnv.success) {
+    const messages = parsedEnv.error.issues
+      .map((issue) => `${issue.path.join('.') || 'env'}: ${issue.message}`)
+      .join('; ');
+
+    throw new Error(`Invalid environment variables: ${messages}`);
+  }
+
+  cachedEnv = parsedEnv.data;
+  return cachedEnv;
 }
 
-export const env = parsedEnv.data;
+export const env = validateEnvOrThrow();
