@@ -4,8 +4,8 @@ import { z } from 'zod';
 const NUMBER_AS_STRING = /^\d+$/;
 
 export const EnvDto = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']),
-  PORT: z.string().regex(NUMBER_AS_STRING, 'PORT must be a number'),
+  NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
+  PORT: z.string().regex(NUMBER_AS_STRING, 'PORT must be a number').optional(),
   COOKIE_SECRET: z.string().min(1, 'COOKIE_SECRET is required'),
   CORS: z.string().min(1, 'CORS is required'),
   CLOUDFLARE_ACCOUNT_ID: z.string().min(1, 'CLOUDFLARE_ACCOUNT_ID is required'),
