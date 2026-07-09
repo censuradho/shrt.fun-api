@@ -1,4 +1,4 @@
-# mv-api
+# shrt.fun API
 
 **API de encurtador de URLs com analytics em tempo real e geolocalização.**
 
