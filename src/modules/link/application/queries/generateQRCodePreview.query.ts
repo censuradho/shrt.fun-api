@@ -2,7 +2,7 @@ import { AppError } from "@/shared/errors/AppError";
 import { URL_ERRORS } from "@/modules/link/domain/errors/url.error";
 import { PlanName } from "@/shared/constants/Plan.enum";
 import { IQRCodePort, QRCodeOptions } from "@/modules/link/domain/interfaces/QRCodePort";
-import { IEnvProvider } from "@/shared/types/interfaces/EnvProvider";
+import { IEnvProvider } from "@/domain/EnvProvider";
 import { IUserService } from "@/modules/user/domain/interfaces/IUserService";
 import { HTTP_ERROR_CODES } from "@/shared/constants/httpStatusCodes";
 import { AUTHENTICATION_ERROR_MESSAGES } from "@/modules/auth/domain/errors/authentication.errors";

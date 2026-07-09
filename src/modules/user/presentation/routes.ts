@@ -10,7 +10,12 @@ export async function registerUserRoutes(app: FastifyInstance) {
     '/username',
     {
       preHandler: authMiddleware,
-      schema: { body: updateUsernameDto },
+      schema: {
+        tags: ['User'],
+        summary: 'Atualiza o username do usuário autenticado',
+        security: [{ bearerAuth: [] }],
+        body: updateUsernameDto,
+      },
     },
     controller.updateUsername.bind(controller),
   );
