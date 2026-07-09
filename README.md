@@ -58,6 +58,19 @@ pnpm seed     # popula dados iniciais (planos, etc.) — obrigatório antes do p
 pnpm dev
 ```
 
+## Documentação da API (Swagger)
+
+Com o servidor rodando, a documentação interativa (OpenAPI) fica disponível em:
+
+```
+http://localhost:<PORT>/docs
+```
+
+- Gerada automaticamente a partir dos schemas Zod de cada rota (`fastify-type-provider-zod` + `@fastify/swagger` + `@fastify/swagger-ui`) — não há DTOs duplicados só para a doc.
+- Rotas organizadas por tag de domínio: `Auth`, `Links`, `Redirect`, `Analytics`, `User`, `Health`.
+- Rotas protegidas exigem JWT: clique em **Authorize** no topo da página e informe `Bearer <token>`.
+- A UI abre direto na aba de schema (tipos, obrigatoriedade, enums) em vez do exemplo cru; configurável em [`src/infra/http/plugins/swagger.ts`](./src/infra/http/plugins/swagger.ts).
+
 ## Build
 
 ```bash
