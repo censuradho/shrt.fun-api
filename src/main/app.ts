@@ -12,6 +12,7 @@ import { corsConfig } from '@/infra/config/cors';
 import { envProvider } from '@/infra/config/ProcessEnvProvider';
 import { rateLimitConfig } from '@/infra/config/rateLimit';
 import { redisPlugin } from '@/infra/http/plugins/redis';
+import { swaggerPlugin } from '@/infra/http/plugins/swagger';
 import { analyticsModule } from '@/modules/analytics';
 import { authModule } from '@/modules/auth';
 import { linkModule, linkPublicModule } from '@/modules/link';
@@ -39,6 +40,7 @@ app.setErrorHandler(errorHandler);
 
 app.register(fastifyCors, corsConfig);
 app.register(redisPlugin);
+app.register(swaggerPlugin);
 
 app.register(fastifyRateLimit, rateLimitConfig).after(() => {
   app.setNotFoundHandler(
@@ -60,6 +62,10 @@ app.register(authModule, { prefix: '/v1' });
 app.register(linkModule, { prefix: '/v1' });
 app.register(analyticsModule, { prefix: '/v1' });
 app.register(userModule, { prefix: '/v1' });
-app.get('/v1/health', async () => ({ status: 'ok' }));
+app.get(
+  '/v1/health',
+  { schema: { tags: ['Health'], summary: 'Verifica o status da aplicação' } },
+  async () => ({ status: 'ok' }),
+);
 
 export { app };
