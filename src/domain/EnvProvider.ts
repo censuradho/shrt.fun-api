@@ -3,9 +3,6 @@ export interface LocalEnvironmentVars {
   PORT?: string;
   COOKIE_SECRET?: string;
   CORS?: string
-  CLOUDFLARE_ACCOUNT_ID?: string;
-  CLOUDFLARE_API_TOKEN?: string;
-  CLOUDFLARE_IMAGE_URL?: string;
   REDIS_HOST?: string;
   REDIS_PORT?: string;
   REDIS_URL?: string;
