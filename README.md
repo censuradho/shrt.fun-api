@@ -36,7 +36,7 @@ Uma plataforma performática para criar URLs curtas, gerar QR codes, e acompanha
 Copie o arquivo de exemplo e preencha os valores:
 
 ```bash
-cp .env.example .env
+cp .env.exemple .env
 ```
 
 ## 📚 Documentação de Arquitetura
@@ -48,15 +48,51 @@ cp .env.example .env
 
 ## Desenvolvimento
 
-Sobe apenas os bancos (Postgres + Redis) via Docker e roda o servidor localmente:
+Ambiente local: só os bancos (Postgres + Redis) rodam em Docker, a API roda direto na sua máquina com hot-reload.
 
-```bash
-docker-compose -f docker-compose.dev.yml up -d
-pnpm install
-pnpm deploy   # roda as migrations
-pnpm seed     # popula dados iniciais (planos, etc.) — obrigatório antes do primeiro uso
-pnpm dev
-```
+1. **Instale as dependências**
+
+   ```bash
+   pnpm install
+   ```
+
+2. **Configure o `.env`** (veja [Variáveis de ambiente](#variáveis-de-ambiente)). Para bater com o `docker-compose.dev.yml`, use:
+
+   ```bash
+   DATABASE_URL="postgresql://mvUser:mbPass@localhost:5432/mvDb"
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+   NODE_ENV=development
+   ```
+
+3. **Suba Postgres e Redis via Docker** (`docker-compose.dev.yml` só sobe os bancos, não a API):
+
+   ```bash
+   docker-compose -f docker-compose.dev.yml up -d
+   ```
+
+   | Serviço  | Container         | Porta local | Credenciais                          |
+   |----------|--------------------|-------------|---------------------------------------|
+   | Postgres | `mv_postgres_dev`  | `5432`      | user `mvUser` / senha `mbPass` / db `mvDb` |
+   | Redis    | `mv_redis_dev`     | `6379`      | sem senha                              |
+
+   Para derrubar os bancos: `docker-compose -f docker-compose.dev.yml down` (adicione `-v` para apagar os volumes/dados).
+
+4. **Gere o client do Prisma e rode as migrations**
+
+   ```bash
+   pnpm generate
+   pnpm deploy   # roda as migrations
+   pnpm seed     # popula dados iniciais (planos, etc.) — obrigatório antes do primeiro uso
+   ```
+
+5. **Suba a API em modo dev (watch)**
+
+   ```bash
+   pnpm dev
+   ```
+
+A API sobe em `http://localhost:<PORT>` e a documentação interativa fica em `http://localhost:<PORT>/docs` (veja [Documentação da API (Swagger)](#documentação-da-api-swagger)).
 
 ## Documentação da API (Swagger)
 
